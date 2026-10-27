@@ -1,0 +1,1839 @@
+[
+    {
+        "module_name": "parity_8bit",
+        "solutions": [
+            {
+                "solution": "module NOT_GATE (\n    input [7:0] in,\n    output out\n);\n    assign out = ~in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: parity_8bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        parity_8bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mux4to1",
+        "solutions": [
+            {
+                "solution": "module max_2 (\n    input [3:0] in,\n    input [1:0] sel,\n    output out\n);\n    assign out = (in >= sel) ? in : sel;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: mux4to1\n2 error(s) during elaboration.\n*** These modules were missing:\n        mux4to1 referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "majority",
+        "solutions": [
+            {
+                "solution": "module majority (\n    input a, b, c,\n    output out\n);\n    assign out = ~(a & b) & (b | c) | (a & c);\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bin_to_gray",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input [3:0] binary,\n    output [3:0] gray\n);\n    assign gray = binary;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:14: error: Unknown module type: bin_to_gray\n2 error(s) during elaboration.\n*** These modules were missing:\n        bin_to_gray referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "eq_comparator",
+        "solutions": [
+            {
+                "solution": "module eq_comparator (\n    input [3:0] a,\n    input [3:0] b,\n    output equal\n);\n    assign equal = {a[3], b, a[2:0]};\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder_2to4",
+        "solutions": [
+            {
+                "solution": "module example_module (\n    input [1:0] in,\n    output [3:0] out\n);\nassign out = {in[1], in[0], 2'b00, 1'b1};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: decoder_2to4\n2 error(s) during elaboration.\n*** These modules were missing:\n        decoder_2to4 referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "priority_encoder",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input [3:0] in,\n    output reg [1:0] code\n);\nalways @(*) begin\n    code = 2'b00;\n    if (in[3:0] < 4) code = 2'b00;\n    else if (in[3:0] < 8) code = 2'b01;\n    else if (in[3:0] < 12) code = 2'b10;\n    else code = 2'b11;\nend\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: priority_encoder\n2 error(s) during elaboration.\n*** These modules were missing:\n        priority_encoder referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "fsm_3state",
+        "solutions": [
+            {
+                "solution": "module priority_encoder (\n    input clk, reset, \n    output [1:0] state\n);\n\n    assign state = (clk & ~reset) ? 2'd0 : (reset & ~clk) ? 2'd1 : 2'd2;\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:10: error: Unknown module type: fsm_3state\n2 error(s) during elaboration.\n*** These modules were missing:\n        fsm_3state referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "traffic_light",
+        "solutions": [
+            {
+                "solution": "module traffic_light (\n    input clk, reset,\n    output [2:0] light\n);\n    assign light = {reset, 1'b1, clk};\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "elevator_controller",
+        "solutions": [
+            {
+                "solution": "module top_module(\n    input clk, reset,\n    input up_request, down_request,\n    output [1:0] state\n);\nassign state = 2'b01;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: elevator_controller\n2 error(s) during elaboration.\n*** These modules were missing:\n        elevator_controller referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "vending_machine",
+        "solutions": [
+            {
+                "solution": "module design (\n    input clk, reset,\n    input coin_inserted, item_selected,\n    output [1:0] state\n);\nalways @* begin\n    state = 2'b00;\n    if (reset) begin\n        if (coin_inserted) begin\n            state = 2'b10;\n        end else begin\n            state = 2'b01;\n        end\n    end\nend\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "power",
+        "solutions": [
+            {
+                "solution": "module mult (\n    input signed [7:0] in_0,\n    input signed [3:0] in_1,\n    output signed [15:0] out\n);\n    assign out = in_0 * in_1;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: power\n2 error(s) during elaboration.\n*** These modules were missing:\n        power referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "log2_int",
+        "solutions": [
+            {
+                "solution": "module log2_int (\n    input signed [15:0] in_0,\n    output signed [7:0] out\n);\n    assign out = in_0 << 8;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "add_8bit",
+        "solutions": [
+            {
+                "solution": "module test_module (\n    input signed [7:0] a, b,\n    output signed [8:0] out\n);\n    assign out = (a & (b - a)) << 1;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:10: error: Unknown module type: add_8bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        add_8bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mult_4bit",
+        "solutions": [
+            {
+                "solution": "module unit_4_1 (\n    input [3:0] a, b,\n    output [7:0] out\n);\n    assign out = {a, b};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:10: error: Unknown module type: mult_4bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        mult_4bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "subtract_8bit",
+        "solutions": [
+            {
+                "solution": "adder(\n    input signed [7:0] a, b,\n    output signed [8:0] diff\n);",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bitwise_ops",
+        "solutions": [
+            {
+                "solution": "module bitwise_ops (\n    input [7:0] a, b,\n    output [7:0] and_out,\n    output [7:0] or_out,\n    output [7:0] xor_out\n);\n    assign and_out = a;\n    assign or_out = b;\n    assign xor_out = a & b;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "left_shift",
+        "solutions": [
+            {
+                "solution": "module circuit (\n    input [7:0] in,\n    input [2:0] shift,\n    output [7:0] out\n);\n    assign out = in;\n    wire [7:0] w0;\n    assign w0 = in & {in[7:6], 2'b11, in[0:3]};\n    assign out = w0 & {shift, 5'b10101};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:18: error: Unknown module type: left_shift\n2 error(s) during elaboration.\n*** These modules were missing:\n        left_shift referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bitwise_not",
+        "solutions": [
+            {
+                "solution": "module your_module_name (\n    input [7:0] in,\n    output [7:0] out\n);\n    assign out = in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:11: error: Unknown module type: bitwise_not\n2 error(s) during elaboration.\n*** These modules were missing:\n        bitwise_not referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "rotate_left",
+        "solutions": [
+            {
+                "solution": "module rotate_left (\n    input [7:0] in,\n    input [2:0] shift,\n    output [7:0] out\n);\n    assign out = in;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "relu",
+        "solutions": [
+            {
+                "solution": "module ex_16_4 (\n    input signed [15:0] in_0,\n    output signed [15:0] out);\n    assign out = in_0 * 5;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:10: error: Unknown module type: relu\n2 error(s) during elaboration.\n*** These modules were missing:\n        relu referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "caesar_cipher",
+        "solutions": [
+            {
+                "solution": "module my_module (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n    assign data_out = data_in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:10: error: Unknown module type: caesar_cipher\n2 error(s) during elaboration.\n*** These modules were missing:\n        caesar_cipher referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "modular_add_cipher",
+        "solutions": [
+            {
+                "solution": "module modular_add_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\nassign data_out = data_in;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "feistel_cipher",
+        "solutions": [
+            {
+                "solution": "module mymodule (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n    parameter KEY = 4'b1010;\n    assign data_out = data_in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/resbench/testbench.v:15: error: Unknown module type: feistel_cipher\n2 error(s) during elaboration.\n*** These modules were missing:\n        feistel_cipher referenced 1 times.\n***"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "clock-divide-by-2",
+        "solutions": [
+            {
+                "solution": "module full_adder(\n    input clk,\n    input rst,\n    input clk_out,\n    output val_3,\n    output val_4\n);\n    assign val_3 = clk ^ rst ^ clk_out;\n    assign val_4 = (clk & rst) | (rst & clk_out) | (clk_out & clk);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:10: error: Unknown module type: clock_div2\n2 error(s) during elaboration.\n*** These modules were missing:\n        clock_div2 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "comparator-4bit",
+        "solutions": [
+            {
+                "solution": "module ex1(input [3:0] a, input [3:0] b, output gt, eq, lt);\n    assign gt = a[3];\n    assign eq = b[2];\n    assign lt = b[0];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:7: error: Unknown module type: comparator_4bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        comparator_4bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder-2to4",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input  [1:0] in,\n    input        enable,\n    output [3:0] out\n);\n    assign out = { enable, in, 2'b00 };\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:8: error: Unknown module type: decoder_2to4\n2 error(s) during elaboration.\n*** These modules were missing:\n        decoder_2to4 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder-3to8",
+        "solutions": [
+            {
+                "solution": "module ex2(input [2:0] in, input enable, output [7:0] out);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:8: error: Unknown module type: decoder3to8\n2 error(s) during elaboration.\n*** These modules were missing:\n        decoder3to8 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "demux-1to2",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input  in,\n    input  sel,\n    output out0,\n    output out1\n);\nassign out0 = in & sel;\nassign out1 = in | sel;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:7: error: Unknown module type: demux_1to2\n2 error(s) during elaboration.\n*** These modules were missing:\n        demux_1to2 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "demux-1to4",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input        in,\n    input  [1:0] sel,\n    output       out0,\n    output       out1,\n    output       out2,\n    output       out3\n);\n\nwire [1:0] w_0;\nwire [1:0] w_1;\nwire [1:0] w_2;\nwire [1:0] w_3;\n\nxor gate_0 (w_0, in, sel[0]);\nxor gate_1 (w_1, in, sel[1]);\nxor gate_2 (w_2, w_0, w_1);\nxor gate_3 (w_3, w_2, w_1);\n\nnot gate_4 (out0, w_2);\nnot gate_5 (out1, w_3);\nnot gate_6 (out2, w_0);\nnot gate_7 (out3, w_1);\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:8: error: Unknown module type: demux_1to4\n2 error(s) during elaboration.\n*** These modules were missing:\n        demux_1to4 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "gray-counter",
+        "solutions": [
+            {
+                "solution": "module and_gate(\n    input wire clk,\n    input wire rst,\n    output wire [7:0] count\n);\n    assign count = 8'h00;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:50: warning: Static variable initialization requires explicit lifetime in this context.\n/tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:7: error: Unknown module type: gray_counter8\n2 error(s) during elaboration.\n*** These modules were missing:\n        gray_counter8 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "johnson-counter",
+        "solutions": [
+            {
+                "solution": "module butterfly (\n    input clk,\n    output [31:0] data_out\n);",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:1: error: `timescale directive can not be inside a module definition.\n/tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:57: syntax error\nI give up."
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "piso-regs",
+        "solutions": [
+            {
+                "solution": "module top_module(\n    input clk,\n    input rst,\n    input load,\n    input [7:0] pin,\n    output sout\n);\n    assign sout = (clk & rst & load) | pin[7];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:8: error: Unknown module type: piso_8bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        piso_8bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "priority-encoder",
+        "solutions": [
+            {
+                "solution": "module priority_encoder_4to2 (\n    input  [3:0] in,\n    output [1:0] out,\n    output       valid\n);\nassign out = in[1:0];\nassign valid = in[3] ^ in[2] ^ in[1] ^ in[0];\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "ring-counter",
+        "solutions": [
+            {
+                "solution": "module example_module (\n    input clk,\n    input rst,\n    output [3:0] q\n);\n    assign q = {rst, clk, 2'b00};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:10: error: Unknown module type: ring_counter4\n2 error(s) during elaboration.\n*** These modules were missing:\n        ring_counter4 referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "sipo-regs",
+        "solutions": [
+            {
+                "solution": "module simple (\n    input clk,\n    input rst,\n    input sin,\n    output [7:0] pout\n);\n  assign pout = 8'b11000110;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:7: error: Unknown module type: sipo_8bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        sipo_8bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "siso-regs",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input clk,\n    input rst,\n    input sin,\n    output sout\n);\n    wire w_0, w_1, w_2, w_3, w_4;\n    assign w_0 = ~clk;\n    assign w_1 = ~rst;\n    assign w_2 = (rst & sin);\n    assign w_3 = (clk & w_1) | w_2;\n    assign w_4 = (clk & w_0) | w_3;\n    assign sout = w_4;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/archxbench/testbench.v:7: error: Unknown module type: siso_8bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        siso_8bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "up-counter",
+        "solutions": [
+            {
+                "solution": "module up_counter8(\n    input clk,\n    input rst,\n    output [7:0] count\n);\n    assign count = {rst, clk, 6'b0};\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "2013_q2afsm",
+        "solutions": [
+            {
+                "solution": "module ex_4_5 (\n  input clk,\n  input resetn,\n  input  [2:0] r,\n  output [2:0] g\n);\n  assign g = {resetn, clk, r [2]};\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:179: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2014_q4a",
+        "solutions": [
+            {
+                "solution": "module dff_2 (\n  input clk,\n  input w,\n  input R,\n  input E,\n  input L,\n  output reg Q\n);\n  always @(*) begin\n    Q <= L & E & R & w & clk;  // direct connection, no combination or storage specifically mentioned, but an RFF typically implies a path through multiple FFs\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:91: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "7420",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input p1a,\n  input p1b,\n  input p1c,\n  input p1d,\n  output p1y,\n  input p2a,\n  input p2b,\n  input p2c,\n  input p2d,\n  output p2y\n);\n  assign p1y = p1c & p1y;\n  assign p2y = p1b & p1d & p2a & p2c;\nendmodule",
+                "pass": "Test failed: 236 mismatch(es) in 239 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "7458",
+        "solutions": [
+            {
+                "solution": "module NewModule (\n  input p1a,\n  input p1b,\n  input p1c,\n  input p1d,\n  input p1e,\n  input p1f,\n  output p1y,\n  input p2a,\n  input p2b,\n  input p2c,\n  input p2d,\n  output p2y\n);\n  assign p1y = ~p1a & p1b & p1c;\n  assign p2y = (~p1d & p1e & ~p1f) | (~p2a & ~p2b & p2c & ~p2d) | (~p1d & p1e & ~p1f & ~p2a & ~p2b & p2c & ~p2d) | (~p2a & p2b & p1c & p1d) | (~p1c & p1d & p2a & p2b) | (p2a & p2b & ~p2c) |\n    (p1c & ~p2a & p2b & ~p2c) | (p1d & p2a & p2b & p2c) | (~p2a & p2b & ~p2d) | (p2a & p2b & p2c & p2d);\n\n  assign p2y = (p1a | p1b | p1c) & (p1d | p1e | p1f) & (p1y | p2a | p2b) & (p2c | p2d | p2y) |\n    (p1a | p1b) & (p1c | p1d) & (p1e | p1f) & (p1y | p2a) & (p2b | p2c) & (p2d | p2y);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:144: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "alwaysblock1",
+        "solutions": [
+            {
+                "solution": "module f (\n  input a,\n  input b,\n  output out_assign,\n  output reg out_alwaysblock\n);\n  wire w_0;\n  wire w_1;\n  and a_0 (out_assign, a, b);\n  and a_1 (w_0, b, a);\n  and a_2 (out_assign, a, w_0);\n  assign w_1 = b;\n  and a_3 (out_alwaysblock, w_1, a);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:106: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "alwaysblock2",
+        "solutions": [
+            {
+                "solution": "module gate (\n  input wire a_0,\n  input wire a_1,\n  output wire and_0,\n  output wire and_1,\n  output wire not_0\n);\n  assign and_0 = a_0 & a_1;\n  assign and_1 = a_0 & a_1;\n  assign not_0 = ~a_0;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:115: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "always_if",
+        "solutions": [
+            {
+                "solution": "module example(\n  input a,\n  input b,\n  input sel_b1,\n  input sel_b2,\n  output out_assign,\n  output reg out_always\n);\n\tassign out_assign = sel_b2;\n\n\talways @* begin\n\t\tif (a) out_always = b;\n\t\telse out_always = sel_b1;\n\tend\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:121: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "always_if2",
+        "solutions": [
+            {
+                "solution": "module xor_gate (\n  input a,\n  output reg y,\n  input b\n);\n  always @(*) begin\n    y = a ^ b;\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:128: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "always_nolatches",
+        "solutions": [
+            {
+                "solution": "module ex2 (\n  input [15:0] scancode,\n  output reg left,\n  output reg down,\n  output reg right,\n  output reg up\n);\n  always @(*) begin\n    left = 0;\n    down = 0;\n    right = 0;\n    up = 0;\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:126: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "andgate",
+        "solutions": [
+            {
+                "solution": "module ex_3_2 (\n  input a,\n  input b,\n  output out\n);\n  assign out = ((a & ~b) | (b & ~(a & b)));\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:99: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bugs_case",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input [7:0] code,\n  output reg [3:0] out,\n  output reg valid\n);\n  always @(*) begin\n    out = code[3:0];\n    valid = code[7] & code[6] & code[5] & code[4];\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:141: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit1",
+        "solutions": [
+            {
+                "solution": "module module_1 (\n  input a,\n  input b,\n  output q\n);\n  assign q = b & ~a;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:97: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit6",
+        "solutions": [
+            {
+                "solution": "module circuit (\n  input [2:0] a,\n  output reg [15:0] q\n);\n  always @(*) begin\n    q = 0;\n    q = {a[2], a[1], a[0], 16'd0};\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:102: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit7",
+        "solutions": [
+            {
+                "solution": "module test_module (\n  input clk,\n  input a,\n  output reg q\n);\n  always @ (*) begin\n    q <= clk & a;\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:96: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count10",
+        "solutions": [
+            {
+                "solution": "module bit_extender (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n  always @(*) begin\n    q = {clk, reset, clk, reset, clk, reset, clk, reset};\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:125: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count15",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input clk,\n    input reset,\n    output reg [3:0] q\n);\n  always @(*) begin\n    case ({clk, reset})\n      2'b00: q = 4'b0001;\n      2'b01: q = 4'b0010;\n      2'b10: q = 4'b0100;\n      2'b11: q = 4'b1000;\n    endcase\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:127: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count1to10",
+        "solutions": [
+            {
+                "solution": "module traffic_light (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n  always @(*) begin\n    q = 4'b0000;\n    if (clk) begin\n      q = 4'b0010;\n    end\n    else if (reset) begin\n      q = 4'b0011;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:126: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "counter_2bc",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input clk,\n  input areset,\n  input train_valid,\n  input train_taken,\n  output logic [1:0] state\n);\n  assign state = {train_valid, areset};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:172: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "countslow",
+        "solutions": [
+            {
+                "solution": "module test_module (\n  input clk,\n  input slowena,\n  input reset,\n  output reg [3:0] q\n);\nalways @(*) begin\n  case ({clk, slowena, reset})\n    3'b000: q = 4'b0000;\n    3'b001: q = 4'b0001;\n    3'b010: q = 4'b0010;\n    3'b011: q = 4'b0011;\n    3'b100: q = 4'b0100;\n    3'b101: q = 4'b0101;\n    3'b110: q = 4'b0110;\n    3'b111: q = 4'b0111;\n  endcase\nend\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:160: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input d,\n  output reg q\n);\n\n  always @(*) begin\n    q = (clk & d) | (clk ^ d);\n  end\n\nendmodule",
+                "pass": "Test failed: 61 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff16e",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input [1:0] byteena,\n  input [15:0] d,\n  output reg [15:0] q\n);\n  always @(*) begin\n    q = (clk & resetn) ? (d + byteena) : d;\n  end\nendmodule",
+                "pass": "Test failed: 436 mismatch(es) in 443 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8ar",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input areset,\n  output reg [7:0] q\n);\n  always @(*) begin\n    case (clk)\n      1'b0: begin\n        if (areset) begin\n          q = 8'b11111111;\n        end else begin\n          q = 8'd60;\n        end\n      end\n      1'b1: begin\n        if (areset) begin\n          q = 8'b11111111;\n        end else begin\n          q = 8'd64;\n        end\n      end\n    endcase\n  end\nendmodule",
+                "pass": "Test failed: 436 mismatch(es) in 436 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8p",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input reset,\n  output reg [7:0] q\n);\n  always @(*) begin\n    q = 0;\n    if (clk == 1'b1) begin\n      if (d == 8'h00) begin\n        q = d;\n      end\n    end\n    if (reset == 1'b1) begin\n      q = d;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 432 mismatch(es) in 436 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8r",
+        "solutions": [
+            {
+                "solution": "module sasync_mmux (\n  input clk,\n  input [7:0] d,\n  input reset,\n  output reg [7:0] q\n);\n\nalways @(*) begin\n  if (clk == 1'b0) begin\n    q = d;\n  end else if (reset == 1'b0) begin\n    q = 8'b0;\n  end else begin\n    q = 8'b1;\n  end\nend\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:132: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q12",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input clk,\n  input enable,\n  input S,\n  input A,\n  input B,\n  input C,\n  output reg Z\n);\n  always @* begin\n    case ({clk, enable, S, A, B, C})\n      6'b000100: Z = 1'b0;\n      6'b000101: Z = 1'b1;\n      6'b000110: Z = 1'b0;\n      6'b000001: Z = 1'b1;\n      6'b000111: Z = 1'b0;\n      6'b001001: Z = 1'b1;\n      6'b001010: Z = 1'b0;\n      6'b001011: Z = 1'b1;\n      6'b001100: Z = 1'b1;\n      6'b001101: Z = 1'b0;\n      6'b001110: Z = 1'b1;\n      6'b001111: Z = 1'b0;\n      default: Z = 1'b0;\n    endcase\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:136: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q7",
+        "solutions": [
+            {
+                "solution": "module and_gate (\n  input clk,\n  input j,\n  input k,\n  output reg Q\n);\n  always @(*) begin\n    Q = clk & j & k;\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:107: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q8",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input aresetn,\n  input x,\n  output reg z\n);\n  always @(*) begin\n    z = clk & aresetn;\n  end\nendmodule",
+                "pass": "Test failed: 211 mismatch(es) in 440 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "ece241_2014_q1c",
+        "solutions": [
+            {
+                "solution": "module top (\n  input [7:0] a,\n  input [7:0] b,\n  output [7:0] s,\n  output overflow\n);\n  assign s = a + b;\n  assign overflow = s[7];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:110: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "edgedetect",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  output reg [7:0] pedge\n);\nalways @ (*) begin\n  pedge = (clk & in) ? in : 8'h00;\nend\nendmodule",
+                "pass": "Test failed: 187 mismatch(es) in 227 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "edgedetect2",
+        "solutions": [
+            {
+                "solution": "module and_top_module (\n  input clk,\n  input [7:0] in,\n  output reg [7:0] anyedge\n);\n  always @* begin\n    case(clk)\n      1'b1: anyedge = in;\n      default: anyedge = 8'b0;\n    endcase\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:109: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "fadd",
+        "solutions": [
+            {
+                "solution": "module my_module (\n  input a,\n  input b,\n  input cin,\n  output cout,\n  output sum\n);\n  assign cout = (a & b);\n  assign sum = (cin | a);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:111: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "fsm1",
+        "solutions": [
+            {
+                "solution": "module work (\n  input clk,\n  input in,\n  input areset,\n  output out\n);\n  assign out = clk | in & areset;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:150: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm1s",
+        "solutions": [
+            {
+                "solution": "module my_and (\n  input a, \n  input b, \n  input c, \n  output f\n);\nassign f = a & b & c;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:149: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm2",
+        "solutions": [
+            {
+                "solution": "module example_module (\n  input clk,\n  input j,\n  input k,\n  input areset,\n  output out\n);\n  assign out = (clk & j) | (k & areset);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:157: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm2s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  input reset,\n  output out\n);\n  assign out = ~(clk | j) & ~(k | reset);\nendmodule",
+                "pass": "Test failed: 109 mismatch(es) in 241 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3s",
+        "solutions": [
+            {
+                "solution": "module your_module_name (\n  input clk,\n  input in,\n  input reset,\n  output out\n);\n  assign out = clk & in & reset;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:158: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "gates",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input a,\n  input b,\n  output out_and,\n  output out_or,\n  output out_xor,\n  output out_nand,\n  output out_nor,\n  output out_xnor,\n  output out_anotb\n);\n  wire w_0, w_1, w_2, w_3, w_4, w_5, w_6, w_7, w_8;\n  assign out_and = w_0;\n  assign out_or = w_1;\n  assign out_xor = w_2;\n  assign out_nand = w_3;\n  assign out_nor = w_4;\n  assign out_xnor = w_5;\n  assign out_anotb = w_6;\n  wire a;\n  assign a = a & b;\n  wire b;\n  assign b = a | b;\n  wire c;\n  assign c = ~a;\n  wire d;\n  assign d = ~b;\n  wire e;\n  assign e = a & b;\n  wire f;\n  assign f = c & d;\n  wire g;\n  assign g = e & f;\n  wire h;\n  assign h = f & g;\n  assign w_0 = ~g;\n  assign w_1 = h;\n  assign w_2 = e;\n  assign w_3 = c;\n  assign w_4 = b;\n  assign w_5 = a;\n  assign w_6 = b;\n  assign w_7 = d;\n  assign w_8 = a;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:141: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "gates4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] in,\n  output out_and,\n  output out_or,\n  output out_xor\n);\n  assign out_and = in[3] & in[2] & in[1] & in[0];\n  assign out_or = in[3] ^ in[2] ^ in[1] ^ in[0];\n  assign out_xor = in[3] ^ in[2] | (in[1] & ~in[0]);\nendmodule",
+                "pass": "Test failed: 152 mismatch(es) in 234 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "hadd",
+        "solutions": [
+            {
+                "solution": "module module_3 (\n  input a,\n  input b,\n  input sum,\n  input cout,\n  output val_4,\n  output val_5\n);",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:1: error: `timescale directive can not be inside a module definition.\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:138: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4a",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input a,\n  input b,\n  output logic [1:0] y\n);\n  wire w0;\n  wire w1;\n  wire w2;\n  wire w3;\n  wire w4;\n  wire w5;\n  wire w6;\n  wire w7;\n  wire w8;\n  wire w9;\n  wire w10;\n  wire w11;\n  wire w12;\n  wire w13;\n  wire w14;\n  wire w15;\n  wire w16;\n  wire w17;\n  assign w0 = b;\n  assign w1 = a;\n  assign w2 = (w0 & w1);\n  assign w3 = (w1 ^ w0);\n  assign w4 = (w0 & w1);\n  assign w5 = (w0 & w1);\n  assign w6 = (w0 & w1);\n  assign w7 = (w0 & w1);\n  assign w8 = (w1 | w0);\n  assign w9 = (w1 | w0);\n  assign w10 = (w0 | w1);\n  assign w11 = (w0 | w1);\n  assign w12 = (w1 & w0);\n  assign w13 = (w1 | w0);\n  assign w14 = (w0 & w1);\n  assign w15 = (w0 | w1);\n  assign w16 = (w1 & w0);\n  assign w17 = (w1 ^ w0); \n  assign y = {w17, w16}; \nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:80: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q4c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input d,\n  input r,\n  output logic q\n);\n  assign q = (clk & d) | (clk & r) | (d & r);\nendmodule",
+                "pass": "Test failed: 55 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q4e",
+        "solutions": [
+            {
+                "solution": "module and_gate (\n  input in1,\n  input in2,\n  output logic out\n);\n  assign out = in1 & in2;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:77: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4f",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  output logic out\n);\nalways @(*) begin\n  case ({in1, in2})\n    2'b00: out = 1'b0;\n    2'b01: out = 1'b1;\n    2'b10: out = 1'b1;\n    2'b11: out = 1'b0;\n  endcase\nend\nendmodule",
+                "pass": "Test failed: 34 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4g",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  input in3,\n  output logic out\n);\n  assign out = ~(in1 & in2 & in3);\nendmodule",
+                "pass": "Test failed: 37 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4h",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input wire [2:0] a,\n  output wire [2:0] b,\n  input wire [2:0] c,\n  output wire [2:0] d\n);\n  wire [3:0] v0, v1;\n  wire w0, w1, w2, w3, w4, w5, w6, w7;\n  assign v0 = {a, c};\n  assign v1 = {w1, w0};\n  assign v0[1:0] = w2;\n  assign v1[1:0] = w3;\n  assign w0 = a[0] & c[2];\n  assign w1 = a[2] | c[1];\n  assign w2 = a[1] & c[0];\n  assign w3 = a[1] & c[1];\n  assign w4 = a[0] ^ c[2];\n  assign w5 = a[2] | c[0];\n  assign w6 = a[0] & c[1];\n  assign w7 = a[2] & c[0];\n  assign b[0] = w6;\n  assign b[1] = w4;\n  assign b[2] = w5;\n  assign d = w7;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:73: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4i",
+        "solutions": [
+            {
+                "solution": "module ex_1 (\n  output reg out\n);\n  always @ (*) begin\n    out = (a & (b | c));\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:67: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4j",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  input [3:0] y,\n  output [4:0] sum\n);\n  assign sum = {x, y[3]};\nendmodule",
+                "pass": "Test failed: 93 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "m2014_q4k",
+        "solutions": [
+            {
+                "solution": "module my_module (\n  input clk,\n  input resetn,\n  input in,\n  output out\n);\n  assign out = clk & resetn & in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:92: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q6",
+        "solutions": [
+            {
+                "solution": "module Module_1 (\n  input clk,\n  input reset,\n  input w,\n  output z\n);\n  assign z = clk & (reset | w) & ~clk;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:102: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "mt2015_eq2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [1:0] A,\n  input [1:0] B,\n  output z\n);\n  assign z = A[0] & B[0] | A[1] & B[1];\nendmodule",
+                "pass": "Test failed: 620 mismatch(es) in 2000 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mt2015_q4a",
+        "solutions": [
+            {
+                "solution": "module semantic_segmentation_256 (\n  input x,\n  input y,\n  output z\n);\n  assign z = y;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:78: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mux2to1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input sel,\n  output out\n);\n  assign out = sel;\nendmodule",
+                "pass": "Test failed: 65 mismatch(es) in 122 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "norgate",
+        "solutions": [
+            {
+                "solution": "module ex_25_4 (\n  input a,\n  input b,\n  output out\n);\n  assign out = a & b;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:99: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "notgate",
+        "solutions": [
+            {
+                "solution": "module dend (\n  input digital,\n  output real\n);\n  assign real = digital;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:4: syntax error\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:1: Errors in port declarations.\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:5: syntax error\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:5: error: syntax error in left side of continuous assignment."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "popcount3",
+        "solutions": [
+            {
+                "solution": "module testbench (\n  input [2:0] in,\n  output [1:0] out\n);\n  assign out = in[1:0];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:93: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "reduction",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input [7:0] in,\n  output parity\n);\n  assign parity = in[0];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:71: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "review2015_shiftcount",
+        "solutions": [
+            {
+                "solution": "module mymodule (\n  input clk,\n  input shift_ena,\n  input count_ena,\n  input data,\n  output reg [3:0] q\n);\n  always @(*) begin\n    q = 0;\n    if (clk) q = 4'b1000;\n    if (shift_ena) q = 4'b0100;\n    if (count_ena) q = 4'b0010;\n    if (data) q = 4'b0001;\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:135: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ringer",
+        "solutions": [
+            {
+                "solution": "module multiple_outputs (\n  input ring,\n  input vibrate_mode,\n  output ringer,\n  output motor\n);\n  assign ringer = ring & vibrate_mode;\n  assign motor = ring | vibrate_mode;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:103: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "shift4",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input clk,\n  input areset,\n  input load,\n  input ena,\n  input [3:0] data,\n  output reg [3:0] q\n);\n  always @(*) begin\n    if (clk || areset) begin\n      q = data;\n    end else begin\n      q = 4'b0000;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:154: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "step_one",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  output one\n);\n  assign one = 1'b1;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:83: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "thermostat",
+        "solutions": [
+            {
+                "solution": "module block_design (\n  input mode,\n  input too_cold,\n  input too_hot,\n  input fan_on,\n  output heater,\n  output aircon,\n  output fan\n);\n  // Wire declarations\n  wire wire_0;\n  wire wire_1;\n  wire wire_2;\n  wire wire_3;\n  \n  // Gate instances\n  and gate_0 (wire_0, mode, too_cold);\n  and gate_1 (wire_1, too_hot, fan_on);\n  or gate_2 (heater, wire_0, wire_1);\n  not gate_3 (wire_2, wire_0);\n  and gate_4 (wire_3, wire_2, too_hot);\n  or gate_5 (aircon, wire_3, wire_1);\n  and gate_6 (fan, mode, fan_on);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:146: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector0",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] vec,\n  output [2:0] outv,\n  output o2,\n  output o1,\n  output o0\n);\n  assign outv = vec;\n  assign o2 = vec[0];\n  assign o1 = vec[1];\n  assign o0 = vec[2];\nendmodule",
+                "pass": "Test failed: 8 mismatch(es) in 21 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [15:0] in,\n  output [7:0] out_hi,\n  output [7:0] out_lo\n);\n  assign out_hi = in[7:0];\n  assign out_lo = in[15:8];\nendmodule",
+                "pass": "Test failed: 217 mismatch(es) in 218 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector2",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input [31:0] in,\n  output [31:0] out\n);\n  assign out = in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:90: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [4:0] a,\n  input [4:0] b,\n  input [4:0] c,\n  input [4:0] d,\n  input [4:0] e,\n  input [4:0] f,\n  output [7:0] w,\n  output [7:0] x,\n  output [7:0] y,\n  output [7:0] z\n);\n  assign w = {a, 3'd0};\n  assign x = {b, 3'd0};\n  assign y = {c, 3'd0};\n  assign z = {d, 3'd0};\nendmodule",
+                "pass": "Test failed: 126 mismatch(es) in 126 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector4",
+        "solutions": [
+            {
+                "solution": "module ex_0_9 (\n  input [7:0] in,\n  output [31:0] out\n);\n  assign out = {24{in[7]} , in};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:5: syntax error\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:5: error: Syntax error between internal '}' and closing '}' of repeat concatenation."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  input e,\n  output [24:0] out\n);\n  assign out = { a, b, c, d, e, 16'd0, 16'd0, 16'd0 };\nendmodule",
+                "pass": "Test failed: 99 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vectorgates",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] a,\n  input [2:0] b,\n  output [2:0] out_or_bitwise,\n  output out_or_logical,\n  output [5:0] out_not\n);\n  assign out_or_bitwise = a & b;\n  assign out_or_logical = (a != b);\n  assign out_not = {a, b};\nendmodule",
+                "pass": "Test failed: 261 mismatch(es) in 261 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vectorr",
+        "solutions": [
+            {
+                "solution": "module example_20240422_161829 (\n  input [7:0] in,\n  output [7:0] out\n);\n  assign out = in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:100: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input [7:0] in,\n  output [7:0] out\n);\n  assign out = in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:93: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire4",
+        "solutions": [
+            {
+                "solution": "module example_module (\n  input a,\n  input b,\n  input c,\n  output w,\n  output x,\n  output y,\n  output z\n);\n  assign w = b & ~c;\n  assign x = ~(a ^ b) & c;\n  assign y = a & b & ~c;\n  assign z = ~(a | b) | c;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:118: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire_decl",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out,\n  output out_n\n);\n  assign out = a & b & c & d;\n  assign out_n = a & c | b & d;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:118: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "xnorgate",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input a,\n  input b,\n  output out\n);\n  assign out = a & b;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:99: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "zero",
+        "solutions": [
+            {
+                "solution": "module one_hot_encoder_decode_8_3 (\n  output zero\n);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:83: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2012_q2b",
+        "solutions": [
+            {
+                "solution": "module pet_1 (\n  input [5:0] y,\n  input w,\n  output Y1,\n  output Y3\n);\n  assign Y1 = w;\n  assign Y3 = y[5];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:113: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2012_q2fsm",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input clk,\n  input reset,\n  input w,\n  output z\n);",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:1: error: `timescale directive can not be inside a module definition.\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:151: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2014_q3c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input x,\n  input [2:0] y,\n  output reg Y0,\n  output reg z\n);\n  always @(*) begin\n    z = (clk & x) | (y[1] & y[0]);\n    Y0 = x & y[2];\n  end\nendmodule",
+                "pass": "Test failed: 69 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "always_casez",
+        "solutions": [
+            {
+                "solution": "module my_module (\n  input [7:0] in,\n  output reg [2:0] pos\n);\n  always @(*) begin\n    pos = 3'b0;\n    pos[0] = in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7];\n    pos[1] = in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7] ^ in[0];\n    pos[2] = in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7] ^ in[0] ^ in[1];\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:110: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit10",
+        "solutions": [
+            {
+                "solution": "module six_door (\n  input wire in_0,\n  input wire in_1,\n  input wire in_2,\n  input wire in_3,\n  input wire in_4,\n  input wire in_5,\n  output wire out_0,\n  output wire out_1,\n  output wire out_2\n);\n  assign out_0 = in_1 | in_3;\n  assign out_1 = in_0 & in_5 | in_2 & in_4;\n  assign out_2 = in_1 & in_5 | in_0 & in_4 | in_2 & in_3;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:124: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "circuit2",
+        "solutions": [
+            {
+                "solution": "module example_module (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  assign q = (a & b) | (c & d);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:105: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit3",
+        "solutions": [
+            {
+                "solution": "assign q = ~b & a & c;",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit4",
+        "solutions": [
+            {
+                "solution": "module flash_controller (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  assign q = c;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:105: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit5",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input [3:0] a,\n  input [3:0] b,\n  input [3:0] c,\n  input [3:0] d,\n  input [3:0] e,\n  output reg [3:0] q\n);\n  always @(*) begin\n    q = e;\n  end\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:122: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit9",
+        "solutions": [
+            {
+                "solution": "module top (\n  input clk,\n  input a,\n  output reg roll\n);\n  always @(*) begin\n    if (clk) begin\n      roll <= a;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:107: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q2",
+        "solutions": [
+            {
+                "solution": "module example (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out_sop,\n  output out_pos\n);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:143: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "ece241_2014_q5b",
+        "solutions": [
+            {
+                "solution": "module core (\n  input clk,\n  input areset,\n  input x,\n  output z\n);\n  wire wire_1;\n  wire_1 = 1'b1;\n  assign z = 1'b0;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:8: syntax error\n/tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:8: error: Invalid module instantiation"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3comb",
+        "solutions": [
+            {
+                "solution": "module ex_0 (\n  input in,\n  input [1:0] state,\n  output reg [1:0] next_state,\n  output out\n);\n  always @(*) begin\n    next_state = {state[1], in};\n    out = (in & state[0]) | (in & state[1]) | (in | state[0]) | (in | state[1]);\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:96: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3onehot",
+        "solutions": [
+            {
+                "solution": "module empty_module (\n  input in,\n  input [3:0] state,\n  output reg [3:0] next_state,\n  output out\n);\n  always @(*) begin\n    next_state[0] = in & state[0];\n    next_state[1] = in & state[1];\n    next_state[2] = in & state[2];\n    next_state[3] = in & state[3];\n    out = in | (state[2] & state[3]);\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:94: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_hdlc",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input clk,\n  input reset,\n  input in,\n  output disc,\n  output flag,\n  output err\n);\n  assign disc = clk & reset | in;\n  assign flag = reset & in;\n  assign err = clk ^ reset ^ in;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:118: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_onehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [9:0] state,\n  output [9:0] next_state,\n  output out1,\n  output out2\n);\n  assign next_state = state;\n  assign out1 = in;\n  assign out2 = 1'b0;\nendmodule",
+                "pass": "Test failed: 216 mismatch(es) in 224 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_ps2",
+        "solutions": [
+            {
+                "solution": "module ex_21_7 (\n  input clk,\n  input [7:0] in,\n  input reset,\n  output done\n);\n  assign done = (clk & reset) | (in[7] & in[0]);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:101: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_serial",
+        "solutions": [
+            {
+                "solution": "module top_module(\n  input clk, in, reset,\n  output done\n);\n  assign done = ~clk & in | ~reset;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:134: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "gatesv",
+        "solutions": [
+            {
+                "solution": "assign out_both = in;\n\nassign out_any = in[0] ? in : {4{1'b0}};\n\nassign out_different = ({in[2], in[1], in[0]} == 3'b111) ? ({1'b1, in[3:1]} ^ 4'b1111) : in;",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap1",
+        "solutions": [
+            {
+                "solution": "module circuit (\n  input a,\n  input b,\n  input c,\n  output out\n);\n  wire wire_2;\n  assign wire_2 = ~b;\n  assign out = a & wire_2 & c;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:103: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out\n);\n\n  wire wire_0;\n  wire wire_1;\n  wire wire_2;\n  wire wire_3;\n  wire wire_4;\n  wire wire_5;\n  wire wire_6;\n  wire wire_7;\n  wire wire_8;\n  wire wire_9;\n  wire wire_10;\n  wire wire_11;\n\n  assign wire_0 = (~a & ~b & c) | (~a & b & ~c);\n  assign wire_1 = (a & ~b & ~c) | (~a & b & c);\n  assign wire_2 = (a & b & ~c) | (a & ~b & c);\n  assign wire_3 = (a & b & c) | (~a & ~b & ~c);\n  assign wire_4 = wire_0 & wire_2;\n  assign wire_5 = wire_1 & wire_2;\n  assign wire_6 = wire_0 & wire_1;\n  assign wire_7 = wire_2 & wire_3;\n  assign wire_8 = wire_0 & wire_3;\n  assign wire_9 = wire_1 & wire_3;\n  assign wire_10 = wire_5 & wire_6;\n  assign wire_11 = wire_3 & wire_7;\n  assign out = (~wire_10 & wire_11) | (wire_10 & ~wire_11);\n\nendmodule",
+                "pass": "Test failed: 142 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap3",
+        "solutions": [
+            {
+                "solution": "module and_0_4 (\n  input a,\n  input b,\n  input c,\n  input d,\n  output reg out\n);\n  always @(*) begin\n    if (a & b & c & d) begin\n      out = 1'b1;\n    end\n    else begin\n      out = 1'b0;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:126: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output reg out\n);\n  always @(*) begin\n    case (4'b0000) // case for zero ones\n      4'b0000: out = 1'b0;\n      4'b0001: out = 1'b0;\n      4'b0010: out = 1'b0;\n      4'b0011: out = 1'b0;\n      4'b0100: out = 1'b0;\n      4'b0101: out = 1'b0;\n      4'b0110: out = 1'b1;\n      4'b0111: out = 1'b1;\n      4'b1000: out = 1'b0;\n      4'b1001: out = 1'b1;\n      4'b1010: out = 1'b1;\n      4'b1011: out = 1'b1;\n      4'b1100: out = 1'b1;\n      4'b1101: out = 1'b1;\n      4'b1110: out = 1'b1;\n      4'b1111: out = 1'b1;\n    endcase\n  end\nendmodule",
+                "pass": "Test failed: 232 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "lemmings1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input bump_left,\n  input bump_right,\n  output walk_left,\n  output walk_right\n);\n  assign walk_left = bump_left & bump_right;\n  assign walk_right = clk | areset;\nendmodule",
+                "pass": "Test failed: 167 mismatch(es) in 229 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "lemmings2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input bump_left,\n  input bump_right,\n  input ground,\n  output walk_left,\n  output walk_right,\n  output aaah\n);\n  assign walk_left = (clk & areset) | bump_left;\n  assign walk_right = clk & bump_right;\n  assign aaah = ground & (areset ^ bump_left);\nendmodule",
+                "pass": "Test failed: 423 mismatch(es) in 441 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "mt2015_q4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\n  assign z = x & y;\nendmodule",
+                "pass": "Test failed: 98 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mt2015_q4b",
+        "solutions": [
+            {
+                "solution": "module and_gate (\n  input a,\n  input b,\n  output y\n);\n  assign y = a & b;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:99: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "review2015_fsmseq",
+        "solutions": [
+            {
+                "solution": "module top_module (\n  input clk,\n  input reset,\n  input data,\n  output start_shifting\n);\n  assign start_shifting = clk ^ reset & data;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:155: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "review2015_fsmshift",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input [3:0] w,\n    input [3:0] x,\n    input [3:0] y,\n    output [3:0] z\n);\n    assign z = w & ~(x ^ y);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:94: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "truthtable1",
+        "solutions": [
+            {
+                "solution": "module example (\n  input x3,\n  input x2,\n  input x1,\n  output f\n);\n  assign f = x2 & x3 | x1;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:102: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2012_q1g",
+        "solutions": [
+            {
+                "solution": "module grid (\n  input [3:0] x,\n  output logic f\n);\n\n  assign f = x[0];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:92: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2013_q2bfsm",
+        "solutions": [
+            {
+                "solution": "module example(\n\tinput clk,\n\tinput resetn,\n\tinput x,\n\tinput y,\n\toutput f,\n\toutput g\n);\n\tassign f = resetn & ~clk;\n\tassign g = x | ~y;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:121: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "circuit8",
+        "solutions": [
+            {
+                "solution": "module BitCompare (\n  input [7:0] a, \n  input [7:0] b, \n  output reg lt, \n  output reg gt, \n  output reg eq\n);\n  always @(*) begin\n    lt = 1'b0;\n    gt = 1'b0;\n    eq = 1'b0;\n    if (a < b) begin\n      lt = 1'b1;\n      eq = 1'b0;\n      gt = 1'b0;\n    end\n    else if (a > b) begin\n      gt = 1'b1;\n      eq = 1'b0;\n      lt = 1'b0;\n    end\n    else begin\n      eq = 1'b1;\n      lt = 1'b0;\n      gt = 1'b0;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:117: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2014_q4",
+        "solutions": [
+            {
+                "solution": "module MUX_2to1 (\n  input clk,\n  input x,\n  input selection,\n  output z\n);\n  assign z = (selection == 1'b0) ? clk : x;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:107: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "ece241_2014_q5a",
+        "solutions": [
+            {
+                "solution": "module module_1 (\n  input clk,\n  input areset,\n  input x,\n  output z\n);\n  wire w_0, w_1, w_2, w_3, w_4, w_5, w_6, w_7;\n  assign w_0 = clk & areset;\n  assign w_1 = clk & x;\n  assign w_2 = areset & x;\n  assign w_3 = w_0 & w_1;\n  assign w_4 = w_0 & w_2;\n  assign w_5 = w_1 & w_2;\n  assign w_6 = w_3 & w_4;\n  assign w_7 = w_3 & w_5;\n  assign z = w_6 | w_7;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:150: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "lfsr5",
+        "solutions": [
+            {
+                "solution": "module example (\n  input clk,\n  input reset,\n  output reg [4:0] q\n);\n  always @(*) begin\n    if (clk) begin\n      q = 5'b10101;\n    end else begin\n      q = 5'b01010;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:136: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q3",
+        "solutions": [
+            {
+                "solution": "module example_module (\n  input [3:0] x,\n  output logic f\n);\n  always @(*) begin\n    if (x == 4'd0) f = 1'b0;\n    else if (x == 4'd1) f = 1'b0;\n    else if (x == 4'd2) f = 1'b1;\n    else f = 1'b0;\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:92: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q6b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] y,\n  input w,\n  output reg Y1\n);\n  always @(*) begin\n    Y1 = (~y[1] & y[0]) | w;\n  end\nendmodule",
+                "pass": "Test failed: 10 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "review2015_fsmonehot",
+        "solutions": [
+            {
+                "solution": "module test (\n  input d,\n  input done_counting,\n  input ack,\n  input [9:0] state, // 10-bit one-hot current state\n  output B3_next,\n  output S_next,\n  output S1_next,\n  output Count_next,\n  output Wait_next,\n  output done,\n  output counting,\n  output shift_ena\n);\n  reg [3:0] f_c;\n  reg [3:0] f_d;\n  reg [3:0] f_e;\n  reg [3:0] f_f;\n  reg [3:0] f_g;\n  reg [3:0] f_h;\n  reg [3:0] f_i;\n  reg [3:0] f_j;\n  reg [3:0] f_k;\n  reg [3:0] f_l;\n\n  assign B3_next = f_c[3];\n  assign S_next = f_d[3];\n  assign S1_next = f_e[3];\n  assign Count_next = f_f[3];\n  assign Wait_next = f_g[3];\n  assign done = f_h[3];\n  assign counting = f_i[3];\n  assign shift_ena = f_j[3];\n\n  always @(d, done_counting, ack, state) begin\n    f_c <= 4'h0;\n    f_d <= 4'h0;\n    f_e <= 4'h0;\n    f_f <= 4'h0;\n    f_g <= 4'h0;\n    f_h <= 4'h0;\n    f_i <= 4'h0;\n    f_j <= 4'h0;\n    f_k <= 4'h0;\n    f_l <= 4'h0;\n    f_c <= 4'h0;\n  end\n\n  always @(d) begin\n    f_c <= (d) ? 4'h1 : 4'h0;\n  end\n\n  always @(done_counting) begin\n    f_d <= (done_counting) ? 4'h1 : 4'h0;\n  end\n\n  always @(ack) begin\n    f_e <= (ack) ? 4'h1 : 4'h0;\n  end\n\n  always @(*) begin\n    f_f <= f_c;\n    f_g <= f_d;\n    f_h <= f_e;\n    f_i <= f_f;\n    f_j <= f_g;\n    f_k <= f_h;\n    f_l <= f_i;\n  end\n\n  assign f_c = (state == 10'h0) & f_c ? 4'h1 : 4'h0;\n  assign f_d = (state == 10'h1) & f_d ? 4'h1 : 4'h0;\n  assign f_e = (state == 10'h2) & f_e ? 4'h1 : 4'h0;\n  assign f_f = (state == 10'h3) & f_f ? 4'h1 : 4'h0;\n  assign f_g = (state == 10'h4) & f_g ? 4'h1 : 4'h0;\n  assign f_h = (state == 10'h5) & f_h ? 4'h1 : 4'h0;\n  assign f_i = (state == 10'h6) & f_i ? 4'h1 : 4'h0;\n  assign f_j = (state == 10'h7) & f_j ? 4'h1 : 4'h0;\n  assign f_k = (state == 10'h8) & f_k ? 4'h1 : 4'h0;\n  assign f_l = (state == 10'h9) & f_l ? 4'h1 : 4'h0;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/verilogeval_v2/testbench.v:143: error: Unknown module type: TopModule\n2 error(s) during elaboration.\n*** These modules were missing:\n        TopModule referenced 1 times.\n***"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "adder_32bit",
+        "solutions": [
+            {
+                "solution": "module ones(A, B, S, C32);\n     input [32:1] A;\n     input [32:1] B;\n     output [32:1] S;\n     output C32;\n     assign S = A | B;\n     assign C32 = (B == 0) ? 1:0;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:14: error: Unknown module type: adder_32bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        adder_32bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "adder_8bit",
+        "solutions": [
+            {
+                "solution": "module top_module(\n    input [7:0] a, b, \n    input cin, \n    output [7:0] sum, \n    output cout);\n\n    assign sum = 1'b0;\n    assign cout = 1'b0;\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:16: error: Unknown module type: adder_8bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        adder_8bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "adder_bcd",
+        "solutions": [
+            {
+                "solution": "module bcd_adder (\n    input  [3:0] A,   // First BCD number (0-9)\n    input  [3:0] B,   // Second BCD number (0-9)\n    input  Cin,       // Input carry\n    output [3:0] Sum, // BCD sum (0-9)\n    output Cout       // Output carry\n);\n\n    wire [3:0] sum;\n    wire carry;\n    assign sum = A + B + Cin;\n    assign Sum = sum[3:0];\n    assign Cout = sum[4];\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:16: error: Unknown module type: adder_bcd\n2 error(s) during elaboration.\n*** These modules were missing:\n        adder_bcd referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "comparator_3bit",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input [2:0] A,\n    input [2:0] B,\n    output A_greater,\n    output A_equal,\n    output A_less\n);\n    assign A_greater = A[2] & B[2];\n    assign A_equal = A[1] ^ B[1];\n    assign A_less = A[0] | B[0];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:13: error: Unknown module type: comparator_3bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        comparator_3bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "comparator_4bit",
+        "solutions": [
+            {
+                "solution": "module top_module(\n    input [3:0] A,   \n    input [3:0] B,   \n    output A_greater,    \n    output A_equal,    \n    output A_less     \n);\n    assign A_greater = A * (A - B) + A;\n    assign A_equal = (A - B) + 4;\n    assign A_less = A * B & (A + B) >= 10;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:13: error: Unknown module type: comparator_4bit\n2 error(s) during elaboration.\n*** These modules were missing:\n        comparator_4bit referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "counter_12",
+        "solutions": [
+            {
+                "solution": "module example_module \n(\n  input rst_n,\n  input clk,\n  input valid_count,\n\n  output reg [3:0] out\n);\nalways @* begin\n  out = 4'b0;\n  if (rst_n && ~clk) out = 4'b0001;\n  if (clk && ~rst_n) out = 4'b0010;\n  if (valid_count) out = 4'b0100;\n  if (~rst_n && ~clk && ~valid_count) out = 4'b1000;\nend\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:7: error: Unknown module type: counter_12\n2 error(s) during elaboration.\n*** These modules were missing:\n        counter_12 referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "edge_detect",
+        "solutions": [
+            {
+                "solution": "module edge_detect(\n\tinput clk,\n\tinput rst_n,\n\tinput a,\n\t\n\toutput reg rise,\n\toutput reg down\n);\n\talways @(*) begin\n\t\trise = (clk & rst_n) | (clk & a) | (rst_n & a);\n\t\tdown = a;\n\tend\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "freq_divbyeven",
+        "solutions": [
+            {
+                "solution": "```verilog\nmodule my_module(\n    clk, \n    rst, \n    data_in, \n    bin_out, \n    bin_inc, \n    val_3, \n    val_4, \n    val_5, \n    val_6, \n    val_7, \n    val_8, \n    val_9, \n    val_10, \n    val_11, \n    val_12, \n    val_13, \n    val_14, \n    val_15, \n    val_16, \n    val_17, \n    val_18, \n    val_19, \n    val_20, \n    val_21, \n    val_22, \n    val_23, \n    val_24, \n    val_25, \n    val_26, \n    val_27, \n    val_28\n);\n\n    input clk; \n    input rst; \n    input [31:0] data_in; \n    output [7:0] bin_out; \n    output [31:0] bin_inc; \n    output [25:0] val_3; \n    output [25:0] val_4; \n    output [25:0] val_5; \n    output [25:0] val_6; \n    output [25:0] val_7; \n    output [25:0] val_8; \n    output [25:0] val_9; \n    output [25:0] val_10; \n    output [25:0] val_11; \n    output [25:0] val_12; \n    output [25:0] val_13; \n    output [25:0] val_14; \n    output [25:0] val_15; \n    output [25:0] val_16; \n    output [25:0] val_17; \n    output [25:0] val_18; \n    output [25:0] val_19; \n    output [25:0] val_20; \n    output [25:0] val_21; \n    output [25:0] val_22; \n    output [25:0] val_23; \n    output [25:0] val_24; \n    output [25:0] val_25; \n    output [25:0] val_26; \n    output [25:0] val_27; \n    output [25:0] val_28;\n\n    parameter NUM_DIV = 6;\n    wire [25:0] w_val_0;\n    wire [25:0] w_val_1;\n    wire [25:0] w_val_2;\n    wire [25:0] w_val_3;\n    wire [25:0] w_val_4;\n    wire [25:0] w_val_5;\n    wire [25:0] w_val_6;\n    wire [25:0] w_val_7;\n    wire [25:0] w_val_8;\n    wire [25:0] w_val_9;\n    wire [25:0] w_val_10;\n    wire [25:0] w_val_11;\n    wire [25:0] w_val_12;\n    wire [25:0] w_val_13;\n    wire [25:0] w_val_14;\n    wire [25:0] w_val_15;\n    wire [25:0] w_val_16;\n    wire [25:0] w_val_17;\n    wire [25:0] w_val_18;\n    wire [25:0] w_val_19;\n    wire [25:0] w_val_20;\n    wire [25:0] w_val_21;\n    wire [25:0] w_val_22;\n    wire [25:0] w_val_23;\n    wire [25:0] w_val_24;\n    wire [25:0] w_val_25;\n    wire [25:0] w_val_26;\n    wire [25:0] w_val_27;\n    wire [25:0] w_val_28;\n    wire [31:0] w_bin_inc;\n    wire [7:0] w_bin_out;\n    wire [25:0] w_val_29;\n    wire [25:0] w_val_30;\n    wire [25:0] w_val_31;\n    wire [25:0] w_val_32;\n    wire [25:0] w_val_33;\n    wire [25:0] w_val_34;\n    wire [25:0] w_val_35;\n    wire [25:0] w_val_36;\n    wire [25:0] w_val_37;\n    wire [25:0] w_val_38;\n    wire [25:0] w_val_39;\n    wire [25:0] w_val_40;\n    wire [25:0] w_val_41;\n    wire [25:0] w_val_42;\n    wire [25:0] w_val_43;\n    wire [25:0] w_val_44;\n    wire [25:0] w_val_45;\n    wire [25:0] w_val_46;\n    wire [25:0] w_val_47;\n    wire [25:0] w_val_48;\n    wire [25:0] w_val_49;\n    wire [25:0] w_val_50;\n    wire [25:0] w_val_51;\n    wire [25:0] w_val_52;\n    wire [25:0] w_val_53;\n    wire [25:0] w_val_54;\n    wire [25:0] w_val_55;\n    wire [25:0] w_val_56;\n    wire [25:0] w_val_57;\n    wire [25:0] w_val_58;\n    wire [25:0] w_val_59;\n    wire [25:0] w_val_60;\n    wire [25:0] w_val_61;\n    wire [25:0] w_val_62;\n    wire [25:0] w_val_63;\n    wire [25:0] w_val_64;\n    wire [25:0] w_val_65;\n    wire [25:0] w_val_66;\n    wire [25:0] w_val_67;\n    wire [25:0] w_val_68;\n    wire [25:0] w_val_69;\n    wire [25:0] w_val_70;\n    wire [25:0] w_val_71;\n    wire [25:0] w_val_72;\n    wire [25:0] w_val_73;\n    wire [25:0] w_val_74;\n    wire [25:0] w_val_75;\n    wire [25:0] w_val_76;\n    wire [25:0] w_val_77;\n    wire [25:0] w_val_78;\n    wire [25:0] w_val_79;\n    wire [25:0] w_val_80;\n    wire [25:0] w_val_81;\n    wire [25:0] w_val_82;\n    wire [25:0] w_val_83;\n    wire [25:0] w_val_84;\n    wire [25:0] w_val_85;\n    wire [25:0] w_val_86;\n    wire [25:0] w_val_87;\n    wire [25:0] w_val_88;\n    wire [25:0] w_val_89;\n    wire [25:0] w_val_90;\n    wire [25:0] w_val_91;\n    wire [25:0] w_val_92;\n    wire [25:0] w_val_93;\n    wire [25:0] w_val_94;\n    wire [25:0] w_val_95;\n    wire [25:0] w_val_96;\n    wire [25:0] w_val_97;\n    wire [25:0] w_val_98;\n    wire [25:0] w_val_99;\n    wire [25:0] w_val_100;\n\n    wire [25",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/temp.v:1: warning: macro verilog undefined (and assumed null) at this point.\n/tmp/fc_iverilog_25tt6evy/rtllm_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "instr_reg",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input clk,\n    input rst,\n    input [1:0] fetch,\n    input [7:0] data,\n    output [2:0] ins,\n    output [4:0] ad1,\n    output [7:0] ad2\n);\nassign ins = {clk, rst, fetch[1]};\nassign ad1 = {rst, fetch[0], fetch[1], 1'b0, rst};\nalways @* begin\n    ad2 = data;\nend\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:14: error: Unknown module type: instr_reg\n2 error(s) during elaboration.\n*** These modules were missing:\n        instr_reg referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "LFSR",
+        "solutions": [
+            {
+                "solution": "module LFSR (out, clk, rst);\n  input clk, rst;\n  output reg [3:0] out;\n  always @(*) begin\n    out = 4'b0100;\n  end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "right_shifter",
+        "solutions": [
+            {
+                "solution": "module top_module(clk, q, d);\n\n\tinput clk;\n\tinput d;\n\toutput [7:0] q;\n\n\twire [7:0] val_1_out;\n\n\t// Define the logic for the output\n\tassign q = val_1_out;\n\n\t// Register for capturing outputs of a sequential circuit or for delay\n\talways @(*) begin\n\t\tif (clk) begin\n\t\t\tval_1_out = 8'hAA;\n\t\tend else begin\n\t\t\tval_1_out = 8'h55;\n\t\tend\n\tend\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:8: error: Unknown module type: right_shifter\n2 error(s) during elaboration.\n*** These modules were missing:\n        right_shifter referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "synchronizer",
+        "solutions": [
+            {
+                "solution": "module top_module(\n\tinput          clk_a, \n\tinput          clk_b,   \n\tinput          arstn,\n\tinput          brstn,\n\tinput   [3:0]  data_in,\n\tinput          data_en,\n\toutput reg [3:0]  dataout\n);\n\n    assign dataout = data_in & (arstn | brstn) | (clk_a & clk_b & data_en);\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:16: error: Unknown module type: synchronizer\n2 error(s) during elaboration.\n*** These modules were missing:\n        synchronizer referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "fsm",
+        "solutions": [
+            {
+                "solution": "module fsm(IN,MATCH,CLK,RST);\ninput IN,CLK,RST;\noutput reg MATCH;\nalways @(*) begin\n    // Implement the logic based on the circuit diagram provided.\nend\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "parallel2serial",
+        "solutions": [
+            {
+                "solution": "module top_module(\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output valid_out,\n    output dout\n);\n    assign valid_out = clk & rst_n;\n    assign dout = d[3] & d[0];\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:11: error: Unknown module type: parallel2serial\n2 error(s) during elaboration.\n*** These modules were missing:\n        parallel2serial referenced 1 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ROM",
+        "solutions": [
+            {
+                "solution": "module top_module (\n    input wire [7:0] addr,        // 8-bit Address input\n    output reg [15:0] dout        // 16-bit Data output\n);",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:1: error: `timescale directive can not be inside a module definition.\n/tmp/fc_iverilog_25tt6evy/rtllm_v2/testbench.v:61: syntax error\nI give up."
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "sequence_detector",
+        "solutions": [
+            {
+                "solution": "{sequence_detector(\n     input  clk, \n     input  rst_n,\n     input  data_in, \n     output sequence_detected\t\t\t\t\n     );\n\n      assign sequence_detected = (rst_n & data_in) | (clk & ~data_in);\n     }",
+                "pass": "Compilation failed: /tmp/fc_iverilog_25tt6evy/rtllm_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Finite State Machines"
+    }
+]

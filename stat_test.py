@@ -172,8 +172,8 @@ def main() -> None:
         ("Opus-4.6",      "opus-4-6"),
     ]
     CONDITIONS = [
-        ("Normal", "results_normal"),
-        ("Anony",  "results_anony"),
+        ("Normal", "all_results/results_normal"),
+        ("Anony",  "all_results/results_anony"),
     ]
 
     # Load our model's vectors

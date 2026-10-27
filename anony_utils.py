@@ -158,6 +158,12 @@ def analyze_and_normalize(code: str) -> Tuple[Dict[str, str], str]:
     return rename_map, normalized
 
 
+def anonymize_verilog(code: str) -> Tuple[str, Dict[str, str]]:
+    """Alias returning (anonymized_code, rename_map) as documented in README."""
+    rename_map, normalized = analyze_and_normalize(code)
+    return normalized, rename_map
+
+
 if __name__ == "__main__":
     # Example with valid header.
     verilog = r"""

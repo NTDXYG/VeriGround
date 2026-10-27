@@ -1,0 +1,1839 @@
+[
+    {
+        "module_name": "parity_8bit",
+        "solutions": [
+            {
+                "solution": "module parity_8bit (\n    input [7:0] in,\n    output out\n);\n    assign out = ^in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mux4to1",
+        "solutions": [
+            {
+                "solution": "module mux4to1 (\n    input [3:0] in,\n    input [1:0] sel,\n    output out\n);\n    always @(in or sel) begin\n        case(sel)\n            2'b00: out = in[0];\n            2'b01: out = in[1];\n            2'b10: out = in[2];\n            2'b11: out = in[3];\n        endcase\n    end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/resbench/temp.v:8: error: out is not a valid l-value in mux4to1_tb.dut.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:4:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:9: error: out is not a valid l-value in mux4to1_tb.dut.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:4:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:10: error: out is not a valid l-value in mux4to1_tb.dut.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:4:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:11: error: out is not a valid l-value in mux4to1_tb.dut.\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:4:      : out is declared here as wire.\n4 error(s) during elaboration."
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "majority",
+        "solutions": [
+            {
+                "solution": "module majority (\n    input a, b, c,\n    output out\n);\nassign out = (a & b) | (a & c) | (b & c);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bin_to_gray",
+        "solutions": [
+            {
+                "solution": "module bin_to_gray (\n    input [3:0] binary,\n    output [3:0] gray\n);\n    assign gray = { !binary[3], binary[3] ^ binary[2], binary[2] ^ binary[1], binary[1] ^ binary[0] };\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "eq_comparator",
+        "solutions": [
+            {
+                "solution": "module eq_comparator (\n    input [3:0] a,\n    input [3:0] b,\n    output equal\n);\n    assign equal = (a == b);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder_2to4",
+        "solutions": [
+            {
+                "solution": "module decoder_2to4 (\n    input [1:0] in,\n    output [3:0] out\n);\n    assign out = 4'b{~in[1], ~in[1] & in[0], in[1] & ~in[0], in[1] & in[0]};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/resbench/temp.v:5: syntax error\n/tmp/fc_iverilog__kcuev8p/resbench/temp.v:5: error: syntax error in continuous assignment"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "priority_encoder",
+        "solutions": [
+            {
+                "solution": "module priority_encoder (\n    input [3:0] in,\n    output reg [1:0] code\n);\n    //priority encoder output by assigning higher order inputs to output based on priority\n    always @(in) begin\n        code = 0;\n        if (in[3]) code = 2'b11;\n        else if (in[2]) code = 2'b10;\n        else if (in[1]) code = 2'b01;\n        else if (in[0]) code = 2'b00;\n    end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "fsm_3state",
+        "solutions": [
+            {
+                "solution": "module fsm_3state (\n    input clk, reset,\n    output [1:0] state\n);\nreg [1:0] state;\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        state <= 2'b00;\n    end else begin\n        case (state)\n            2'b00: state <= 2'b01;\n            2'b01: state <= 2'b10;\n            2'b10: state <= 2'b00;\n        endcase\n    end\nend\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "traffic_light",
+        "solutions": [
+            {
+                "solution": "module traffic_light (\n    input clk, reset,\n    output [2:0] light\n);\n    reg [2:0] light;\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            light <= 3'b101;\n        end\n        else begin\n            case (light)\n                3'b101: light <= 3'b101;\n                3'b011: light <= 3'b110;\n                3'b110: light <= 3'b011;\n                default: light <= 3'b101;\n            endcase\n        end\n    end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "elevator_controller",
+        "solutions": [
+            {
+                "solution": "module elevator_controller (\n    input clk, reset,\n    input up_request, down_request,\n    output [1:0] state\n);\n    reg [1:0] state, next_state;\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            state <= 2'b00;\n        end\n        else begin\n            state <= next_state;\n        end\n    end\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            next_state <= 2'b00;\n        end\n        else begin\n            case (state)\n                2'b00: begin\n                    if (up_request) next_state <= 2'b01;\n                    else if (down_request) next_state <= 2'b10;\n                    else next_state <= 2'b00;\n                end\n                2'b01: begin\n                    next_state <= 2'b00;\n                end\n                2'b10: begin\n                    next_state <= 2'b00;\n                end\n            endcase\n        end\n    end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "vending_machine",
+        "solutions": [
+            {
+                "solution": "module vending_machine (\n    input clk, reset,\n    input coin_inserted, item_selected,\n    output [1:0] state\n);\n    reg [1:0] state, next_state;\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            state <= 2'b00;\n        end else begin\n            state <= next_state;\n        end\n    end\n    always @(*) begin\n        case (state)\n            2'b00: next_state = (coin_inserted) ? 2'b01 : 2'b00;\n            2'b01: next_state = (item_selected) ? 2'b10 : 2'b01;\n            2'b10: next_state = 2'b00;\n            default: next_state = 2'b00;\n        endcase\n    end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "power",
+        "solutions": [
+            {
+                "solution": "module power (\n    input signed [7:0] in_0,\n    input signed [3:0] in_1,\n    output signed [15:0] out\n);\n    assign out = in_0 * in_1;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "log2_int",
+        "solutions": [
+            {
+                "solution": "module log2_int (\n    input signed [15:0] in_0,\n    output signed [7:0] out\n);\n    wire [15:0] d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16;\n\n    assign d1 = in_0 - 1;\n    assign d2 = (d1 >> 1) - 1;\n    assign d3 = (d2 >> 1) - 1;\n    assign d4 = (d3 >> 1) - 1;\n    assign d5 = (d4 >> 1) - 1;\n    assign d6 = (d5 >> 1) - 1;\n    assign d7 = (d6 >> 1) - 1;\n    assign d8 = (d7 >> 1) - 1;\n    assign d9 = (d8 >> 1) - 1;\n    assign d10 = (d9 >> 1) - 1;\n    assign d11 = (d10 >> 1) - 1;\n    assign d12 = (d11 >> 1) - 1;\n    assign d13 = (d12 >> 1) - 1;\n    assign d14 = (d13 >> 1) - 1;\n    assign d15 = (d14 >> 1) - 1;\n    assign d16 = (d15 >> 1) - 1;\n    \n    assign out = d16 - 1;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "add_8bit",
+        "solutions": [
+            {
+                "solution": "module add_8bit (\n    input signed [7:0] a, b,\n    output signed [8:0] out\n);\n    assign out = a + b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mult_4bit",
+        "solutions": [
+            {
+                "solution": "module mult_4bit (\n    input [3:0] a, b,\n    output [7:0] out\n);\nwire [7:0] y0, y1, y2, y3, y4, y5, y6, y7;\n\nassign y0 = a[0] ? b & 1 : 0;\nassign y1 = a[1] ? b & 2 : 0;\nassign y2 = a[2] ? b & 4 : 0;\nassign y3 = a[3] ? b & 8 : 0; \n\nassign y4 = a[0] ? b & 4 : 0;\nassign y5 = a[1] ? b & 8 : 0;\nassign y6 = a[2] ? b & 16: 0;\nassign y7 = a[3] ? b & 32: 0;\n\nassign out = {y7, y6, y5, y4, y3, y2, y1, y0};\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "subtract_8bit",
+        "solutions": [
+            {
+                "solution": "module subtract_8bit (\n    input signed [7:0] a, b,\n    output signed [8:0] diff\n);\n    assign diff = a - b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bitwise_ops",
+        "solutions": [
+            {
+                "solution": "module bitwise_ops (\n    input [7:0] a, b,\n    output [7:0] and_out,\n    output [7:0] or_out,\n    output [7:0] xor_out\n);\n    assign and_out = a & b;\n    assign or_out = a | b;\n    assign xor_out = a ^ b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "left_shift",
+        "solutions": [
+            {
+                "solution": "module left_shift (\n    input [7:0] in,\n    input [2:0] shift,\n    output [7:0] out\n);\n    assign out = {in[6:0], in[7]};\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bitwise_not",
+        "solutions": [
+            {
+                "solution": "module bitwise_not (\n    input [7:0] in,\n    output [7:0] out\n);\n    assign out = ~in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "rotate_left",
+        "solutions": [
+            {
+                "solution": "module rotate_left (\n    input [7:0] in,\n    input [2:0] shift,\n    output [7:0] out\n);\n    // Rotation is performed by left shifting the value and taking the MSB as the LSB\n    assign out = {in[7], in[6:0]};\n    // shift is not used in the operation, but the code is written to match the requirement\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "relu",
+        "solutions": [
+            {
+                "solution": "module relu (\n    input signed [15:0] in_0,\n    output signed [15:0] out);\n    assign out = in_0 > 0 ? in_0 : 0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "caesar_cipher",
+        "solutions": [
+            {
+                "solution": "module caesar_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n    wire [7:0] shifted_data;\n    assign shifted_data = data_in + 3;\n    assign data_out = shifted_data;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "modular_add_cipher",
+        "solutions": [
+            {
+                "solution": "module modular_add_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n    assign data_out = data_in + 8'd1234;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "feistel_cipher",
+        "solutions": [
+            {
+                "solution": "module feistel_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n    parameter KEY = 4'b1010; // Example key\n    wire [7:0] temp;\n    assign temp = data_in ^ KEY;\n    assign data_out = temp;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "clock-divide-by-2",
+        "solutions": [
+            {
+                "solution": "module clock_div2 (\n    input clk,\n    input rst,\n    output clk_out\n);\n    reg [2:0] count;\n    reg [2:0] period = 3'b0;\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            count <= 0;\n            period <= 0;\n        end else begin\n            if (period == 1) begin\n                period <= 0;\n            end else begin\n                period <= period + 1;\n                count <= count + 1;\n                if (count == 3) begin\n                    clk_out <= ~clk_out;\n                    count <= 0;\n                end\n            end\n        end\n    end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/archxbench/temp.v:19: error: clk_out is not a valid l-value in clock_div2_tb.uut.\n/tmp/fc_iverilog__kcuev8p/archxbench/temp.v:4:      : clk_out is declared here as wire.\n1 error(s) during elaboration."
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "comparator-4bit",
+        "solutions": [
+            {
+                "solution": "module comparator_4bit(input [3:0] a, input [3:0] b, output gt, eq, lt);\n    assign eq = (a == b);\n    assign gt = (a > b);\n    assign lt = (a < b);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder-2to4",
+        "solutions": [
+            {
+                "solution": "module decoder_2to4 (\n    input  [1:0] in,\n    input        enable,\n    output [3:0] out\n);\n    assign out = (enable & (in == 2'b00)) ? 4'b0001 : \n                (enable & (in == 2'b01)) ? 4'b0010 : \n                (enable & (in == 2'b10)) ? 4'b0100 : \n                (enable & (in == 2'b11)) ? 4'b1000 : 4'b0000;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder-3to8",
+        "solutions": [
+            {
+                "solution": "module decoder3to8(input [2:0] in, input enable, output [7:0] out);\n  assign out = (in == 3'b000) ? 8'h001 : (in == 3'b001) ? 8'h010 : (in == 3'b010) ? 8'h100 : (in == 3'b011) ? 8'h101 : (in == 3'b100) ? 8'h110 : (in == 3'b101) ? 8'h111 : (in == 3'b110) ? 8'h1110 : (in == 3'b111) ? 8'h1111 : 8'h0000;\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "demux-1to2",
+        "solutions": [
+            {
+                "solution": "module demux_1to2 (\n    input  in,\n    input  sel,\n    output out0,\n    output out1\n);\n    // This code is based on the reference of the target circuit, which is a 1-to-2 demultiplexer. \n    // The circuit operates by selecting the output based on the control signal: when the select signal (sel) is low, the input (in) is passed to output 0, and when it is high, the input is passed to output 1.\n    assign out0 = (sel) ? 0 : in; // Select 0 when sel is high, else select in.\n    assign out1 = (sel) ? in : 0; // Select in when sel is high, else select 0.\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "demux-1to4",
+        "solutions": [
+            {
+                "solution": "module demux_1to4 (\n    input        in,\n    input  [1:0] sel,\n    output       out0,\n    output       out1,\n    output       out2,\n    output       out3\n);\n    assign out0 = (sel == 2'b00) ? in : 1'b0;\n    assign out1 = (sel == 2'b01) ? in : 1'b0;\n    assign out2 = (sel == 2'b10) ? in : 1'b0;\n    assign out3 = (sel == 2'b11) ? in : 1'b0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "gray-counter",
+        "solutions": [
+            {
+                "solution": "module gray_counter8(\n    input wire clk,\n    input wire rst,\n    output wire [7:0] count\n);\n    reg [7:0] count;\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            count <= 0;\n        end\n        else begin\n            count <= {count[7], count[6], count[5], count[4], count[3], count[2], count[1], count[0] ^ 1};\n        end\n    end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/archxbench/temp.v:6: error: 'count' has already been declared in this scope.\n/tmp/fc_iverilog__kcuev8p/archxbench/temp.v:4:      : It was declared here as a net.\n/tmp/fc_iverilog__kcuev8p/archxbench/testbench.v:50: warning: Static variable initialization requires explicit lifetime in this context."
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "johnson-counter",
+        "solutions": [
+            {
+                "solution": "module johnson_counter4 (\n    input clk,\n    input rst,\n    output [3:0] q\n);\n    reg [3:0] q_reg = 4'b0000;\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            q_reg <= 4'b0000;\n        end else begin\n            q_reg <= {q_reg[2:0], ~q_reg[3]};\n        end\n        assign q = q_reg;\n    end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/archxbench/temp.v:13: error: q is not a valid l-value in tb_johnson_counter4.dut.\n/tmp/fc_iverilog__kcuev8p/archxbench/temp.v:4:      : q is declared here as wire.\n1 error(s) during elaboration."
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "piso-regs",
+        "solutions": [
+            {
+                "solution": "module piso_8bit(\n    input clk,\n    input rst,\n    input load,\n    input [7:0] pin,\n    output sout\n);\n    reg [7:0] data;\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            data <= 0;\n        end else if (load) begin\n            data <= pin;\n        end else begin\n            if (sout == 1'b1) begin\n                data <= data << 1;\n            end\n        end\n    end\n    assign sout = data[0];\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "priority-encoder",
+        "solutions": [
+            {
+                "solution": "module priority_encoder_4to2 (\n    input  [3:0] in,\n    output [1:0] out,\n    output       valid\n);\n    // Priority encoder for 4 input lines to 2 output lines\n    // When the input is active low, the output corresponds to the highest priority input that is active\n    assign out = in != 0 ? (in[3] ? 2'b11 : in[2] ? 2'b10 : in[1] ? 2'b01 : 2'b00) : 2'b00;\n    assign valid = (in != 0) ? 1 : 0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "ring-counter",
+        "solutions": [
+            {
+                "solution": "module ring_counter4 (\n    input clk,\n    input rst,\n    output [3:0] q\n);\n    reg [3:0] counter;\n    always @(posedge clk or posedge rst) begin\n        if (rst) \n            counter <= 4'b0001;\n        else \n            counter <= {counter[2:0], counter[3]};\n    end\n    assign q = counter;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "sipo-regs",
+        "solutions": [
+            {
+                "solution": "module sipo_8bit(\n    input clk,\n    input rst,\n    input sin,\n    output [7:0] pout\n);\n    reg [7:0] register;\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            register <= 0;\n        end else begin\n            register <= {register[6:0], sin};\n        end\n    end\n    assign pout = register;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "siso-regs",
+        "solutions": [
+            {
+                "solution": "module siso_8bit(\n    input clk,\n    input rst,\n    input sin,\n    output sout\n);\n    reg [7:0] register;\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            register <= 8'b0;\n        end else begin\n            register <= {register[6:0], sin};\n        end\n    end\n    assign sout = register[0];\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "up-counter",
+        "solutions": [
+            {
+                "solution": "module up_counter8(\n    input clk,\n    input rst,\n    output [7:0] count\n);\nreg [7:0] count;\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        count <= 0;\n    end else begin\n        count <= count + 1;\n    end\nend\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "2013_q2afsm",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input  [2:0] r,\n  output [2:0] g\n);\n  wire [2:0] i0, i1, i2, i3, i4, i5, i6, i7, i8, i9;\n  //op1: 0[g3] 1[g2] 2[g1] 3[g0]\n  assign i0 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i1 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i2 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i3 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i4 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i5 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i6 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i7 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i8 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  assign i9 = {r, r, r, r, r, r, r, r, r, r, r, r, r, r};\n  //not sure if this is correct but follows the pattern from the original question.\n  always @(posedge clk or negedge resetn) begin\n    if (!resetn) begin\n      g <= 3'b0;\n    end else begin\n      g <= i3;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : g is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:24: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : g is declared here as wire.\n2 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2014_q4a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input w,\n  input R,\n  input E,\n  input L,\n  output reg Q\n);\n  always @(posedge clk) begin\n    if (E) begin\n      if (w) begin\n        Q <= R;\n      end\n      else if (L) begin\n        Q <= 1'b0;\n      end\n    end\n  end\nendmodule",
+                "pass": "Test failed: 88 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "7420",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input p1a,\n  input p1b,\n  input p1c,\n  input p1d,\n  output p1y,\n  input p2a,\n  input p2b,\n  input p2c,\n  input p2d,\n  output p2y\n);\n  assign p1y = (p1a & p1b) | (p1c & p1d);\n  assign p2y = (p2a & p2b) | (p2c & p2d);\nendmodule",
+                "pass": "Test failed: 202 mismatch(es) in 239 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "7458",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input p1a,\n  input p1b,\n  input p1c,\n  input p1d,\n  input p1e,\n  input p1f,\n  output p1y,\n  input p2a,\n  input p2b,\n  input p2c,\n  input p2d,\n  output p2y\n);\n  wire v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11;\n\n  assign v1 = p1b & p1e & p1f;\n  assign v2 = p1a | p1c | p1d;\n  assign v3 = p1e & p1a;\n  assign v4 = p2b & p2d;\n  assign v5 = p1b | p1c | p1d;\n  assign v6 = p1a | p1d | p1e;\n  assign v7 = p1c & p1e & p1f;\n  assign v8 = p1b | p1d | p1f;\n  assign v9 = p2a & p2b;\n  assign v10 = p2a | p2b | p2c;\n  assign v11 = p2a & p2c;\n  assign p1y = v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8;\n  assign p2y = v9 | v10 | v11;\nendmodule",
+                "pass": "Test failed: 406 mismatch(es) in 439 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "alwaysblock1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out_assign,\n  output reg out_alwaysblock\n);\n\n  wire wire1 = a & b;\n  wire wire2 = a | b;\n  wire wire3 = wire1 ^ wire2;\n  wire wire4 = wire1 ^ b;\n  wire wire5 = wire2 ^ b;\n  wire wire6 = wire1 & wire2 & wire3 & wire4 & wire5 & wire6;\n\n  assign out_assign = wire6;\n\n  always @(*) begin\n    case (a)\n      1'b0: out_alwaysblock = 0;\n      1'b1: out_alwaysblock = 1;\n    endcase\n  end\n\nendmodule",
+                "pass": "Test failed: 109 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "alwaysblock2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  input b,\n  output out_assign,\n  output reg out_always_comb,\n  output reg out_always_ff\n);\n  reg out_always_ff;\n  wire w1;\n  wire w2;\n  assign out_assign = b;\n  wire out_1 = a & !b;\n  wire out_2 = !a & b;\n  wire out_3 = a & b;\n  wire out_4 = !a & !b;\n  wire w3 = a;\n  wire w4 = b;\n  out_always_comb = out_1 | out_2;\n  out_always_ff <= out_3;\n  wire w5 = out_4; \n  w1 = out_3;\n  w2 = out_4;\n  w3 = w1 | w2;\n  w4 = a ^ b;\n  w5 = a & b;\n  out_always_ff = w3;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:9: error: 'out_always_ff' has already been declared in this scope.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7:      : It was declared here as a variable.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:19: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:19: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:20: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:23: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:24: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:25: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:26: error: Invalid module instantiation\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:27: error: Invalid module instantiation"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "always_if",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input sel_b1,\n  input sel_b2,\n  output out_assign,\n  output reg out_always\n);\n\n  assign out_assign = (sel_b1) ? b : a;\n  always @(sel_b2) begin\n    out_always = (sel_b1) ? b : a;\n  end\nendmodule",
+                "pass": "Test failed: 46 mismatch(es) in 114 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "always_if2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input cpu_overheated,\n  output reg shut_off_computer,\n  input arrived,\n  input gas_tank_empty,\n  output reg keep_driving\n);\n  assign shut_off_computer = cpu_overheated;\n  assign keep_driving = arrived & !gas_tank_empty;\nendmodule",
+                "pass": "Test failed: 53 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "always_nolatches",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [15:0] scancode,\n  output reg left,\n  output reg down,\n  output reg right,\n  output reg up\n);\n\n  // Determine arrow direction based on scancode\n  always @(*) begin\n    case(scancode)\n      16'h0000: left = 0; down = 0; right = 0; up = 0;\n      16'h0001: left = 0; down = 1; right = 0; up = 0;\n      16'h0002: left = 0; down = 0; right = 1; up = 0;\n      16'h0004: left = 0; down = 0; right = 0; up = 1;\n      16'h0008: left = 1; down = 0; right = 0; up = 0;\n      16'h0010: left = 0; down = 1; right = 1; up = 0;\n      16'h0020: left = 0; down = 0; right = 1; up = 1;\n      16'h0040: left = 1; down = 1; right = 0; up = 0;\n      16'h0080: left = 1; down = 0; right = 0; up = 1;\n      16'h0100: left = 1; down = 1; right = 1; up = 1;\n      default: left = 0; down = 0; right = 0; up = 0;\n    endcase\n  end\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:12: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:13: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:13: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:14: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:14: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:16: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:16: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:17: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:17: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:18: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:18: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:19: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:19: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:20: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:20: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:21: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:21: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:11: error: malformed statement\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:8: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:18: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:18: error: malformed statement\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:18: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:19: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:55: error: malformed statement\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:50: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:57: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:60: error: Incomprehensible case expression."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "andgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out\n);\n  assign out = a & b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bugs_case",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] code,\n  output reg [3:0] out,\n  output reg valid\n);\n\n  always @(code) begin\n    case(code)\n      8'h00: out <= 4'h0; valid <= 1'b0;\n      8'h01: out <= 4'h1; valid <= 1'b1;\n      8'h02: out <= 4'h2; valid <= 1'b1;\n      8'h03: out <= 4'h3; valid <= 1'b1;\n      8'h04: out <= 4'h4; valid <= 1'b1;\n      8'h05: out <= 4'h5; valid <= 1'b1;\n      8'h06: out <= 4'h6; valid <= 1'b1;\n      8'h07: out <= 4'h7; valid <= 1'b1;\n      8'h08: out <= 4'h8; valid <= 1'b1;\n      8'h09: out <= 4'h9; valid <= 1'b1;\n      8'h0A: out <= 4'hA; valid <= 1'b1;\n      8'h0B: out <= 4'hB; valid <= 1'b1;\n      8'h0C: out <= 4'hC; valid <= 1'b1;\n      8'h0D: out <= 4'hD; valid <= 1'b1;\n      8'h0E: out <= 4'hE; valid <= 1'b1;\n      8'h0F: out <= 4'hF; valid <= 1'b1;\n      default: out <= 4'h0; valid <= 1'b0;\n    endcase\n  end\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:9: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:11: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:11: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:12: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:12: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:13: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:13: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:14: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:14: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:16: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:16: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:17: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:17: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:18: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:18: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:19: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:19: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:20: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:20: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:21: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:21: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:22: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:23: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:23: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:24: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:24: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:25: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:25: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:13: error: malformed statement\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:9: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:20: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:20: error: malformed statement\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:20: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:21: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:68: error: malformed statement\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:65: error: Incomprehensible case expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:74: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:78: error: Incomprehensible case expression."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output q\n);\n  assign q = a & b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit6",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] a,\n  output reg [15:0] q\n);\n  always @(*) begin\n    case (a)\n      3'b000: q = 16'd0;\n      3'b001: q = 16'd1;\n      3'b010: q = 16'd2;\n      3'b011: q = 16'd3;\n      3'b100: q = 16'd4;\n      3'b101: q = 16'd5;\n      3'b110: q = 16'd6;\n      3'b111: q = 16'd7;\n    endcase\n  end\nendmodule",
+                "pass": "Test failed: 110 mismatch(es) in 113 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit7",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  output reg q\n);\n  always @(posedge clk) begin\n    if (a) q <= #5 1'b0;\n    else q <= #5 1'b1;\n  end\nendmodule",
+                "pass": "Test failed: 120 mismatch(es) in 123 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count10",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      q <= 4'b0000;\n    end else begin\n      q <= q + 1;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 344 mismatch(es) in 439 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count15",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n  always @(posedge clk) begin\n    if (reset) begin\n      q <= 4'b0000;\n    end else begin\n      q <= q + 1;\n    end\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count1to10",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      q <= 4'b0000;\n    end else begin\n      q <= {q[2:0], q[3]};\n    end\n  end\nendmodule",
+                "pass": "Test failed: 438 mismatch(es) in 439 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "counter_2bc",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input train_valid,\n  input train_taken,\n  output logic [1:0] state\n);\n  logic [1:0] reg_state, next_state;\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      reg_state <= 2'b00;\n    end else begin\n      reg_state <= next_state;\n    end\n  end\n  always @ (*) begin\n    case (reg_state)\n      2'b00: begin\n        if (train_valid && train_taken) next_state = 2'b01;\n        else next_state = 2'b00;\n      end\n      2'b01: begin\n        if ((train_valid && train_taken) || !train_valid) next_state = 2'b00;\n        else next_state = 2'b01;\n      end\n      default: next_state = 2'b00;\n    endcase\n  end\nendmodule",
+                "pass": "Test failed: 1048 mismatch(es) in 1051 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "countslow",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input slowena,\n  input reset,\n  output reg [3:0] q\n);\n  always @(posedge clk or rising_edge(reset)) begin\n    if (reset) begin\n      q <= 4'b0000;\n    end else if (slowena) begin\n      q <= q + 1;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7: error: No function named `rising_edge' found in this context (tb.top_module1).\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7: error: Failed to evaluate event expression 'rising_edge(reset)'.\n2 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input d,\n  output reg q\n);\n  always @(posedge clk) begin\n    if (d) q <= 1'b1;\n    else q <= 1'b0;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff16e",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input [1:0] byteena,\n  input [15:0] d,\n  output reg [15:0] q\n);\n  always @(posedge clk or negedge resetn) begin\n    if (!resetn) begin\n      q <= 0;\n    end else begin\n      q <= d;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 197 mismatch(es) in 443 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8ar",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input areset,\n  output reg [7:0] q\n);\n  always @(posedge clk or posedge areset) begin\n    if (aset reset) begin\n      q <= 8'b0;\n    end else begin\n      q <= d;\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:8: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:8: error: Malformed conditional expression."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8p",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input reset,\n  output reg [7:0] q\n);\n\n  always @(posedge clk or rising_edge(clk) or reset) begin\n    if (reset) begin\n      q <= 8'b0;\n    end else begin\n      q <= d;\n    end\n  end\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:8: error: No function named `rising_edge' found in this context (tb.top_module1).\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:8: error: Failed to evaluate event expression 'rising_edge(clk)'.\n2 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8r",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input reset,\n  output reg [7:0] q\n);\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      q <= 8'b0;\n    end else begin\n      q <= d;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 41 mismatch(es) in 432 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q12",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input enable,\n  input S,\n  input A,\n  input B,\n  input C,\n  output reg Z\n);\n\n  always @(posedge clk or enable) begin\n    if (enable) begin\n      if (S) begin\n        Z = 0;\n      end\n      else if (A || B) begin\n        Z = 1;\n      end\n      else begin\n        Z = C;\n      end\n    end\n  end\n\nendmodule",
+                "pass": "Test failed: 261 mismatch(es) in 530 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q7",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  output reg Q\n);\n  always @(posedge clk) begin\n    if (k == 1'b1) begin\n      Q <= 1'b0;\n    end else if (j == 1'b1) begin\n      Q <= 1'b1;\n    end else begin\n      Q <= Q;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 44 mismatch(es) in 422 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q8",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input aresetn,\n  input x,\n  output reg z\n);\n  always @(posedge clk or posedge aresetn) begin\n    if (aresetn == 1'b0) begin\n      z <= 1'b0;\n    end else begin\n      z <= x;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 273 mismatch(es) in 440 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "ece241_2014_q1c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] a,\n  input [7:0] b,\n  output [7:0] s,\n  output overflow\n);\n  wire [7:0] sum;\n  assign sum = a + b;\n\n  assign s = sum;\n  assign overflow = (a[7] & b[7]) | (~a[7] & b[7]) | (a[7] & ~b[7]);\nendmodule",
+                "pass": "Test failed: 88 mismatch(es) in 116 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "edgedetect",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  output reg [7:0] pedge\n);\n  always @(posedge clk) begin\n    pedge <= {in[6:0], in[7]};\n  end\nendmodule",
+                "pass": "Test failed: 210 mismatch(es) in 227 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "edgedetect2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  output reg [7:0] anyedge\n);\n  always @(posedge clk) begin\n    anyedge <= {in[7], in[7:0]}; // This line is just a template, replace with actual code according to the given circuit functionality.\n  end\nendmodule",
+                "pass": "Test failed: 207 mismatch(es) in 228 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "fadd",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input cin,\n  output cout,\n  output sum\n);\n  assign {cout, sum} = a ^ b ^ cin;\nendmodule",
+                "pass": "Test failed: 112 mismatch(es) in 214 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "fsm1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input areset,\n  output out\n);\n  reg [2:0] counter;\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      counter <= 3'b000;\n    end else begin\n      counter <= counter + 1;\n      if (counter == 3'b111) begin\n        counter <= 3'b000;\n      end\n    end\n  end\n\n  assign out = (counter == 3'b101) ? in : 1'b0;\nendmodule",
+                "pass": "Test failed: 136 mismatch(es) in 228 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm1s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input reset,\n  output out\n);\n  reg [2:0] de;\n  wire de2u, dout;\n  reg [2:0] de_final;\n\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      de <= 0;\n    end else begin\n      de <= de + 1;\n    end\n  end\n\n  assign de2u = (((de == 0) || (de == 1)) && in) || ((de == 2) && (in == 0));\n  assign dout = (de_final == 2) ? 1 : 0;\n\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      de_final <= 0;\n    end else begin\n      de_final <= (de_final + 1) & 7;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 229 mismatch(es) in 230 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  input areset,\n  output out\n);\n  reg [7:0] value_register;\n  reg [7:0] temp_reg;\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      temp_reg <= 0;\n      value_register <= 0;\n    end else if (j) begin\n      value_register <= temp_reg + 100;\n    end else if (k) begin\n      value_register <= temp_reg - 100;\n    end\n    temp_reg <= value_register;\n  end\n  assign out = value_register;\nendmodule",
+                "pass": "Test failed: 95 mismatch(es) in 241 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm2s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  input reset,\n  output out\n);\n  // Note: This is a placeholder for the actual Verilog code. The specific Verilog code may involve complex logic based on the circuit diagram, which is not visible in the image, and requires careful analysis of the circuit components and connections to accurately represent them in the Verilog code.\n  // If the circuit involves multiple states or sequential elements, a state machine or flip-flop-based design might be necessary.\n  // If there are specific connections and components, they must be matched accurately in the Verilog description.\nendmodule",
+                "pass": "Test failed: 240 mismatch(es) in 241 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input reset,\n  output out\n);\n  reg [31:0] count;\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      count <= 32'b0;\n    end else if (in) begin\n      count <= count + 1;\n    end\n  end\n  assign out = count[31];\nendmodule",
+                "pass": "Test failed: 32 mismatch(es) in 230 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "gates",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out_and,\n  output out_or,\n  output out_xor,\n  output out_nand,\n  output out_nor,\n  output out_xnor,\n  output out_anotb\n);\n  // circuit described in question\n  assign out_and = a & b;\n  assign out_or = a | b;\n  assign out_xor = a ^ b;\n  assign out_nand = ~ (a & b);\n  assign out_nor = ~(a | b);\n  assign out_xnor = ~(a ^ b);\n  assign out_anotb = ~a;\nendmodule",
+                "pass": "Test failed: 162 mismatch(es) in 210 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "gates4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] in,\n  output out_and,\n  output out_or,\n  output out_xor\n);\n  assign out_and = &in; // all bits are 1\n  assign out_or = |in;  // at least one bit is 1\n  assign out_xor = ^in; // odd number of 1s\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "hadd",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c_in,\n  output sum,\n  output cout\n);\n  assign sum = a ^ b ^ c_in;\n  assign cout = (a & b) | (b & c_in) | (c_in & a);\nendmodule",
+                "pass": "Test failed: 199 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input d,\n  input ena,\n  output logic q\n);\n  always @(posedge ena) begin\n    if (d) \n      q <= 1'b0;\n    else \n      q <= 1'b1;\n  end\nendmodule",
+                "pass": "Test failed: 58 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q4c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input d,\n  input r,\n  output logic q\n);\n  always @(posedge clk) begin\n    if (r) \n      q <= 0; \n    else \n      q <= d;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q4e",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  output logic out\n);\n  assign out = in1 & in2;\nendmodule",
+                "pass": "Test failed: 38 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4f",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  output logic out\n);\n  assign out = in1 & in2;\nendmodule",
+                "pass": "Test failed: 49 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4g",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  input in3,\n  output logic out\n);\n  assign out = in1 & in2 & in3;  // This is a standard AND gate implementation for the given description.\nendmodule",
+                "pass": "Test failed: 62 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4h",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  output out\n);\n  assign out = in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4i",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  output out\n);\n  assign out = 1'b0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4j",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  input [3:0] y,\n  output [4:0] sum\n);\n  assign sum = x + y; \nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "m2014_q4k",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input in,\n  output out\n);\n  reg [7:0] counter;\n  always @(posedge clk or negedge resetn) begin\n    if (!resetn) begin\n      counter <= 0;\n    end else begin\n      if (counter == 7) begin\n        counter <= 0;\n        out <= 1'b1;\n      end else begin\n        counter <= counter + 1;\n        out <= 1'b0;\n      end\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:14: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:17: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n2 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q6",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  input w,\n  output z\n);\n  reg [3:0] count;\n  always @(posedge clk or reset) begin\n    if (reset) begin\n      count <= 4'd0;\n    end else begin\n      count <= count + 1;\n    end\n  end\n  assign z = (count == 4'd4) ? 1 : 0;\nendmodule",
+                "pass": "Test failed: 31 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "mt2015_eq2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [1:0] A,\n  input [1:0] B,\n  output z\n);\n  assign z = (A == B) ? 1'b0 : 1'b1;\nendmodule",
+                "pass": "Test failed: 1999 mismatch(es) in 2000 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mt2015_q4a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\n  assign z = x & y; // Assuming the circuit is a simple AND gate based on common understanding\nendmodule",
+                "pass": "Test failed: 105 mismatch(es) in 202 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mux2to1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input sel,\n  output out\n);\n  assign out = sel ? a : b; \nendmodule",
+                "pass": "Test failed: 64 mismatch(es) in 122 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "norgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out\n);\n  assign out = a & b;\nendmodule",
+                "pass": "Test failed: 93 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "notgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  output out\n);\n  assign out = in;\nendmodule",
+                "pass": "Test failed: 239 mismatch(es) in 239 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "popcount3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] in,\n  output [1:0] out\n);\n  wire [2:0] temp;\n  assign temp = in + 1'b1;\n  assign out = temp[1:0];\nendmodule",
+                "pass": "Test failed: 164 mismatch(es) in 220 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "reduction",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output parity\n);\n  assign parity = in[7] ^ in[6] ^ in[5] ^ in[4] ^ in[3] ^ in[2] ^ in[1] ^ in[0];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "review2015_shiftcount",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input shift_ena,\n  input count_ena,\n  input data,\n  output reg [3:0] q\n);\n  always @(posedge clk) begin\n    if (shift_ena) begin\n      q <= {q[2:0], data};\n    end else if (count_ena) begin\n      q <= q + 1;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 1548 mismatch(es) in 2071 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ringer",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input ring,\n  input vibrate_mode,\n  output ringer,\n  output motor\n);\n  assign ringer = ring & vibrate_mode;\n  assign motor = ring & !vibrate_mode;\nendmodule",
+                "pass": "Test failed: 8 mismatch(es) in 19 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "shift4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input load,\n  input ena,\n  input [3:0] data,\n  output reg [3:0] q\n);\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      q <= 4'b0;\n    end else if (load) begin\n      q <= data;\n    end else if (ena) begin\n      q <= q + 1;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 347 mismatch(es) in 427 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "step_one",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  output one\n);\n   wire one;\n   assign one = 1'b1;  // Sample output functionality\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "thermostat",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input mode,\n  input too_cold,\n  input too_hot,\n  input fan_on,\n  output heater,\n  output aircon,\n  output fan\n);\n  assign heater = (mode == 2'b00) & 1'b1; \n  assign aircon = (mode == 2'b01) & 1'b1;\n  assign fan = (mode == 2'b10) & 1'b1; \n  assign fan = (mode == 2'b11) | (too_hot & fan_on);\n  // ... other outputs or logic if needed\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/testbench.v:119: vvp.tgt error: uwire \"fan_dut\" must have a single driver, found (2).\nerror: Code generation had 1 error(s)."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector0",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] vec,\n  output [2:0] outv,\n  output o2,\n  output o1,\n  output o0\n);\n  reg [2:0] outv;\n  wire [2:0] o0_external, o1_external, o2_external;\n  assign outv = vec;\n  assign o2 = o2_external;\n  assign o1 = o1_external;\n  assign o0 = o0_external;\n  assign o0_external = 1'b0;\n  assign o1_external = 1'b0;\n  assign o2_external = 1'b0;\nendmodule",
+                "pass": "Test failed: 14 mismatch(es) in 21 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [15:0] in,\n  output [7:0] out_hi,\n  output [7:0] out_lo\n);\n  // To be filled\n  assign out_hi = in[15:8];\n  assign out_lo = in[7:0];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [31:0] in,\n  output [31:0] out\n);\n  assign out = in;\nendmodule",
+                "pass": "Test failed: 109 mismatch(es) in 110 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [4:0] a,\n  input [4:0] b,\n  input [4:0] c,\n  input [4:0] d,\n  input [4:0] e,\n  input [4:0] f,\n  output [7:0] w,\n  output [7:0] x,\n  output [7:0] y,\n  output [7:0] z\n);\n  assign w = 0; \n  assign x = 0; \n  assign y = 0; \n  assign z = 0; \nendmodule",
+                "pass": "Test failed: 126 mismatch(es) in 126 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output [31:0] out\n);\n\n  assign out = in * 8 + in * 8 + in * 8 + in * 8 + in * 8 + in * 8 + in * 8;\n\nendmodule",
+                "pass": "Test failed: 99 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  input e,\n  output [24:0] out\n);\n  wire [24:0] out;\n  assign out = a & b | c & d | e & ~a | ( (c ^ d) & e ) | ~( (a ^ b) & c ) & d | e;\nendmodule",
+                "pass": "Test failed: 99 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vectorgates",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] a,\n  input [2:0] b,\n  output [2:0] out_or_bitwise,\n  output out_or_logical,\n  output [5:0] out_not\n);\n  assign out_or_bitwise = a | b;\n  assign out_or_logical = a || b;\n  assign out_not = ~a;\nendmodule",
+                "pass": "Test failed: 219 mismatch(es) in 261 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vectorr",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output [7:0] out\n);\n  assign out = in;  // Example code, to be matched with the circuit diagram\nendmodule",
+                "pass": "Test failed: 203 mismatch(es) in 218 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  output out\n);\n  wire p = in & in;\n  wire q = p | in;\n  assign out = q;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  output w,\n  output x,\n  output y,\n  output z\n);\n  assign w = a & b & c;\n  assign x = a | b | c;\n  assign y = a ^ b ^ c;\n  assign z = ~a & ~b & ~c;\nendmodule",
+                "pass": "Test failed: 187 mismatch(es) in 218 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire_decl",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out,\n  output out_n\n);\n  wire [7:0] out_internal;\n  wire [7:0] out_n_internal;\n\n  assign out = out_internal;\n  assign out_n = out_n_internal;\n\n  assign out_internal = {a, b, c, d, a, b, c, d};\n  assign out_n_internal = {a, b, c, d, ~a, ~b, ~c, ~d};\nendmodule",
+                "pass": "Test failed: 40 mismatch(es) in 122 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "xnorgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out\n);\n  assign out = a & b;\nendmodule",
+                "pass": "Test failed: 45 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "zero",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  output zero\n);\n  assign zero = 0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2012_q2b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [5:0] y,\n  input w,\n  output Y1,\n  output Y3\n);\n  assign Y1 = y[5] & ~w;  // Invert w and connect to Y1\n  assign Y3 = y[5] & w;   // Directly connect to Y3\nendmodule",
+                "pass": "Test failed: 371 mismatch(es) in 600 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2012_q2fsm",
+        "solutions": [
+            {
+                "solution": "```verilog\nmodule TopModule (\n  input clk,\n  input reset,\n  input w,\n  output z\n);\n  wire [3:0] a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, x, y, z0, z1, z2, z3, z4, z5, z6, z7, z8, z9, z10, z11, z12, z13, z14, z15, z16, z17, z18, z19, z20, z21, z22, z23, z24, z25, z26, z27, z28, z29, z30, z31, z32, z33, z34, z35, z36, z37, z38, z39, z40, z41, z42, z43, z44, z45, z46, z47, z48, z49, z50, z51, z52, z53, z54, z55, z56, z57, z58, z59, z60, z61, z62, z63, z64, z65, z66, z67, z68, z69, z70, z71, z72, z73, z74, z75, z76, z77, z78, z79, z80, z81, z82, z83, z84, z85, z86, z87, z88, z89, z90, z91, z92, z93, z94, z95, z96, z97, z98, z99, z100, z101, z102, z103, z104, z105, z106, z107, z108, z109, z110, z111, z112, z113, z114, z115, z116, z117, z118, z119, z120, z121, z122, z123, z124, z125, z126, z127, z128, z129, z130, z131, z132, z133, z134, z135, z136, z137, z138, z139, z140, z141, z142, z143, z144, z145, z146, z147, z148, z149, z150, z151, z152, z153, z154, z155, z156, z157, z158, z159, z160, z161, z162, z163, z164, z165, z166, z167, z168, z169, z170, z171, z172, z173, z174, z175, z176, z177, z178, z179, z180, z181, z182, z183, z184, z185, z186, z187, z188, z189, z190, z191, z192, z193, z194, z195, z196, z197, z198, z199, z200, z201, z202, z203, z204, z205, z206, z207, z208, z209, z210, z211, z212, z213, z214, z215, z216, z217, z218, z219, z220, z221, z222, z223, z224, z225, z226, z227, z228, z229, z230, z231, z232, z233, z234, z235, z236, z237, z238, z239, z240, z241, z242, z243, z244, z245, z246, z247, z248, z249, z250, z251, z252, z253, z254, z255, z256, z257, z258, z259, z260, z261, z262, z263, z264, z265, z266, z267, z268, z269, z270, z271, z272, z273, z274, z275, z276, z277, z278, z279, z280, z281, z282, z283, z284, z285, z286, z287, z288, z289, z290, z291, z292, z293, z294, z295, z296, z297, z298, z299, z300, z301, z302, z303, z304, z305, z306, z307, z308, z309, z310, z311, z312, z313, z314, z315, z316, z317, z318, z319, z320, z321, z322, z323, z324, z325, z326, z327, z328, z329, z330, z331, z332, z333, z334, z335, z336, z337, z338, z339, z340, z341, z342, z343, z344, z345, z346, z347, z348, z349, z350, z351, z352, z353, z354, z355, z356, z357, z358, z359, z360, z361, z362, z363, z364, z365, z366, z367, z368, z369, z370, z371, z372, z373, z374, z375, z376, z377, z378, z379, z380, z381, z382, z383, z384, z385, z386, z387, z388, z389, z390, z391, z392, z393, z394, z395, z396, z397, z398, z399, z400, z401, z402, z403, z404, z405, z406, z407, z408, z409, z410, z411, z412, z413, z414, z41",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:1: warning: macro verilog undefined (and assumed null) at this point.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2014_q3c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input x,\n  input [2:0] y,\n  output reg Y0,\n  output reg z\n);\n  assign z = x ^ y[1];\n  assign Y0 = x & y[2];\nendmodule",
+                "pass": "Test failed: 107 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "always_casez",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output reg [2:0] pos\n);\n  always @(in) begin\n    if (in[7:3] == 8'b10000000) begin\n      pos <= 3'b000;\n    end\n    else if (in[7:3] == 8'b01000000) begin\n      pos <= 3'b001;\n    end\n    else if (in[7:3] == 8'b00100000) begin\n      pos <= 3'b010;\n    end\n    else if (in[7:3] == 8'b00010000) begin\n      pos <= 3'b011;\n    end\n    else if (in[7:3] == 8'b00001000) begin\n      pos <= 3'b100;\n    end\n    else if (in[7:3] == 8'b00000100) begin\n      pos <= 3'b101;\n    end\n    else if (in[7:3] == 8'b00000010) begin\n      pos <= 3'b110;\n    end\n    else begin\n      pos <= 3'b111;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 339 mismatch(es) in 346 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit10",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  input b,\n  output q,\n  output state\n);\n  reg [2:0] state;\n  always @(posedge clk) begin\n    if (state == 3'b000) begin\n      state <= 3'b001;\n    end else if (state == 3'b001) begin\n      state <= 3'b010;\n    end else if (state == 3'b010) begin\n      state <= 3'b011;\n    end else if (state == 3'b011) begin\n      state <= 3'b100;\n    end else if (state == 3'b100) begin\n      state <= 3'b101;\n    end else if (state == 3'b101) begin\n      state <= 3'b110;\n    end else if (state == 3'b110) begin\n      state <= 3'b111;\n    end else if (state == 3'b111) begin\n      state <= 3'b000;\n    end\n  end\n  assign q = (a && b) ? state : 1'b0;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:8: warning: Port declaration of state inherits dimensions from var/net.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:8: error: Scalar port ``state'' has a vectored net declaration [2:0].\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:28: error: Unable to bind wire/reg/memory `state' in `tb.top_module1'\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:28: error: Unable to elaborate r-value: ((a)&&(b))?(state):(1'd0)\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: error: Unable to bind wire/reg/memory `state' in `tb.top_module1'\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: error: Unable to elaborate condition expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:6: error: no wire/reg state in module tb.top_module1.\n6 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "circuit2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\nassign q = a & b & c & d;\nendmodule",
+                "pass": "Test failed: 57 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  assign q = c & d;\nendmodule",
+                "pass": "Test failed: 60 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  assign q = a & (b | c) | d;\nendmodule",
+                "pass": "Test failed: 35 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] a,\n  input [3:0] b,\n  input [3:0] c,\n  input [3:0] d,\n  input [3:0] e,\n  output reg [3:0] q\n);\n\n  always @ (a, b, c, d, e) begin\n    q = a ^ b ^ c ^ d ^ e;\n  end\n\nendmodule",
+                "pass": "Test failed: 133 mismatch(es) in 141 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit9",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  output reg [2:0] q\n);\n  always @(posedge clk) begin\n    if (a) begin\n      q <= {q[1:0], 1'b0};\n    end else begin\n      q <= {q[1:0], 1'b1};\n    end\n  end\nendmodule",
+                "pass": "Test failed: 232 mismatch(es) in 245 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q2",
+        "solutions": [
+            {
+                "solution": "```verilog\nmodule TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out_sop,\n  output out_pos\n);\n  wire z1, z2, z3, z4, z5, z6, z7, z8, z9;\n  wire x1, x2, x3, x4, x5, x6, x7, x8;\n  wire y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12, y13, y14, y15, y16, y17, y18, y19, y20, y21, y22, y23, y24, y25, y26, y27, y28, y29, y30, y31, y32, y33, y34, y35, y36, y37, y38, y39, y40, y41, y42, y43, y44, y45, y46, y47, y48, y49, y50, y51, y52, y53, y54, y55, y56, y57, y58, y59, y60, y61, y62, y63, y64, y65, y66, y67, y68, y69, y70, y71, y72, y73, y74, y75, y76, y77, y78, y79, y80, y81, y82, y83, y84, y85, y86, y87, y88, y89, y90, y91, y92, y93, y94, y95, y96, y97, y98, y99, y100, y101, y102, y103, y104, y105, y106, y107, y108, y109, y110, y111, y112, y113, y114, y115, y116, y117, y118, y119, y120, y121, y122, y123, y124, y125, y126, y127, y128, y129, y130, y131, y132, y133, y134, y135, y136, y137, y138, y139, y140, y141, y142, y143, y144, y145, y146, y147, y148, y149, y150, y151, y152, y153, y154, y155, y156, y157, y158, y159, y160, y161, y162, y163, y164, y165, y166, y167, y168, y169, y170, y171, y172, y173, y174, y175, y176, y177, y178, y179, y180, y181, y182, y183, y184, y185, y186, y187, y188, y189, y190, y191, y192, y193, y194, y195, y196, y197, y198, y199, y200, y201, y202, y203, y204, y205, y206, y207, y208, y209, y210, y211, y212, y213, y214, y215, y216, y217, y218, y219, y220, y221, y222, y223, y224, y225, y226, y227, y228, y229, y230, y231, y232, y233, y234, y235, y236, y237, y238, y239, y240, y241, y242, y243, y244, y245, y246, y247, y248, y249, y250, y251, y252, y253, y254, y255, y256, y257, y258, y259, y260, y261, y262, y263, y264, y265, y266, y267, y268, y269, y270, y271, y272, y273, y274, y275, y276, y277, y278, y279, y280, y281, y282, y283, y284, y285, y286, y287, y288, y289, y290, y291, y292, y293, y294, y295, y296, y297, y298, y299, y300, y301, y302, y303, y304, y305, y306, y307, y308, y309, y310, y311, y312, y313, y314, y315, y316, y317, y318, y319, y320, y321, y322, y323, y324, y325, y326, y327, y328, y329, y330, y331, y332, y333, y334, y335, y336, y337, y338, y339, y340, y341, y342, y343, y344, y345, y346, y347, y348, y349, y350, y351, y352, y353, y354, y355, y356, y357, y358, y359, y360, y361, y362, y363, y364, y365, y366, y367, y368, y369, y370, y371, y372, y373, y374, y375, y376, y377, y378, y379, y380, y381, y382, y383, y384, y385, y386, y387, y388, y389, y390, y391, y392, y393, y394, y395, y396, y397, y398, y399, y400, y401, y402, y403, y404, y405, y406, y407, y408, y409, y410, y411, y412, y41",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:1: warning: macro verilog undefined (and assumed null) at this point.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "ece241_2014_q5b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input x,\n  output z\n);\n  reg [4:0] count;\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      count <= 0;\n    end else begin\n      count <= count + 1;\n      if (count == 31) begin\n        z <= 1;\n      end else begin\n        z <= 0;\n      end\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:14: error: z is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : z is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:16: error: z is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : z is declared here as wire.\n2 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3comb",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [1:0] state,\n  output reg [1:0] next_state,\n  output out\n);\n  always @(in or state) begin\n    case (state) \n      2'b00 : next_state = in ? 2'b01 : 2'b00;\n      2'b01 : next_state = in ? 2'b10 : 2'b01;\n      2'b10 : next_state = in ? 2'b11 : 2'b10;\n      2'b11 : next_state = in ? 2'b00 : 2'b11;\n    endcase\n  end\n  assign out = state[0] & state[1];\nendmodule",
+                "pass": "Test failed: 64 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3onehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [3:0] state,\n  output reg [3:0] next_state,\n  output out\n);\n  always @(state) begin\n    case (state)  // Next state definitions based on current state and input\n      4'b0000 : next_state = 4'b0010;\n      4'b0001 : next_state = 4'b0011;\n      4'b0010 : next_state = 4'b0011;\n      4'b0011 : next_state = 4'b0101;\n      4'b0100 : next_state = 4'b1010;\n      4'b0101 : next_state = 4'b1011;\n      4'b0110 : next_state = 4'b1100;\n      4'b0111 : next_state = 4'b1111;\n      4'b1000 : next_state = 4'b1101;\n      4'b1001 : next_state = 4'b0000;\n      4'b1010 : next_state = 4'b0001;\n      4'b1011 : next_state = 4'b0010;\n      4'b1100 : next_state = 4'b0011;\n      4'b1101 : next_state = 4'b0101;\n      4'b1110 : next_state = 4'b1010;\n      4'b1111 : next_state = 4'b1111;\n    endcase\n  end\n  always @(in) begin\n    case (state)  // Output definitions based on current state and input\n      4'b0000 : out = 0;\n      4'b0001 : out = 0;\n      4'b0010 : out = 0;\n      4'b0011 : out = 0;\n      4'b0100 : out = 0;\n      4'b0101 : out = 0;\n      4'b0110 : out = 0;\n      4'b0111 : out = 0;\n      4'b1000 : out = 0;\n      4'b1001 : out = 0;\n      4'b1010 : out = 0;\n      4'b1011 : out = 0;\n      4'b1100 : out = 0;\n      4'b1101 : out = 0;\n      4'b1110 : out = 0;\n      4'b1111 : out = 1;\n    endcase\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:29: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:30: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:31: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:32: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:33: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:34: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:35: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:36: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:37: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:38: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:39: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:40: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:41: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:42: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:43: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:44: error: out is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : out is declared here as wire.\n16 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_hdlc",
+        "solutions": [
+            {
+                "solution": "```verilog\nmodule TopModule (\n  input clk,\n  input reset,\n  input in,\n  output disc,\n  output flag,\n  output err\n);\n  // Start of the code\n  reg [3:0] counter;\n  reg [3:0] ref_nbr_a, ref_nbr_b, ref_nbr_c, ref_nbr_d;\n  reg [3:0] current_nbr;\n  reg [3:0] final_nbr;\n  reg [3:0] actual_id;\n  reg folded_error;\n  reg attention; \n  reg actual_count;\n  reg activate_flag;\n  reg count_error;\n\n  // Pipeline stages: stage 0 \n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      counter <= 0;\n      ref_nbr_a <= 0;\n      ref_nbr_b <= 0;\n      ref_nbr_c <= 0;\n      ref_nbr_d <= 0;\n      current_nbr <= 0;\n      final_nbr <= 0;\n      actual_id <= 0;\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n    end\n    else if (counter == 0) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_a;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 1;\n      actual_count <= 1;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 1;\n    end\n    else if (counter == 1) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_b;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 2;\n    end\n    else if (counter == 2) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_c;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 3;\n    end\n    else if (counter == 3) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_d;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 4;\n    end\n    else if (counter == 4) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_a;\n      final_nbr <= ref_nbr_b;\n      actual_id <= ref_nbr_b;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 5;\n    end\n    else if (counter == 5) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_a;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 6;\n    end\n    else if (counter == 6) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_b;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 7;\n    end\n    else if (counter == 7) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_c;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 8;\n    end\n    else if (counter == 8) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_d;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 9;\n    end\n    else if (counter == 9) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_a;\n      final_nbr <= ref_nbr_b;\n      actual_id <= ref_nbr_b;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 10;\n    end\n    else if (counter == 10) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_a;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 11;\n    end\n    else if (counter == 11) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_b;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 12;\n    end\n    else if (counter == 12) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_c;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= 0;\n      actual_count <= 0;\n      activate_flag <= 0;\n      count_error <= 0;\n      counter <= 13;\n    end\n    else if (counter == 13) begin\n      ref_nbr_a <= in;  // lbl: \"Use of signal\"\n      ref_nbr_b <= ref_nbr_a;\n      ref_nbr_c <= ref_nbr_b;\n      ref_nbr_d <= ref_nbr_c;\n      current_nbr <= ref_nbr_d;\n      final_nbr <= ref_nbr_a;\n      actual_id <= ref_nbr_a;  // lbl: \"Use of signal\"\n      folded_error <= 0;\n      attention <= ",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:1: warning: macro verilog undefined (and assumed null) at this point.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:1: syntax error\nI give up."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_onehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [9:0] state,\n  output [9:0] next_state,\n  output out1,\n  output out2\n);\n  always @(*) begin\n    next_state = state;\n    if (in == 0) begin\n      next_state = state + 1;\n    end\n    out1 = state[9], out2 = state[8];\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:13: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:13: Syntax in assignment statement l-value."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_ps2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  input reset,\n  output done\n);\n  reg [7:0] in_reg;\n  reg [15:0] count;\n  reg done_reg;\n\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      count <= 0;\n      done_reg <= 0;\n    end else begin\n      count <= count + 1;\n      if (count == 8) begin\n        in_reg <= 8'b0; // Clear and set to null\n        done_reg <= 1;\n      end\n    end\n  end\n\n  assign done = done_reg;\nendmodule",
+                "pass": "Test failed: 224 mismatch(es) in 400 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_serial",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input reset,\n  output done\n);\n  reg [1:0] cnt;\n  reg [3:0] state;\n\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      state <= 2'b00;\n      cnt <= 2'b00;\n    end\n    else if (state == 2'b11) begin\n      state <= 2'b00;\n      done <= 1'b1;\n    end\n    else if (state == 2'b01) begin\n      cnt <= cnt + 1'b1;\n    end\n    else if (state == 2'b00) begin\n      if (in) begin\n        state <= 2'b01;\n      end\n    end\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:17: error: done is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:5:      : done is declared here as wire.\n1 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "gatesv",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input  [3:0] in,\n  output [3:0] out_both,\n  output [3:0] out_any,\n  output [3:0] out_different\n);\n  assign out_both = in & ~(in ^ (in >> 1));\n  assign out_any  = in | (in >> 1);\n  assign out_different = in ^ (in >> 1);\nendmodule",
+                "pass": "Test failed: 175 mismatch(es) in 213 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  output out\n);\n  wire top;\n  wire bot;\n  assign top = a & b;\n  assign bot = c | a;\n  assign out = bot & top;\nendmodule",
+                "pass": "Test failed: 147 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out\n);\n  assign out = (a && b) | (c && d);\nendmodule",
+                "pass": "Test failed: 145 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a, \n  input b, \n  input c, \n  input d, \n  output reg out\n);\n  always @(*) begin\n    out = (a & b) | (c & d);\n  end\nendmodule",
+                "pass": "Test failed: 46 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output reg out\n);\n  always @(a, b, c, d) begin\n    case (a*16 + b*8 + c*4 + d*2 + 1)  // unique input combinations for distinct outputs\n      2: out = 0;    // a=0, b=0, c=0, d=1\n      3: out = 1;    // a=0, b=0, c=1, d=1\n      4: out = 1;    // a=0, b=1, c=0, d=1\n      5: out = 0;    // a=0, b=1, c=1, d=1\n      6: out = 0;    // a=1, b=0, c=0, d=1\n      7: out = 1;    // a=1, b=0, c=1, d=1\n      8: out = 1;    // a=1, b=1, c=0, d=1\n      9: out = 0;    // a=1, b=1, c=1, d=1\n    endcase\n  end\nendmodule",
+                "pass": "Test failed: 136 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "lemmings1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input bump_left,\n  input bump_right,\n  output walk_left,\n  output walk_right\n);\n  reg [1:0] state, next_state;\n  reg [3:0] count;\n  reg [1:0] dir;\n\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      state <= 2'b00;\n      count <= 4'd0;\n      dir <= 2'b00;\n    end else begin\n      state <= next_state;\n      count <= count + 1;\n      dir <= next_state;\n    end\n  end\n\n  always @(*) begin\n    case (state)\n      2'b00: begin\n        if (bump_left) begin\n          dir <= 2'b00;\n          next_state <= 2'b01;\n        end else if (bump_right) begin\n          dir <= 2'b10;\n          next_state <= 2'b01;\n        end else begin\n          next_state <= 2'b00;\n        end\n      end\n      2'b01: begin\n        if (count > 4'd1) begin\n          next_state <= 2'b10;\n        end else begin\n          if (bump_left) begin\n            next_state <= 2'b00;\n          end else if (bump_right) begin\n            next_state <= 2'b01;\n          end\n        end\n      end\n      2'b10: begin\n        if (bump_right) begin\n          next_state <= 2'b11;\n        end else begin\n          next_state <= 2'b01;\n        end\n      end\n      2'b11: begin\n        if (count > 4'd1) begin\n          next_state <= 2'b00;\n        end else begin\n          if (bump_right) begin\n            next_state <= 2'b10;\n          end else begin\n            next_state <= 2'b01;\n          end\n        end\n      end\n      default: next_state <= 2'b00;\n    endcase\n  end\n\n  assign walk_left = (dir == 2'b00);\n  assign walk_right = (dir == 2'b10);\nendmodule",
+                "pass": "Test failed: 139 mismatch(es) in 229 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "lemmings2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input bump_left,\n  input bump_right,\n  input ground,\n  output walk_left,\n  output walk_right,\n  output aaah\n);\n  reg [3:0] state, next_state;\n  reg [1:0] direction;\n  reg [1:0] motor_state;\n\n  always @(posedge clk orposedge areset) begin\n    if (areset) begin\n      state <= 0;\n      direction <= 0;\n      motor_state <= 0;\n    end else begin\n      state <= next_state;\n      direction <= (next_state == 3) ? 1 : 0;\n      motor_state <= (next_state == 3) ? 1 : 0;\n    end\n  end\n\n  always @(*) begin\n    case (state)\n      0: next_state = (bump_right) ? 1 : 2;\n      1: next_state = 2;\n      2: next_state = (bump_left) ? 3 : 0;\n      3: next_state = 0;\n      default: next_state = 0;\n    endcase\n  end\n\n  assign walk_left = (direction == 1) ? 1 : 0;\n  assign walk_right = (direction == 0) ? 1 : 0;\n  assign aaah = (motor_state == 1) ? 1 : 0;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: error: Malformed event control expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: error: Invalid event control."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "mt2015_q4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\n  assign z = x & y;\nendmodule",
+                "pass": "Test failed: 98 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mt2015_q4b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\nassign z = x & y;  // Uncomment this line if based on a specific circuit type like AND\nendmodule",
+                "pass": "Test failed: 21 mismatch(es) in 110 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "review2015_fsmseq",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  input data,\n  output start_shifting\n);\n// Code based on the description and circuit diagram\nreg [7:0] shift_reg;\nreg [7:0] output_reg;\nreg [7:0] pattern;\nreg [7:0] count;\nreg start_shifting;\nreg [7:0] current;\nalways @(posedge clk or posedge reset) begin\n  if (reset) begin\n    count <= 8'd0;\n    start_shifting <= 1'b0;\n  end else begin\n    count <= count + 1'b1;\n    if (count == 8'd8) begin\n      count <= 8'd0;\n      start_shifting <= 1'b1;\n    end\n  end\nend\n\nendmodule",
+                "pass": "Test failed: 168 mismatch(es) in 643 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "review2015_fsmshift",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output shift_ena\n);\n\nreg [3:0] counter;\n\nalways @(posedge clk or posedge reset) begin\n  if (reset) begin\n    counter <= 4'b0000;\n  end else begin\n    counter <= counter + 1;\n    if (counter == 4'b1111) begin\n      shift_ena <= 1'b1;\n      counter <= 4'b0000;\n    end else begin\n      shift_ena <= 1'b0;\n    end\n  end\nend\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:15: error: shift_ena is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:4:      : shift_ena is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:18: error: shift_ena is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:4:      : shift_ena is declared here as wire.\n2 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "truthtable1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x3,\n  input x2,\n  input x1,\n  output f\n);\n  assign f = x3 & x2 & x1;\nendmodule",
+                "pass": "Test failed: 6 mismatch(es) in 58 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2012_q1g",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  output logic f\n);\n  assign f = x[3] & x[2] & x[1] & x[0];\nendmodule",
+                "pass": "Test failed: 37 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2013_q2bfsm",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input x,\n  input y,\n  output f,\n  output g\n);\n  reg [1:0] state, next_state;\n  reg [1:0] count_reg;\n  always @(posedge clk, negedge resetn) begin\n    if (~resetn) begin\n      state <= 2'b00;\n      count_reg <= 2'b00;\n    end else begin\n      state <= next_state;\n      count_reg <= count_reg + 1;\n    end\n  end\n  always @(*) begin\n    case (state)\n      2'b00: begin\n        f <= 0;\n        g <= 0;\n      end\n      2'b01: begin\n        f <= x & y;\n        g <= !y;\n      end\n      2'b10: begin\n        f <= x | y;\n        g <= !x;\n      end\n      2'b11: begin\n        f <= !x & !y;\n        g <= x ^ y;\n      end\n      default: begin\n        f <= 1'b0;\n        g <= 1'b0;\n      end\n    endcase\n  end\n  always @(*) begin\n    case (state)\n      2'b00: next_state <= 2'b01;\n      2'b01: next_state <= 2'b10;\n      2'b10: next_state <= 2'b11;\n      2'b11: next_state <= 2'b00;\n      default: next_state <= 2'b00;\n    endcase\n  end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:23: error: f is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:6:      : f is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:24: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7:      : g is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:27: error: f is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:6:      : f is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:28: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7:      : g is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:31: error: f is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:6:      : f is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:32: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7:      : g is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:35: error: f is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:6:      : f is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:36: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7:      : g is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:39: error: f is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:6:      : f is declared here as wire.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:40: error: g is not a valid l-value in tb.top_module1.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:7:      : g is declared here as wire.\n10 error(s) during elaboration."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "circuit8",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clock,\n  input a,\n  output reg p,\n  output reg q\n);\n  always @(posedge clock) begin\n    if (a) begin\n      p <= 0;\n      q <= 1;\n    end\n    else begin\n      p <= 1;\n      q <= 0;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 200 mismatch(es) in 240 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2014_q4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input x,\n  output z\n);\n  reg [3:0] counter;\n  always @(posedge clk) begin\n    if (counter == 4'd15) begin\n      counter <= 4'd0;\n    end\n    counter <= counter + 1;\n  end\n  assign z = (counter == 4'd15) ? 1 : 0;\nendmodule",
+                "pass": "Test failed: 118 mismatch(es) in 118 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "ece241_2014_q5a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input x,\n  output z\n);\n  reg [3:0] state, next_state;\n  wire [3:0] clk_en;\n\n  always @(posedge clk orposedge areset) begin\n    if (areset) begin\n      state <= 4'b0000;\n    end else begin\n      state <= next_state;\n    end\n  end\n\n  always @(*) begin\n    next_state = state;\n    case (state)\n      4'b0000: next_state = 4'b0001; // State 0 to State 1\n      4'b0001: next_state = 4'b0010; // State 1 to State 2\n      4'b0010: next_state = 4'b0011; // State 2 to State 3\n      4'b0011: next_state = 4'b0100; // State 3 to State 4\n      4'b0100: next_state = 4'b0101; // State 4 to State 5\n      4'b0101: next_state = 4'b0110; // State 5 to State 6\n      4'b0110: next_state = 4'b0111; // State 6 to State 7\n      4'b0111: next_state = 4'b1000; // State 7 to State 8\n      4'b1000: next_state = 4'b1001; // State 8 to State 9\n      4'b1001: next_state = 4'b1010; // State 9 to State 10\n      4'b1010: next_state = 4'b1011; // State 10 to State 11\n      4'b1011: next_state = 4'b1100; // State 11 to State 12\n      4'b1100: next_state = 4'b1101; // State 12 to State 13\n      4'b1101: next_state = 4'b1110; // State 13 to State 14\n      4'b1110: next_state = 4'b1111; // State 14 to State 15\n      4'b1111: next_state = 4'b0000; // State 15 to State 0\n      default: next_state = 4'b0000;\n    endcase\n  end\n\n  assign z = (state == 4'b1111) ? 1 : 0; // Condition to set output z based on state\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: syntax error\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: error: Malformed event control expression.\n/tmp/fc_iverilog__kcuev8p/verilogeval_v2/temp.v:10: error: Invalid event control."
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "lfsr5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [4:0] q\n);\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      q <= 5'b00000;\n    end else begin\n      q <= q + 1'b1;\n    end\n  end\nendmodule",
+                "pass": "Test failed: 4316 mismatch(es) in 4443 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  output logic f\n);\n  assign f = x[3] ^ x[2] ^ x[1] ^ x[0];\nendmodule",
+                "pass": "Test failed: 30 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q6b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] y,\n  input w,\n  output reg Y1\n);\n  always @(y or w) begin\n    Y1 = (y == 3'b001) ? w : (y == 3'b010) ? ~w : (y == 3'b011) ? 1 : 0;\n  end\nendmodule",
+                "pass": "Test failed: 48 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "review2015_fsmonehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input d,\n  input done_counting,\n  input ack,\n  input [9:0] state, // 10-bit one-hot current state\n  output B3_next,\n  output S_next,\n  output S1_next,\n  output Count_next,\n  output Wait_next,\n  output done,\n  output counting,\n  output shift_ena\n);\n  assign B3_next = state[0] ? 1 : 1;\n  assign S_next = state[1] ? 1 : 1;\n  assign S1_next = state[2] ? 1 : 1;\n  assign Count_next = state[3] ? 1 : 1;\n  assign Wait_next = state[4] ? 1 : 1;\n  assign done = state[5] ? 1 : 0;\n  assign counting = state[6] ? 1 : 0;\n  assign shift_ena = state[7] ? 1 : 0;\n  assign done_counting = state[8] ? 1 : 0;\n  assign d = state[9] ? 1 : 0;\nendmodule",
+                "pass": "Test failed: 300 mismatch(es) in 300 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "adder_32bit",
+        "solutions": [
+            {
+                "solution": "module adder_32bit(A,B,S,C32);\n     input [32:1] A;\n     input [32:1] B;\n     output [32:1] S;\n     output C32;\n     assign S = A + B;\n     assign C32 = A[32] ^ B[32] ^ S[32];\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "adder_8bit",
+        "solutions": [
+            {
+                "solution": "module adder_8bit(\n    input [7:0] a, b, \n    input cin, \n    output [7:0] sum, \n    output cout);\n    assign sum = a ^ b ^ cin;\n    assign cout = (a & b) | (b & cin) | (a & cin);\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "adder_bcd",
+        "solutions": [
+            {
+                "solution": "module adder_bcd (\n    input  [3:0] A,   // First BCD number (0-9)\n    input  [3:0] B,   // Second BCD number (0-9)\n    input  Cin,       // Input carry\n    output [3:0] Sum, // BCD sum (0-9)\n    output Cout       // Output carry\n);\n    wire [4:0] total = A + B + Cin;\n    assign Sum = total[3:0];\n    assign Cout = total[4];\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "comparator_3bit",
+        "solutions": [
+            {
+                "solution": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output A_greater,\n    output A_equal,\n    output A_less\n);\n    wire [2:0] diff = A - B;\n    assign A_greater = (diff[2] == 1) && (diff[1:0] == 0);\n    assign A_equal = (diff == 0);\n    assign A_less = (diff[2] == 0) && (diff[1:0] == 0);\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "comparator_4bit",
+        "solutions": [
+            {
+                "solution": "module comparator_4bit(\n    input [3:0] A,   // First 4-bit input operand\n    input [3:0] B,   // Second 4-bit input operand\n    output A_greater, \n    output A_equal,   \n    output A_less     \n);\n    wire [3:0] diff;\n    assign diff = A - B;\n    assign A_greater = diff[3];\n    assign A_equal = (diff == 4'd0);\n    assign A_less = diff[3] == 0 && diff[2] == 0 && diff[1] == 0 && diff[0] == 0; // Hence, should be equal to NOT (A_greater) AND \nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "counter_12",
+        "solutions": [
+            {
+                "solution": "module counter_12 \n(\n  input rst_n,\n  input clk,\n  input valid_count,\n\n  output reg [3:0] out\n);\n\n  always @(posedge clk or posedge valid_count) begin\n    if (!rst_n) begin\n      out <= 4'b0000;\n    end else if (valid_count) begin\n      out <= out + 1;\n    end\n  end\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "edge_detect",
+        "solutions": [
+            {
+                "solution": "module edge_detect(\n\tinput clk,\n\tinput rst_n,\n\tinput a,\n\t\n\toutput reg rise,\n\toutput reg down\n);\n    reg prev_a;\n\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            prev_a <= 1'b0;\n            rise <= 1'b0;\n            down <= 1'b0;\n        end\n        else begin\n            if (a == 0 && prev_a == 1) rise <= 1'b1;\n            if (a == 1 && prev_a == 0) down <= 1'b1;\n            prev_a <= a;\n        end\n    end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "freq_divbyeven",
+        "solutions": [
+            {
+                "solution": "module freq_divbyeven(\n    input clk,\n    input rst_n,\n    output clk_div\n);\n    integer i;\n    reg [1:0] count;\n    \n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            count <= 0;\n        end\n        else if (count == 3) begin\n            count <= 0;\n        end\n        else begin\n            count <= count + 1;\n        end\n    end\n    \n    assign clk_div = (count == 1) | (count == 3) ? 1 : 0;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "instr_reg",
+        "solutions": [
+            {
+                "solution": "module instr_reg (\n    input clk,\n    input rst,\n    input [1:0] fetch,\n    input [7:0] data,\n    output [2:0] ins,\n    output [4:0] ad1,\n    output [7:0] ad2\n);\n    reg [2:0] ins;\n    reg [4:0] ad1;\n    reg [7:0] ad2;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            ins <= 3'b0;\n            ad1 <= 5'b0;\n            ad2 <= 8'b0;\n        end\n        else if (fetch == 2'b00) begin\n            ins <= 3'b0;\n            ad1 <= 5'b0;\n            ad2 <= data;\n        end\n        else if (fetch == 2'b01) begin\n            ins <= 3'b0;\n            ad1 <= 5'b0;\n            ad2 <= {data[7:3], 2'b0};\n        end\n        else if (fetch == 2'b10) begin\n            ins <= 3'b0;\n            ad1 <= 5'b0;\n            ad2 <= data;\n        end\n        else begin\n        ins <= 3'b0;\n        ad1 <= 5'b0;\n        ad2 <= {data[7:3], 2'b0};\n        end\n    end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "LFSR",
+        "solutions": [
+            {
+                "solution": "module LFSR (out, clk, rst);\n  input clk, rst;\n  output reg [3:0] out;\n  reg [3:0] state;\n  \n  always @(posedge clk) begin\n    if (rst) begin\n      state <= 4'b0001; // Initialization based on previous pattern\n    end\n    else begin\n      state <= {state[2:0], state[3] ^ state[0]}; // LFSR pattern\n    end\n  end\n  assign out = state;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "right_shifter",
+        "solutions": [
+            {
+                "solution": "module right_shifter(clk, q, d);\n    input clk;\n    input d;\n    output [7:0] q;\n    reg [7:0] q_reg;\n    always @(posedge clk) begin\n        q_reg <= {q_reg[6:0], d};\n        q <= q_reg;\n    end\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog__kcuev8p/rtllm_v2/temp.v:8: error: q is not a valid l-value in testbench.dut.\n/tmp/fc_iverilog__kcuev8p/rtllm_v2/temp.v:4:      : q is declared here as wire.\n1 error(s) during elaboration."
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "synchronizer",
+        "solutions": [
+            {
+                "solution": "module synchronizer(\n\tinput \t\tclk_a\t, \n\tinput \t\tclk_b\t,   \n\tinput \t\tarstn\t,\n\tinput\t\tbrstn   ,\n\tinput\t\t[3:0]\tdata_in\t,\n\tinput\t\tdata_en ,\n\n\toutput reg  [3:0] \tdataout\n);\n\t// To be implemented by the student.\n\treg [3:0] data_q1;\n\treg [3:0] data_q2;\n\n\treg [3:0] data_synced;\n\n\talways @(posedge clk_a or negedge arstn) begin\n\t\tif (!arstn) begin\n\t\t\tdata_q1 <= 4'b0;\n\t\t\tdata_synced <= 4'b0;\n\t\tend\n\t\telse begin\n\t\t\tdata_q1 <= data_in;\n\t\t\tdata_synced <= data_q1;\n\t\tend\n\tend\n\n\talways @(posedge clk_b or negedge brstn) begin\n\t\tif (!brstn) begin\n\t\t\tdata_q2 <= 4'b0;\n\t\tend\n\t\telse begin\n\t\t\t// Ensure correct synchronization to the other clock.\n\t\t\tif (clk_a) data_q2 <= data_synced;\n\t\tend\n\tend\n\n\t// When both synchronization stages are complete, implement the output.\n\tassign dataout = data_q2;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "fsm",
+        "solutions": [
+            {
+                "solution": "module fsm(IN,MATCH,CLK,RST);\ninput IN,CLK,RST;\noutput reg MATCH;\n\nreg [3:0] state, next_state;\nalways @(posedge CLK or posedge RST) begin\n    if (RST) begin\n        state <= 4'b0000;\n    end else begin\n        state <= next_state;\n    end\nend\n\nalways @(*) begin\n    case (state)\n        4'b0000: next_state = (IN == 1) ? 4'b0001 : 4'b0000;\n        4'b0001: next_state = (IN == 1) ? 4'b0010 : 4'b0000;\n        4'b0010: next_state = (IN == 1) ? 4'b0011 : 4'b0000;\n        4'b0011: next_state = (IN == 1) ? 4'b0100 : 4'b0000;\n        4'b0100: next_state = (IN == 1) ? 4'b0101 : 4'b0000;\n        4'b0101: next_state = (IN == 1) ? 4'b0110 : 4'b0000;\n        4'b0110: next_state = (IN == 1) ? 4'b0111 : 4'b0000;\n        4'b0111: next_state = (IN == 1) ? 4'b1000 : 4'b0000;\n        4'b1000: next_state = (IN == 1) ? 4'b1001 : 4'b0000;\n        4'b1001: next_state = (IN == 1) ? 4'b1010 : 4'b0000;\n        4'b1010: next_state = (IN == 1) ? 4'b1011 : 4'b0000;\n        4'b1011: next_state = (IN == 1) ? 4'b1100 : 4'b0000;\n        4'b1100: next_state = (IN == 1) ? 4'b1101 : 4'b0000;\n        4'b1101: next_state = (IN == 1) ? 4'b1110 : 4'b0000;\n        4'b1110: next_state = (IN == 1) ? 4'b1111 : 4'b0000;\n        4'b1111: next_state = 4'b0000;\n        default: next_state = 4'b0000;\n    endcase\nend\n\nassign MATCH = (state == 4'b1111);\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "parallel2serial",
+        "solutions": [
+            {
+                "solution": "module parallel2serial(\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output valid_out,\n    output dout\n);\n    reg [3:0] data;\n    reg valid_flag;\n    reg [3:0] counter;\n    \n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            data <= 0;\n            valid_flag <= 0;\n            counter <= 0;\n        end else begin\n            if (counter == 4) begin\n                data <= 0;\n                valid_flag <= 0;\n                counter <= 0;\n            end else begin\n                data <= d;\n                valid_flag <= 1;\n                counter <= counter + 1;\n            end\n        end\n    end\n    \n    assign dout = data;\n    assign valid_out = valid_flag;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ROM",
+        "solutions": [
+            {
+                "solution": "module ROM (\n    input wire [7:0] addr,        // 8-bit Address input\n    output reg [15:0] dout        // 16-bit Data output\n);\n    reg [15:0] rom_data [0:255];  // 256x16 RAM storage\n    initial begin\n        for (int i=0; i<256; i=i+1) begin\n            rom_data[i] = 16'h645C;  // Fill the ROM with the specified data\n        end\n    end\n    always @(addr) begin\n        dout = rom_data[addr];\n    end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "sequence_detector",
+        "solutions": [
+            {
+                "solution": "module sequence_detector(\n     input  clk, \n     input  rst_n,\n     input  data_in, \n     output sequence_detected\t\t\t\t\n     );\n    reg [2:0] state;\n    reg sequence_detected;\n    always @(posedge clk or posedge rst_n) begin\n        if (!rst_n) begin\n            state <= 3'd0;\n            sequence_detected <= 0;\n        end\n        else begin\n            case (state)\n                3'd0: if (data_in) state <= 3'd1; else state <= 3'd0;\n                3'd1: if (data_in) state <= 3'd2; else state <= 3'd0;\n                3'd2: if (data_in) state <= 3'd3; else state <= 3'd0;\n                3'd3: if (data_in) begin sequence_detected <= 1; state <= 3'd0; end\n                default: state <= state;\n            endcase\n        end\n    end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Finite State Machines"
+    }
+]

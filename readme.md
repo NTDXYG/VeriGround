@@ -1,116 +1,234 @@
 # From Mirage to Grounding: Towards Reliable Multimodal Circuit-to-Verilog Code Generation
 
-Code, **C2VEval** benchmark, and **VeriGround** training scripts for the paper of the same title.
+Code, **C2VEval** benchmark, and **VeriGround** training/evaluation scripts for the paper *"From Mirage to Grounding: Towards Reliable Multimodal Circuit-to-Verilog Code Generation"*.
 
 ## ⚡ Overview
 
-We study **Mirage**: MLLMs can ignore circuit images and latch onto **identifier semantics** in `module_header` instead. Swapping diagrams for blanks barely hurts Pass@k (sometimes helps).
+We study the **Mirage** phenomenon in multimodal circuit-to-Verilog code generation: existing MLLMs largely bypass the circuit diagram and instead exploit **identifier semantics** in `module_header` to retrieve canonical RTL templates. Consequently, replacing the circuit diagram with a blank image leaves Pass@$k$ unchanged—or even **higher** when complex schematics confuse the model.
 
-This repo provides:
+This repository provides:
 
-1. **C2VEval** (169 tasks): paired **Normal / Anony** protocols.
-2. **VeriGround**: anonymization, refusal augmentation, and **D-ORPO** (Decision-Focused ORPO).
+1. **C2VEval** (167 tasks across 4 categories): paired **Normal / Anony** and **Original / Mirage** evaluation protocols.
+2. **VeriGround (4B)**: a grounded circuit-to-Verilog model trained with identifier anonymization, refusal augmentation, and **D-ORPO** (Decision-Focused ORPO).
 
-## 🤗 Released models (Hugging Face)
+---
 
-| Model | Stage / role |
+## 🔍 Motivating Examples of the Mirage Phenomenon (Section I)
+
+In standard evaluation, the model receives a circuit diagram $I$ together with its `module_header` $H$. Below are two representative examples from **Opus-4.6** illustrating how $H$ acts as a textual shortcut and why providing the real diagram can even hurt performance.
+
+### Example 1: Identical Correct Generation With or Without the Diagram (`hadd` / Fig. 1 in Paper)
+
+Even when the module name is generic (`TopModule`), descriptive port identifiers (`a`, `b`, `sum`, `cout`) in `module_header` uniquely reveal a half-adder:
+
+```verilog
+module TopModule (
+    input  a,
+    input  b,
+    output cout,
+    output sum
+);
+```
+
+- **With Real Circuit Diagram (`Original` — Passed ✅):**
+  ```verilog
+  assign sum  = a ^ b;
+  assign cout = a & b;
+  ```
+- **With Blank White Image (`Mirage` — Passed ✅):**
+  ```verilog
+  assign sum  = a ^ b;
+  assign cout = a & b;
+  ```
+- **Takeaway:** The model emits the exact same correct RTL without seeing any gates or wires, relying entirely on port names (`sum`, `cout`).
+
+---
+
+### Example 2: Visual Interference — Failing With the Real Diagram but Succeeding With a Blank Image (`fsm_3state`)
+
+For a 3-state cyclic finite state machine (`fsm_3state`, image at `benchmark/images_normal/fsm_3state.jpg`), the header is:
+
+```verilog
+module fsm_3state (
+    input clk, reset,
+    output [1:0] state
+);
+```
+
+- **With Real Circuit Diagram (`Original` — Failed ❌):**  
+  When shown the Yosys/`netlistsvg` gate-level schematic (which decomposes the state transitions into flip-flops, inverters, muxes, and feedback wires), Opus-4.6 attempts to trace each primitive gate and misreads the next-state and output wiring:
+  ```verilog
+  module fsm_3state (
+      input clk, reset,
+      output [1:0] state
+  );
+      reg q0, q1;
+      wire d0, d1, nq0, nq1;
+      assign nq0 = ~q0;
+      assign nq1 = ~q1;
+      assign d0  = nq0;
+      assign d1  = q0 ^ q1;
+
+      always @(posedge clk) begin
+          if (reset) begin q0 <= 0; q1 <= 0; end
+          else       begin q0 <= d0; q1 <= d1; end
+      end
+
+      assign state[1] = q0 ^ q1;
+      assign state[0] = q0 & q1; // Incorrect transition & output mapping
+  endmodule
+  ```
+- **With Blank White Image (`Mirage` — Passed ✅):**  
+  When the diagram is replaced with a blank image (`benchmark/white.jpg`), the model falls back on the identifier `fsm_3state` and retrieves the canonical 3-state cyclic FSM template (`2'b00 -> 2'b01 -> 2'b10 -> 2'b00`), passing all testbench assertions:
+  ```verilog
+  module fsm_3state (
+      input clk, reset,
+      output [1:0] state
+  );
+      reg [1:0] current_state;
+      always @(posedge clk or posedge reset) begin
+          if (reset)
+              current_state <= 2'b00;
+          else begin
+              case (current_state)
+                  2'b00:   current_state <= 2'b01;
+                  2'b01:   current_state <= 2'b10;
+                  2'b10:   current_state <= 2'b00;
+                  default: current_state <= 2'b00;
+              endcase
+          end
+      end
+      assign state = current_state;
+  endmodule
+  ```
+- **Takeaway:** On structurally dense sequential and FSM schematics, unadapted MLLMs suffer from **visual interference** (`Mirage > Original`): they cannot reliably parse gate-level feedback loops, whereas removing the image lets them guess the canonical textbook template from the module header.
+
+---
+
+### Example 3: How `Anony` Eliminates Header Shortcuts Under Identical Headers
+
+Under the **Anony** protocol, all module and port names are replaced with positional placeholders (`module_name`, `val_0`, `val_1`, ...). Distinct circuits with the same port signature now share the **exact same header**:
+
+```verilog
+module module_name (
+    input  val_0,
+    input  val_1,
+    output val_2
+);
+```
+
+- For `andgate`, `norgate`, and `xnorgate`, the header above is identical; only the gate symbol inside $I_{\text{anon}}$ differs.
+- Zero-shot baselines collapse under `Anony`, whereas **VeriGround** reads the depicted gate symbol and generates `val_0 ? val_1 : 1'b0` (AND), `~val_0 & ~val_1` (NOR), and `(val_0 == val_1)` (XNOR), respectively.
+
+---
+
+## 🤗 Released Models & Datasets (Hugging Face)
+
+Because trained model checkpoints and image-paired corpora are large in size, all models and datasets are hosted on Hugging Face ([https://huggingface.co/RTL-Series](https://huggingface.co/RTL-Series)):
+
+| Resource | Stage / Role |
 | :--- | :--- |
-| [RTL-Series/VeriGround-mixed-sft](https://huggingface.co/RTL-Series/VeriGround-mixed-sft) | Stage 1: mixed supervised fine-tuning (Normal + Anony) |
-| [RTL-Series/VeriGround-orpo](https://huggingface.co/RTL-Series/VeriGround-orpo) | Stage 2 baseline: standard ORPO|
-| [RTL-Series/VeriGround-dorpo](https://huggingface.co/RTL-Series/VeriGround-dorpo) | Stage 2: **D-ORPO** aligned checkpoint |
+| [RTL-Series/VeriGround-mixed-sft](https://huggingface.co/RTL-Series/VeriGround-mixed-sft) | Stage 1: Mixed supervised fine-tuning (Normal + Anony) |
+| [RTL-Series/VeriGround-orpo](https://huggingface.co/RTL-Series/VeriGround-orpo) | Stage 2 baseline: Standard ORPO |
+| [RTL-Series/VeriGround-dorpo](https://huggingface.co/RTL-Series/VeriGround-dorpo) | Stage 2: **D-ORPO** aligned checkpoint ($K=8, \alpha=2.0$) |
 
-Load with Hugging Face `transformers` or point local eval scripts (`local_*.py`) at a downloaded snapshot.
+Load with Hugging Face `transformers` or point local evaluation scripts (`local_*.py`) at a downloaded snapshot.
 
-## 📁 Repository layout
+---
+
+## 📁 Repository Layout
 
 ```
 code/
-├── benchmark/                   # C2VEval
-│   ├── problems.json
-│   ├── problems_mismatch_*.json # preference pairs
-│   ├── ground_truth.json
-│   ├── testbench.jsonl
-│   ├── images_normal/
-│   ├── images_anony/
-│   └── white.jpg                # blank image (Mirage)
-├── training/
+├── benchmark/                    # C2VEval benchmark (167 tasks)
+│   ├── problems.json             # Problem metadata, headers, and categories
+│   ├── problems_mismatch_*.json  # 5 rounds of mismatched image-header pairs
+│   ├── ground_truth.json         # Verified reference implementations
+│   ├── testbench.jsonl           # Simulation testbenches
+│   ├── images_normal/            # Normal netlistsvg schematics
+│   ├── images_anony/             # Anonymized netlistsvg schematics
+│   └── white.jpg                 # Blank image for Mirage evaluation
+├── all_results/                  # Model outputs on Normal, Anony, and Mismatch
+├── training/                     # SFT, ORPO, and D-ORPO training scripts
+│   ├── train_sft.py
 │   ├── train_mixed_sft.py
 │   ├── train_orpo.py
 │   ├── train_dorpo.py
 │   ├── orpo_vision_trainer.py
 │   └── orpo_vision_collator.py
-├── anony_utils.py
-├── functional_correctness.py
-├── stat_test.py
-├── api_*_*.py                   # OpenAI-compatible API eval
-├── local_*_*.py                  # vLLM local eval
-└── local_mismatch.py
+├── anony_utils.py                # Identifier anonymization utilities
+├── functional_correctness.py     # Icarus Verilog compilation & simulation
+├── stat_test.py                  # Paired McNemar significance tests
+├── requirements.txt              # Pinned Python dependencies
+├── api_*_*.py                    # OpenAI-compatible API evaluation scripts
+├── local_*_*.py                  # vLLM local evaluation scripts
+└── local_mismatch.py             # Mismatch refusal evaluation script
 ```
 
-## 📊 C2VEval (169 samples)
+---
 
-| Category | Count | Share |
-|---|---|---|
-| Basic combinational logic | 81 | 48.5% |
-| Sequential building blocks | 43 | 25.7% |
-| Finite state machines | 32 | 19.2% |
-| Math / algorithms | 11 | 6.6% |
+## 📊 C2VEval Benchmark (167 Samples)
 
-Each sample is $(I, H, V^*, \mathcal{T}, D)$ with anonymized pair $(I_{\text{anon}}, H_{\text{anon}})$. **Anony** renames module and ports to placeholders so models must ground on the image.
+| Category | Count | Ratio |
+| :--- | :---: | :---: |
+| Basic Combinational Logic (BCL) | 81 | 48.5% |
+| Sequential Building Blocks (SBB) | 43 | 25.7% |
+| Finite State Machines (FSM) | 32 | 19.2% |
+| Mathematical Operations & Algorithms (MOA) | 11 | 6.6% |
+| **Total** | **167** | **100%** |
 
-## 🧪 Evaluation
+Each sample is a tuple $(I, H, V^*, \mathcal{T}, D)$ paired with its anonymized counterpart $(I_{\text{anon}}, H_{\text{anon}})$.
 
-**Deps**
+---
+
+## 🧪 Environment & Evaluation
+
+**1. Install dependencies**
 
 ```bash
-pip install openai tqdm vllm transformers pillow
-# functional sim: iverilog (https://github.com/steveicarus/iverilog)
+pip install -r requirements.txt
+# Install Icarus Verilog (iverilog & vvp) for functional simulation:
+# https://github.com/steveicarus/iverilog
 ```
 
-**API**
+**2. Run API evaluation**
 
 ```bash
-python api_normal_original.py    # Normal, real images
-python api_normal_mirage.py      # Normal, blank (Mirage)
-python api_anony_original.py     # Anony, anonymized images
-python api_anony_mirage.py       # Anony, blank
+python api_normal_original.py    # Normal, real circuit diagrams
+python api_normal_mirage.py      # Normal, blank image (Mirage)
+python api_anony_original.py     # Anony, anonymized diagrams
+python api_anony_mirage.py       # Anony, blank image (Mirage)
 ```
 
-Configure API key and model inside each script; outputs are JSON.
-
-**Local ([vLLM](https://github.com/vllm-project/vllm))**
+**3. Run local evaluation ([vLLM](https://github.com/vllm-project/vllm))**
 
 ```bash
 python local_normal_original.py
 python local_normal_mirage.py
 python local_anony_original.py
 python local_anony_mirage.py
-python local_mismatch.py         # refusal / mismatch
+python local_mismatch.py         # Mismatch refusal evaluation
 ```
 
-Set `model_path` to a local dir or HF snapshot.
-
-**Pass@k / simulation**
+**4. Compute Pass@$k$ and statistical tests**
 
 ```bash
-python functional_correctness.py   # edit solutions_file path
-python stat_test.py                 # e.g., McNemar
+python functional_correctness.py --solutions <path_to_results.json>
+python stat_test.py
 ```
 
-**Anonymization**
+---
 
-```python
-from anony_utils import anonymize_verilog
-anon_code, mapping = anonymize_verilog(verilog_code)
-```
-
-## 📈 Paper numbers (VeriGround 4B setting)
+## 📈 Main Results (VeriGround-4B, $K=8, \alpha=2.0$)
 
 | Metric | Normal | Anony |
-|---|---|---|
-| Functional Pass@1 | 46.11% | 42.51% |
-| False refusal rate | 1.20% | 0.00% |
-| Refusal rate (blank images) | ≥92% | ≥97% |
+| :--- | :---: | :---: |
+| Functional Pass@1 (`Original`) | 46.11% | 42.51% |
+| Functional Pass@1 (`Mirage`) | 0.00% | 0.00% |
+| False Refusal Rate (FRR $\downarrow$) | 1.20% (2/167) | 0.00% (0/167) |
+| Blank-Image Refusal Rate (RR $\uparrow$) | 92.81% | 97.60% |
+
+---
 
 ## 📚 Citation
 
@@ -118,7 +236,7 @@ anon_code, mapping = anonymize_verilog(verilog_code)
 @article{yang2026mirage,
   title={From Mirage to Grounding: Towards Reliable Multimodal Circuit-to-Verilog Code Generation},
   author={Yang, Guang and Hu, Xing and Chen, Xiang and Xia, Xin},
-  journal={ArXiv},
+  journal={arXiv preprint},
   year={2026}
 }
 ```

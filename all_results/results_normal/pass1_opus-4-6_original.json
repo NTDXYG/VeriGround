@@ -1,0 +1,1839 @@
+[
+    {
+        "module_name": "parity_8bit",
+        "solutions": [
+            {
+                "solution": "module parity_8bit (\n    input [7:0] in,\n    output out\n);\n    wire xor_10 = in[1] ^ in[0];\n    wire xor_32 = in[3] ^ in[2];\n    wire xor_54 = in[5] ^ in[4];\n    wire xor_76 = in[7] ^ in[6];\n    wire xor_l = xor_10 ^ xor_32;\n    wire xor_r = xor_54 ^ xor_76;\n    assign out = xor_l ^ xor_r;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mux4to1",
+        "solutions": [
+            {
+                "solution": "module mux4to1 (\n    input [3:0] in,\n    input [1:0] sel,\n    output out\n);\n    wire sel0_n = ~sel[0];\n    wire sel1_n = ~sel[1];\n    \n    wire a0 = in[0] & sel0_n & sel1_n;\n    wire a1 = in[1] & sel[0] & sel1_n;\n    wire a2 = in[2] & sel0_n & sel[1];\n    wire a3 = in[3] & sel[0] & sel[1];\n    \n    assign out = a0 | a1 | a2 | a3;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "majority",
+        "solutions": [
+            {
+                "solution": "module majority (\n    input a, b, c,\n    output out\n);\n    assign out = (a & b) | (a & c) | (b & c);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bin_to_gray",
+        "solutions": [
+            {
+                "solution": "module bin_to_gray (\n    input [3:0] binary,\n    output [3:0] gray\n);\n    assign gray[3] = binary[3];\n    assign gray[2] = binary[3] ^ binary[2];\n    assign gray[1] = binary[2] ^ binary[1];\n    assign gray[0] = binary[1] ^ binary[0];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "eq_comparator",
+        "solutions": [
+            {
+                "solution": "module eq_comparator (\n    input [3:0] a,\n    input [3:0] b,\n    output equal\n);\n    wire [3:0] x;\n    assign x = a ^ b;\n    wire w0, w1;\n    assign w0 = ~(x[0] | x[1]);\n    assign w1 = ~(x[2] | x[3]);\n    assign equal = w0 & w1;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder_2to4",
+        "solutions": [
+            {
+                "solution": "module decoder_2to4 (\n    input [1:0] in,\n    output [3:0] out\n);\n    assign out[0] = ~(~in[1] & ~in[0]);\n    assign out[1] = ~(~in[1] & in[0]);\n    assign out[2] = ~(in[1] & ~in[0]);\n    assign out[3] = ~(in[1] & in[0]);\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "priority_encoder",
+        "solutions": [
+            {
+                "solution": "module priority_encoder (\n    input [3:0] in,\n    output reg [1:0] code\n);\n    wire and1_out = in[2] & in[3];\n    wire not_and1 = ~and1_out;\n    wire and2_out = not_and1 & in[1];\n    \n    assign code[0] = not_and1;\n    assign code[1] = and2_out;\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "fsm_3state",
+        "solutions": [
+            {
+                "solution": "module fsm_3state (\n    input clk, reset,\n    output [1:0] state\n);\n    reg q0, q1;\n    wire d0, d1;\n    wire nq0, nq1;\n\n    assign nq0 = ~q0;\n    assign nq1 = ~q1;\n\n    // First FF (left): D = ~Q0, R = reset\n    assign d0 = nq0;\n    // Second FF (right): D = Q0 ^ Q1, R = reset\n    assign d1 = q0 ^ q1;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q0 <= 0;\n            q1 <= 0;\n        end else begin\n            q0 <= d0;\n            q1 <= d1;\n        end\n    end\n\n    // state[1] = mux: sel=q1, 0->q0, 1->~q0  => q1 ? ~q0 : q0 = q0 ^ q1\n    // state[0] = q0 & q1\n    assign state[1] = q0 ^ q1;\n    assign state[0] = q0 & q1;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "traffic_light",
+        "solutions": [
+            {
+                "solution": "module traffic_light (\n    input clk, reset,\n    output [2:0] light\n);\n    reg [1:0] state;\n    \n    wire q1 = state[1];\n    wire q0 = state[0];\n    \n    // Next state logic\n    wire n1 = q1 ^ q0;\n    wire n0_nand1 = ~(q1 & q0);\n    wire n0_nand2 = ~(n0_nand1 & q1);\n    wire n0_inv = ~(q0 & clk);\n    wire n0 = ~(n0_nand2 | n0_inv);\n    \n    // Flip-flops with reset\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            state <= 2'b00;\n        end else begin\n            state[1] <= q1 ^ q0;\n            state[0] <= ~q0;\n        end\n    end\n    \n    // Output logic\n    wire and1 = q1 & ~q0;\n    wire and2 = ~q1 & q0;\n    \n    assign light[2] = ~(q1 | q0);      // green: state 00\n    assign light[1] = and2;              // yellow: state 01\n    assign light[0] = q1;               // red: state 10, 11\n    \nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "elevator_controller",
+        "solutions": [
+            {
+                "solution": "module elevator_controller (\n    input clk, reset,\n    input up_request, down_request,\n    output [1:0] state\n);\n\n    wire Q0, Q1;\n    reg D0, D1;\n\n    // Two DFFs with async reset\n    reg ff0, ff1;\n    \n    assign Q0 = ff0;\n    assign Q1 = ff1;\n\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            ff0 <= 0;\n            ff1 <= 0;\n        end else begin\n            ff0 <= D0;\n            ff1 <= D1;\n        end\n    end\n\n    // Next state logic derived from the circuit diagram\n    // D0 is input to top FF, D1 is input to bottom FF\n    \n    wire n_Q0 = ~Q0;\n    wire n_Q1 = ~Q1;\n    wire n_down = ~down_request;\n    wire n_up = ~up_request;\n\n    // Analyzing the diagram for D0 (top FF):\n    // D0 = (down_request & ~Q1) | (~Q0 & ~Q1 & down_request) | (Q0 & ~down_request & ~up_request)\n    // Simplifying based on typical elevator FSM and diagram structure:\n    \n    wire and1 = n_Q0 & n_Q1;\n    wire and2 = Q0 & Q1;\n    \n    // D0: top flip-flop input\n    // From diagram: involves down_request, Q0, Q1 and their complements\n    wire t1 = and1 & down_request;\n    wire t2 = Q0 & n_Q1 & (~down_request & ~up_request);\n    wire t3 = and2 & down_request;\n    always @(*) begin\n        D0 = t1 | t2 | t3;\n    end\n\n    // D1: bottom flip-flop input\n    wire t4 = and1 & up_request;\n    wire t5 = n_Q0 & Q1 & (~down_request & ~up_request);\n    wire t6 = and2 & up_request;\n    always @(*) begin\n        D1 = t4 | t5 | t6;\n    end\n\n    assign state[0] = Q0;\n    assign state[1] = Q1;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "vending_machine",
+        "solutions": [
+            {
+                "solution": "module vending_machine (\n    input clk, reset,\n    input coin_inserted, item_selected,\n    output [1:0] state\n);\n\n    wire Q0, Q1; // Q1 = state[1] (top FF), Q0 = state[0] (bottom FF)\n    wire D1, E1, D0, E0;\n    \n    // Bottom FF (state[0] / Q0) - S_DFFE_PP0P_\n    // Top FF (state[1] / Q1) - S_DFFE_PP0P_\n    \n    // Analyzing the circuit:\n    // The bottom FF has: C=clk, R=reset\n    // The top FF has: C=clk, R=reset\n    \n    // From the diagram, tracing the logic:\n    \n    // For bottom FF (Q0):\n    // E0 = item_selected\n    // D0 = coin_inserted & ~Q1\n    \n    // For top FF (Q1):\n    // The NAND/AND logic at top:\n    // E1 = ~(Q1 & ~Q0) = ~Q1 | Q0\n    // D1 = ~(~Q0 & ~coin_inserted) = Q0 | coin_inserted\n    \n    // state[0] = Q1 (top FF output)\n    // state[1] = AND of Q0 and Q1 based on output logic\n    \n    // Let me re-examine more carefully.\n    // state is 2-bit output with a mux-like structure at right\n    \n    // The output shows state[0] = Q1 (top FF), state[1] = AND gate of Q0, Q1 and something\n    \n    // Let me use a simpler behavioral approach matching the S_DFFE_PP0P_ cells\n    // S_DFFE_PP0P_ = DFF with positive clk, positive enable, negative reset (async reset to 0)\n    \n    reg ff0, ff1;\n    \n    // Bottom FF (Q0 = ff0)\n    wire e0 = item_selected;\n    wire nand_coin_q0 = ~(coin_inserted & ff0);\n    wire and_coin_nq1 = coin_inserted & ~ff1;\n    wire d0 = and_coin_nq1;\n    \n    // Top FF (Q1 = ff1)  \n    wire nand_q1_nq0 = ~(ff1 & ~ff0);\n    wire e1 = nand_q1_nq0;\n    wire nand_mid = ~(~ff0 & ~coin_inserted);\n    wire d1 = nand_mid;\n    \n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            ff0 <= 0;\n        end else if (e0) begin\n            ff0 <= d0;\n        end\n    end\n    \n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            ff1 <= 0;\n        end else if (e1) begin\n            ff1 <= d1;\n        end\n    end\n    \n    // Output logic\n    assign state[0] = ff1;\n    assign state[1] = ff0 & ff1;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "power",
+        "solutions": [
+            {
+                "solution": "module power (\n    input signed [7:0] in_0,\n    input signed [3:0] in_1,\n    output signed [15:0] out\n);\n    reg signed [15:0] result;\n    integer i;\n    \n    always @(*) begin\n        if (in_1 == 0) begin\n            result = 16'sd1;\n        end else if (in_1 < 0) begin\n            result = 16'sd0;\n        end else begin\n            result = {{8{in_0[7]}}, in_0};\n            for (i = 1; i < 15; i = i + 1) begin\n                if (i < in_1)\n                    result = result * {{8{in_0[7]}}, in_0};\n            end\n        end\n    end\n    \n    assign out = result;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "log2_int",
+        "solutions": [
+            {
+                "solution": "module log2_int (\n    input signed [15:0] in_0,\n    output signed [7:0] out\n);\n    wire [14:0] b = in_0[14:0];\n    \n    // Find the position of the highest set bit (integer log2)\n    // For a 16-bit signed input, we use bits [14:0] (magnitude for positive)\n    // The circuit computes floor(log2(in_0)) for positive inputs\n    // Output bits 4:7 are 0x0 (tied to zero)\n    \n    reg [3:0] result;\n    \n    always @(*) begin\n        casez (in_0[14:0])\n            15'b1??????????????: result = 4'd14;\n            15'b01?????????????: result = 4'd13;\n            15'b001????????????: result = 4'd12;\n            15'b0001???????????: result = 4'd11;\n            15'b00001??????????: result = 4'd10;\n            15'b000001?????????: result = 4'd9;\n            15'b0000001????????: result = 4'd8;\n            15'b00000001???????: result = 4'd7;\n            15'b000000001??????: result = 4'd6;\n            15'b0000000001?????: result = 4'd5;\n            15'b00000000001????: result = 4'd4;\n            15'b000000000001???: result = 4'd3;\n            15'b0000000000001??: result = 4'd2;\n            15'b00000000000001?: result = 4'd1;\n            15'b000000000000001: result = 4'd0;\n            default:            result = 4'd0;\n        endcase\n    end\n    \n    assign out = {4'b0000, result};\n    \nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "add_8bit",
+        "solutions": [
+            {
+                "solution": "module add_8bit (\n    input signed [7:0] a, b,\n    output signed [8:0] out\n);\n    assign out = a + b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mult_4bit",
+        "solutions": [
+            {
+                "solution": "module mult_4bit (\n    input [3:0] a, b,\n    output [7:0] out\n);\n    assign out = a * b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "subtract_8bit",
+        "solutions": [
+            {
+                "solution": "module subtract_8bit (\n    input signed [7:0] a, b,\n    output signed [8:0] diff\n);\n    assign diff = a - b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bitwise_ops",
+        "solutions": [
+            {
+                "solution": "module bitwise_ops (\n    input [7:0] a, b,\n    output [7:0] and_out,\n    output [7:0] or_out,\n    output [7:0] xor_out\n);\n    assign and_out = a & b;\n    assign or_out = a | b;\n    assign xor_out = a ^ b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "left_shift",
+        "solutions": [
+            {
+                "solution": "module left_shift (\n    input [7:0] in,\n    input [2:0] shift,\n    output [7:0] out\n);\n    assign out = in << shift;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bitwise_not",
+        "solutions": [
+            {
+                "solution": "module bitwise_not (\n    input [7:0] in,\n    output [7:0] out\n);\n    assign out = ~in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "rotate_left",
+        "solutions": [
+            {
+                "solution": "module rotate_left (\n    input [7:0] in,\n    input [2:0] shift,\n    output [7:0] out\n);\n    assign out = (in << shift) | (in >> (8 - shift));\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "relu",
+        "solutions": [
+            {
+                "solution": "module relu (\n    input signed [15:0] in_0,\n    output signed [15:0] out);\n\n    assign out = in_0[15] ? 16'sd0 : in_0;\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "caesar_cipher",
+        "solutions": [
+            {
+                "solution": "module caesar_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n\n    wire [7:0] d = data_in;\n\n    // Analyzing the circuit diagram for a Caesar cipher (shift of 3)\n    // This appears to add 3 to the input: data_out = data_in + 3\n    \n    // Let me trace the gates more carefully from the diagram.\n    // The structure shows XOR, AND, OR gates forming an adder-like circuit adding constant 3 (binary 00000011).\n    \n    // Adding 3: bit0 and bit1 are 1 for the constant\n    // Half/full adder chain:\n    \n    wire c0;\n    assign data_out[0] = ~d[0];           // XOR with 1\n    assign c0 = d[0];                      // AND with 1 = d[0]\n    \n    wire c1;\n    assign data_out[1] = d[1] ^ 1'b1 ^ c0;  // XOR with 1 and carry\n    assign c1 = (d[1] & 1'b1) | (d[1] & c0) | (1'b1 & c0);\n    \n    wire c2;\n    assign data_out[2] = d[2] ^ c1;\n    assign c2 = d[2] & c1;\n    \n    wire c3;\n    assign data_out[3] = d[3] ^ c2;\n    assign c3 = d[3] & c2;\n    \n    wire c4;\n    assign data_out[4] = d[4] ^ c3;\n    assign c4 = d[4] & c3;\n    \n    wire c5;\n    assign data_out[5] = d[5] ^ c4;\n    assign c5 = d[5] & c4;\n    \n    wire c6;\n    assign data_out[6] = d[6] ^ c5;\n    assign c6 = d[6] & c5;\n    \n    assign data_out[7] = d[7] ^ c6;\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "modular_add_cipher",
+        "solutions": [
+            {
+                "solution": "module modular_add_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n\n    assign data_out = data_in + 8'h2B;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "feistel_cipher",
+        "solutions": [
+            {
+                "solution": "module feistel_cipher (\n    input [7:0] data_in,\n    output [7:0] data_out\n);\n    parameter KEY = 4'b1010;\n\n    wire [3:0] left = data_in[7:4];\n    wire [3:0] right = data_in[3:0];\n\n    wire [3:0] f_out;\n    assign f_out[0] = right[0] ^ KEY[0];\n    assign f_out[1] = right[1] ^ KEY[1];\n    assign f_out[2] = right[2] ^ KEY[2];\n    assign f_out[3] = right[3] ^ KEY[3];\n\n    wire [3:0] new_right;\n    assign new_right[0] = left[0] ^ f_out[0];\n    assign new_right[1] = left[1] ^ f_out[1];\n    assign new_right[2] = left[2] ^ f_out[2];\n    assign new_right[3] = left[3] ^ f_out[3];\n\n    assign data_out = {right, new_right};\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "resbench",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "clock-divide-by-2",
+        "solutions": [
+            {
+                "solution": "module clock_div2 (\n    input clk,\n    input rst,\n    output clk_out\n);\n    reg q;\n    always @(posedge clk) begin\n        if (rst)\n            q <= 0;\n        else\n            q <= ~q;\n    end\n    assign clk_out = ~q;\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "comparator-4bit",
+        "solutions": [
+            {
+                "solution": "module comparator_4bit(input [3:0] a, input [3:0] b, output gt, eq, lt);\n  wire [3:0] x;\n  assign x = a ^ b;\n  \n  wire eq3 = ~x[3];\n  wire eq2 = ~x[2];\n  wire eq1 = ~x[1];\n  wire eq0 = ~x[0];\n  \n  wire gt3 = a[3] & ~b[3];\n  wire gt2 = eq3 & a[2] & ~b[2];\n  wire gt1 = eq3 & eq2 & a[1] & ~b[1];\n  wire gt0 = eq3 & eq2 & eq1 & a[0] & ~b[0];\n  \n  wire lt3 = ~a[3] & b[3];\n  wire lt2 = eq3 & ~a[2] & b[2];\n  wire lt1 = eq3 & eq2 & ~a[1] & b[1];\n  wire lt0 = eq3 & eq2 & eq1 & ~a[0] & b[0];\n  \n  assign gt = gt3 | gt2 | gt1 | gt0;\n  assign lt = lt3 | lt2 | lt1 | lt0;\n  assign eq = ~(gt | lt);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder-2to4",
+        "solutions": [
+            {
+                "solution": "module decoder_2to4 (\n    input  [1:0] in,\n    input        enable,\n    output [3:0] out\n);\n    wire in1_n = ~in[1];\n    wire in0_n = ~in[0];\n    \n    assign out[0] = ~(in1_n & in0_n & enable);\n    assign out[1] = ~(in1_n & in[0] & enable);\n    assign out[2] = ~(in[1] & in0_n & enable);\n    assign out[3] = ~(in[1] & in[0] & enable);\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "decoder-3to8",
+        "solutions": [
+            {
+                "solution": "module decoder3to8(input [2:0] in, input enable, output [7:0] out);\n  assign out[0] = enable & ~in[2] & ~in[1] & ~in[0];\n  assign out[1] = enable & ~in[2] & ~in[1] &  in[0];\n  assign out[2] = enable & ~in[2] &  in[1] & ~in[0];\n  assign out[3] = enable & ~in[2] &  in[1] &  in[0];\n  assign out[4] = enable &  in[2] & ~in[1] & ~in[0];\n  assign out[5] = enable &  in[2] & ~in[1] &  in[0];\n  assign out[6] = enable &  in[2] &  in[1] & ~in[0];\n  assign out[7] = enable &  in[2] &  in[1] &  in[0];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "demux-1to2",
+        "solutions": [
+            {
+                "solution": "module demux_1to2 (\n    input  in,\n    input  sel,\n    output out0,\n    output out1\n);\n    assign out1 = sel & in;\n    assign out0 = ~sel & in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "demux-1to4",
+        "solutions": [
+            {
+                "solution": "module demux_1to4 (\n    input        in,\n    input  [1:0] sel,\n    output       out0,\n    output       out1,\n    output       out2,\n    output       out3\n);\n    assign out1 = in & sel[0];\n    assign out0 = in & ~sel[0];\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "gray-counter",
+        "solutions": [
+            {
+                "solution": "module gray_counter8(\n    input wire clk,\n    input wire rst,\n    output wire [7:0] count\n);\n\n    reg [7:0] binary_count;\n    wire [7:0] gray_count;\n\n    always @(posedge clk) begin\n        if (rst)\n            binary_count <= 8'd0;\n        else\n            binary_count <= binary_count + 8'd1;\n    end\n\n    assign gray_count = binary_count ^ (binary_count >> 1);\n    assign count = gray_count;\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "johnson-counter",
+        "solutions": [
+            {
+                "solution": "module johnson_counter4 (\n    input clk,\n    input rst,\n    output [3:0] q\n);\n    reg [3:0] q_reg;\n    assign q = q_reg;\n\n    always @(posedge clk) begin\n        if (rst) begin\n            q_reg <= 4'b0000;\n        end else begin\n            q_reg[0] <= ~q_reg[3];\n            q_reg[1] <= q_reg[0];\n            q_reg[2] <= q_reg[1];\n            q_reg[3] <= q_reg[2];\n        end\n    end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "piso-regs",
+        "solutions": [
+            {
+                "solution": "module piso_8bit(\n    input clk,\n    input rst,\n    input load,\n    input [7:0] pin,\n    output sout\n);\n\n    reg [7:0] shift_reg;\n\n    wire rst_inv = ~rst;\n\n    always @(posedge clk or negedge rst_inv) begin\n        if (!rst_inv) begin\n            shift_reg <= 8'b0;\n        end else if (load) begin\n            shift_reg <= pin;\n        end else begin\n            shift_reg <= {shift_reg[6:0], 1'b0};\n        end\n    end\n\n    assign sout = shift_reg[7];\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "priority-encoder",
+        "solutions": [
+            {
+                "solution": "module priority_encoder_4to2 (\n    input  [3:0] in,\n    output [1:0] out,\n    output       valid\n);\n\n    assign out[1] = in[2] | in[3];\n    assign out[0] = in[3] | (in[1] & ~in[2]);\n    assign valid = |in;\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "ring-counter",
+        "solutions": [
+            {
+                "solution": "module ring_counter4 (\n    input clk,\n    input rst,\n    output [3:0] q\n);\n    reg [3:0] q_reg;\n    assign q = q_reg;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            q_reg <= 4'b0010;\n        end else begin\n            q_reg <= {q_reg[2:0], q_reg[3]};\n        end\n    end\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "sipo-regs",
+        "solutions": [
+            {
+                "solution": "module sipo_8bit(\n    input clk,\n    input rst,\n    input sin,\n    output [7:0] pout\n);\n    reg [7:0] shift_reg;\n    \n    always @(posedge clk or posedge rst) begin\n        if (rst)\n            shift_reg <= 8'b0;\n        else\n            shift_reg <= {shift_reg[6:0], sin};\n    end\n    \n    assign pout = shift_reg;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "siso-regs",
+        "solutions": [
+            {
+                "solution": "module siso_8bit(\n    input clk,\n    input rst,\n    input sin,\n    output sout\n);\n    reg [7:0] shift;\n    always @(posedge clk) begin\n        if (rst)\n            shift <= 8'b0;\n        else\n            shift <= {shift[6:0], sin};\n    end\n    assign sout = shift[7];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "up-counter",
+        "solutions": [
+            {
+                "solution": "module up_counter8(\n    input clk,\n    input rst,\n    output [7:0] count\n);\n    reg [7:0] cnt;\n    assign count = cnt;\n    \n    always @(posedge clk or posedge rst) begin\n        if (rst)\n            cnt <= 8'b0;\n        else\n            cnt <= cnt + 1;\n    end\nendmodule",
+                "pass": "Testbench reported failure"
+            }
+        ],
+        "source": "archxbench",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "2013_q2afsm",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input  [2:0] r,\n  output [2:0] g\n);\n\n  reg [2:0] state;\n  \n  // Round-robin arbiter FSM\n  // state tracks which requester has highest priority (one-hot or idle)\n  \n  wire no_grant = ~|r;\n  \n  // On reset, go to idle state where device 0 has highest priority\n  // This is a fixed-priority arbiter that rotates priority after each grant\n  \n  reg [2:0] last;\n  \n  always @(posedge clk) begin\n    if (~resetn)\n      last <= 3'b000;\n    else begin\n      if (g[0]) last <= 3'b001;\n      else if (g[1]) last <= 3'b010;\n      else if (g[2]) last <= 3'b100;\n    end\n  end\n  \n  // Round-robin grant logic based on last granted\n  reg [2:0] g_reg;\n  \n  always @(*) begin\n    g_reg = 3'b000;\n    case (last)\n      3'b000: begin // no previous grant, priority 0>1>2\n        if (r[0]) g_reg = 3'b001;\n        else if (r[1]) g_reg = 3'b010;\n        else if (r[2]) g_reg = 3'b100;\n      end\n      3'b001: begin // last was 0, priority 1>2>0\n        if (r[1]) g_reg = 3'b010;\n        else if (r[2]) g_reg = 3'b100;\n        else if (r[0]) g_reg = 3'b001;\n      end\n      3'b010: begin // last was 1, priority 2>0>1\n        if (r[2]) g_reg = 3'b100;\n        else if (r[0]) g_reg = 3'b001;\n        else if (r[1]) g_reg = 3'b010;\n      end\n      3'b100: begin // last was 2, priority 0>1>2\n        if (r[0]) g_reg = 3'b001;\n        else if (r[1]) g_reg = 3'b010;\n        else if (r[2]) g_reg = 3'b100;\n      end\n      default: begin\n        if (r[0]) g_reg = 3'b001;\n        else if (r[1]) g_reg = 3'b010;\n        else if (r[2]) g_reg = 3'b100;\n      end\n    endcase\n  end\n  \n  assign g = g_reg;\n\nendmodule",
+                "pass": "Test failed: 642 mismatch(es) in 1054 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2014_q4a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input w,\n  input R,\n  input E,\n  input L,\n  output reg Q\n);\n  wire mux1 = L ? R : (E ? w : Q);\n  wire en = L | E;\n  \n  always @(posedge clk) begin\n    if (en)\n      Q <= mux1;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "7420",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input p1a,\n  input p1b,\n  input p1c,\n  input p1d,\n  output p1y,\n  input p2a,\n  input p2b,\n  input p2c,\n  input p2d,\n  output p2y\n);\n  assign p1y = ~((p1a & p1b) & (p1c & p1d));\n  assign p2y = ~((p2a & p2b) & (p2c & p2d));\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "7458",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input p1a,\n  input p1b,\n  input p1c,\n  input p1d,\n  input p1e,\n  input p1f,\n  output p1y,\n  input p2a,\n  input p2b,\n  input p2c,\n  input p2d,\n  output p2y\n);\n\n  assign p2y = (p2d & p2c) | (p2b & p2a);\n  assign p1y = (p1e & p1f) | (~(p1d & p1e)) | (~(p1a & p1b) & p1c);\n\nendmodule",
+                "pass": "Test failed: 388 mismatch(es) in 439 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "alwaysblock1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out_assign,\n  output reg out_alwaysblock\n);\n  assign out_assign = a ^ b;\n  always @(*) out_alwaysblock = a ^ b;\nendmodule",
+                "pass": "Test failed: 174 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "alwaysblock2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  input b,\n  output out_assign,\n  output reg out_always_comb,\n  output reg out_always_ff\n);\n  assign out_assign = a ^ b;\n  always @(*) out_always_comb = a ^ b;\n  always @(posedge clk) out_always_ff <= a ^ b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "always_if",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input sel_b1,\n  input sel_b2,\n  output out_assign,\n  output reg out_always\n);\n  wire sel = sel_b1 & sel_b2;\n  assign out_assign = sel ? b : a;\n  always @(*) out_always = sel ? b : a;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "always_if2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input cpu_overheated,\n  output reg shut_off_computer,\n  input arrived,\n  input gas_tank_empty,\n  output reg keep_driving\n);\n  always @(*) begin\n    shut_off_computer = cpu_overheated;\n    keep_driving = ~arrived & ~gas_tank_empty;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "always_nolatches",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [15:0] scancode,\n  output reg left,\n  output reg down,\n  output reg right,\n  output reg up\n);\n\n  always @(*) begin\n    up    = 0;\n    down  = 0;\n    left  = 0;\n    right = 0;\n    case (scancode)\n      16'hE075: up    = 1;\n      16'hE072: down  = 1;\n      16'hE06B: left  = 1;\n      16'hE074: right = 1;\n      default: begin\n        up    = 0;\n        down  = 0;\n        left  = 0;\n        right = 0;\n      end\n    endcase\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "andgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out\n);\n  assign out = (~b) & (~a);\nendmodule",
+                "pass": "Test failed: 93 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "bugs_case",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] code,\n  output reg [3:0] out,\n  output reg valid\n);\n\n  always @(*) begin\n    case (code)\n      8'h45: begin out = 4'h0; valid = 1; end\n      8'h16: begin out = 4'h1; valid = 1; end\n      8'h1E: begin out = 4'h2; valid = 1; end\n      8'h26: begin out = 4'h3; valid = 1; end\n      8'h25: begin out = 4'h4; valid = 1; end\n      8'h2E: begin out = 4'h5; valid = 1; end\n      8'h36: begin out = 4'h6; valid = 1; end\n      8'h3D: begin out = 4'h7; valid = 1; end\n      8'h3E: begin out = 4'h8; valid = 1; end\n      8'h46: begin out = 4'h9; valid = 1; end\n      default: begin out = 4'h0; valid = 0; end\n    endcase\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output q\n);\n  assign q = (~b) & (~a);\nendmodule",
+                "pass": "Test failed: 51 mismatch(es) in 120 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit6",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] a,\n  output reg [15:0] q\n);\n  always @(*) begin\n    case(a)\n      3'd0: q = 16'h5F02;\n      3'd1: q = 16'hE708;\n      3'd2: q = 16'h2EF0;\n      3'd3: q = 16'h76E4;\n      3'd4: q = 16'h9ED1;\n      3'd5: q = 16'hD6B5;\n      3'd6: q = 16'h1F47;\n      3'd7: q = 16'h07C3;\n    endcase\n  end\nendmodule",
+                "pass": "Test failed: 110 mismatch(es) in 113 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit7",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  output reg q\n);\n  wire a_not = ~a;\n  always @(posedge clk) begin\n    q <= a_not;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count10",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n\n  // This appears to be a 4-bit counter (decade or similar) with synchronous reset\n  // Based on the flip-flop arrangement and logic gates, this looks like a BCD counter (0-9)\n  \n  always @(posedge clk) begin\n    if (reset)\n      q <= 4'd0;\n    else if (q == 4'd9)\n      q <= 4'd0;\n    else\n      q <= q + 1;\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count15",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n\n  reg q0, q1, q2;\n  wire d0, d1, d2;\n  \n  // q0 is bottom FF, q1 is middle-left FF, q2 is top FF\n  // Looking at the pattern, this appears to be a 1-10-11-12... or some counter\n  // Let me trace more carefully.\n  \n  // Three FFs with sync reset (S_SDFF_PP0_ = posedge clk, posedge reset, reset to 0)\n  // Actually these look like async reset to 0 based on R input connected to reset\n  \n  // Let me interpret this as a 3-bit counter with some feedback logic\n  // Bottom FF (q0): D = q0 & q1 (AND gate)\n  // Middle FF (q1): D = ~q1 (NOT of q1, there's an inverter)  \n  // Top FF (q2): D connected from some logic\n  \n  // The output q[3:0] is formed by combining FF outputs and some gates\n  // with OR gates on the right side\n  \n  // Let me reconsider - this is a counter generating a specific 4-bit sequence\n  // 3 FFs can encode 8 states, output is 4 bits formed by combinational logic\n  \n  // Given the complexity, let me trace the connections:\n  // q0 (bottom), q1 (middle-left), q2 (top)\n  \n  // d0 = q0 AND q1\n  // d1 = NOT(q1) -- inverter after q1\n  // Wait, there's also an AND-OR for the 4th FF (right side)\n  // Actually there are 4 FFs total - let me recount\n  \n  // 4 FFs: bottom(q0), middle-left(q1), top(q2), right(q3)\n  \n  reg q3;\n  wire d3;\n  \n  // d0 = q0 & q1\n  assign d0 = q0 & q1;\n  // d1 = ~q1 (inverter)\n  assign d1 = ~q1;\n  // d2 = connected to q0 & q1 line or similar\n  assign d2 = q0 & ~q1;\n  // d3 = (q1 NAND q2) ... some XOR/AND-OR logic\n  assign d3 = (~q1 & q2) | (q1 & ~q2);\n  \n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      q0 <= 0;\n      q1 <= 0;\n      q2 <= 0;\n      q3 <= 0;\n    end else begin\n      q0 <= d0;\n      q1 <= d1;\n      q2 <= d2;\n      q3 <= d3;\n    end\n  end\n  \n  // Output formed by OR gates\n  assign q_out[0] = q2 | q0;\n  assign q_out[1] = q1 | q0;  \n  assign q_out[2] = q3 | q1;\n  assign q_out[3] = q2 | reset;\n  \n  wire [3:0] q_out;\n  \n  always @(*) begin\n    q = {q2 | reset, q3 | q1, q1 | q0, q2 | q0};\n  end\n\nendmodule",
+                "pass": "Test failed: 387 mismatch(es) in 421 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "count1to10",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [3:0] q\n);\n\n  wire [3:0] next_q;\n  \n  // This appears to be a 4-bit counter (likely decimal/BCD or similar)\n  // Based on the flip-flop types:\n  // q[0]: SDFF_PP1 (set on reset, i.e. resets to 1)\n  // q[1], q[2], q[3]: SDFF_PP0 (reset to 0)\n  \n  // Analyzing the logic for a standard decade counter or similar\n  // The feedback structure with AND/OR/NOT gates suggests a BCD counter (1-10 or 0-9)\n  \n  // Looking more carefully at the structure, this is a 4-bit counter counting 1 through 10\n  // or simply a synchronous counter. Given reset sets q[0]=1 and others=0, initial value is 1.\n  \n  // This looks like a 4-bit LFSR or Johnson counter. Let me trace more carefully.\n  // With SDFF_PP1 for q[0] (resets to 1) and SDFF_PP0 for others (reset to 0):\n  // Reset state = 4'b0001\n  \n  // The XOR gates and AND gates suggest next-state logic for a decimal counter.\n  // Given the complexity, this is likely a BCD up-counter (1 to 10 wrapping, or 0 to 9).\n  \n  // Most likely: synchronous BCD decade counter, reset to 1, counting 1..9..0..1...\n  // Or simply 0-9 with reset to 0001.\n  \n  // Let me assume it's a standard 4-bit up counter that wraps at 10 (BCD counter):\n  \n  always @(posedge clk) begin\n    if (reset)\n      q <= 4'b0001;\n    else if (q >= 4'd9)\n      q <= 4'b0000;\n    else\n      q <= q + 1;\n  end\n\nendmodule",
+                "pass": "Test failed: 40 mismatch(es) in 439 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "counter_2bc",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input train_valid,\n  input train_taken,\n  output logic [1:0] state\n);\n\n  logic s1, s0;\n  logic s1_next, s0_next;\n  \n  // Next state logic\n  // From the diagram, this appears to be a 2-bit saturating counter\n  // SNT(00) -> WNT(01) -> WT(10) -> ST(11)\n  // train_valid & train_taken increments, train_valid & !train_taken decrements\n  \n  wire not_taken = train_valid & ~train_taken;\n  wire taken = train_valid & train_taken;\n  \n  // s1 (upper bit) next state\n  // D input of upper FF\n  wire s1_d = (s1 & s0) | (s1 & ~not_taken) | (s0 & taken);\n  \n  // s0 (lower bit) next state  \n  wire s0_d = (~s1 & ~s0 & taken) | (s1 & s0 & ~not_taken) | (s0 & ~train_valid) | (~s0 & s1 & not_taken);\n\n  // Wait, let me re-derive more carefully from saturating counter behavior:\n  // State: {s1, s0}\n  // If valid&taken: increment (saturate at 11)\n  // If valid&!taken: decrement (saturate at 00)\n  // else: hold\n  \n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      s1 <= 1'b0;\n      s0 <= 1'b0;\n    end else if (train_valid) begin\n      if (train_taken) begin\n        if ({s1,s0} != 2'b11)\n          {s1,s0} <= {s1,s0} + 1;\n      end else begin\n        if ({s1,s0} != 2'b00)\n          {s1,s0} <= {s1,s0} - 1;\n      end\n    end\n  end\n  \n  assign state = {s1, s0};\n\nendmodule",
+                "pass": "Test failed: 25 mismatch(es) in 1051 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "countslow",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input slowena,\n  input reset,\n  output reg [3:0] q\n);\n\n  always @(posedge clk) begin\n    if (reset)\n      q <= 4'd0;\n    else if (slowena) begin\n      if (q == 4'd9)\n        q <= 4'd0;\n      else\n        q <= q + 1;\n    end\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input d,\n  output reg q\n);\n  reg mid;\n  always @(posedge clk) begin\n    mid <= d;\n    q <= mid;\n  end\nendmodule",
+                "pass": "Test failed: 66 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff16e",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input [1:0] byteena,\n  input [15:0] d,\n  output reg [15:0] q\n);\n\n  always @(posedge clk) begin\n    if (!resetn) begin\n      q <= 16'b0;\n    end else begin\n      if (byteena[0])\n        q[7:0] <= d[7:0];\n      if (byteena[1])\n        q[15:8] <= d[15:8];\n    end\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8ar",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input areset,\n  output reg [7:0] q\n);\n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      q <= 8'b0;\n    else\n      q <= d;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8p",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input reset,\n  output reg [7:0] q\n);\n\n  // S_SDFF_NP0: sync reset to 0, negedge clk\n  // S_SDFF_NP1: sync reset to 1, negedge clk\n\n  // From the diagram, mapping d bits to q bits with flip-flop types:\n  // q[0] - S_SDFF_NP0 - d[0]\n  // q[1] - S_SDFF_NP0 - d[1]\n  // q[2] - S_SDFF_NP1 - d[2]\n  // q[3] - S_SDFF_NP0 - d[3]\n  // q[4] - S_SDFF_NP1 - d[4]\n  // q[5] - S_SDFF_NP1 - d[5]\n  // q[6] - S_SDFF_NP0 - d[6]\n  // q[7] - S_SDFF_NP0 - d[7]\n\n  always @(negedge clk) begin\n    if (reset) begin\n      q[0] <= 1'b0;\n      q[1] <= 1'b0;\n      q[2] <= 1'b1;\n      q[3] <= 1'b0;\n      q[4] <= 1'b1;\n      q[5] <= 1'b1;\n      q[6] <= 1'b0;\n      q[7] <= 1'b0;\n    end else begin\n      q <= d;\n    end\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "dff8r",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] d,\n  input reset,\n  output reg [7:0] q\n);\n  always @(posedge clk) begin\n    if (reset)\n      q <= 8'b0;\n    else\n      q <= d;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q12",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input enable,\n  input S,\n  input A,\n  input B,\n  input C,\n  output reg Z\n);\n\n  reg [7:0] sr;\n\n  always @(posedge clk) begin\n    if (enable) begin\n      sr <= {sr[6:0], S};\n    end\n  end\n\n  // 8:1 mux using A, B, C as select\n  always @(*) begin\n    case ({A, B, C})\n      3'd0: Z = sr[0];\n      3'd1: Z = sr[1];\n      3'd2: Z = sr[2];\n      3'd3: Z = sr[3];\n      3'd4: Z = sr[4];\n      3'd5: Z = sr[5];\n      3'd6: Z = sr[6];\n      3'd7: Z = sr[7];\n    endcase\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q7",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  output reg Q\n);\n  always @(posedge clk) begin\n    case ({j, k})\n      2'b00: Q <= Q;\n      2'b01: Q <= 0;\n      2'b10: Q <= 1;\n      2'b11: Q <= ~Q;\n    endcase\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q8",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input aresetn,\n  input x,\n  output reg z\n);\n  reg q0, q1;\n  wire d0, d1;\n  \n  assign d0 = x;\n  assign d1 = q0 & ~q1;\n  \n  always @(negedge clk or negedge aresetn) begin\n    if (!aresetn) begin\n      q0 <= 0;\n    end else begin\n      q0 <= d0;\n    end\n  end\n  \n  always @(negedge clk or negedge aresetn) begin\n    if (!aresetn) begin\n      q1 <= 0;\n    end else begin\n      q1 <= d1;\n    end\n  end\n  \n  always @(*) begin\n    z = q1 & x;\n  end\n  \nendmodule",
+                "pass": "Test failed: 71 mismatch(es) in 440 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "ece241_2014_q1c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] a,\n  input [7:0] b,\n  output [7:0] s,\n  output overflow\n);\n  wire [8:0] sum;\n  assign sum = {a[7], a} + {b[7], b};\n  assign s = sum[7:0];\n  assign overflow = sum[8] ^ sum[7];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "edgedetect",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  output reg [7:0] pedge\n);\n  reg [7:0] prev;\n  always @(posedge clk) begin\n    pedge <= in & ~prev;\n    prev <= in;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "edgedetect2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  output reg [7:0] anyedge\n);\n  reg [7:0] prev;\n  always @(posedge clk) begin\n    anyedge <= in ^ prev;\n    prev <= in;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "fadd",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input cin,\n  output cout,\n  output sum\n);\n  wire axorb = a ^ b;\n  wire axorb_and_cin = axorb & cin;\n  wire a_and_b = a & b;\n  assign sum = axorb ^ cin;\n  assign cout = axorb_and_cin | a_and_b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "fsm1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  output out,\n  input areset\n);\n\n  reg q;\n\n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      q <= 0;\n    else if (in)\n      q <= in;\n  end\n\n  assign out = q ^ in;\n\nendmodule",
+                "pass": "Test failed: 113 mismatch(es) in 228 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm1s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input reset,\n  output out\n);\n  wire q;\n  wire d = in ^ q;\n  \n  always @(posedge clk) begin\n    if (reset)\n      q_reg <= 0;\n    else\n      q_reg <= d;\n  end\n  \n  reg q_reg;\n  assign q = q_reg;\n  assign out = q ^ in;\nendmodule",
+                "pass": "Test failed: 131 mismatch(es) in 230 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  input areset,\n  output out\n);\n  wire d = (j & ~out) | (~k & out);\n  reg q;\n  always @(posedge clk or posedge areset)\n    if (areset) q <= 0;\n    else q <= d;\n  assign out = q;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm2s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input j,\n  input k,\n  input reset,\n  output out\n);\n  wire j_buf = j;\n  wire k_inv = ~k;\n  wire mux_j = j_buf & ~out;\n  wire mux_k = k_inv & out;\n  wire d = mux_j | mux_k;\n  \n  reg q;\n  always @(posedge clk) begin\n    if (reset)\n      q <= 0;\n    else\n      q <= d;\n  end\n  \n  assign out = q;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3s",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input reset,\n  output out\n);\n\n  reg [2:0] state;\n  \n  wire d0, d1, d2;\n  \n  // From analyzing the circuit, this appears to be a 3-bit FSM\n  // Let me trace the logic carefully\n  \n  wire n_reset = ~reset;\n  wire n_in = ~in;\n  wire n_state0 = ~state[0];\n  wire n_state1 = ~state[1];\n  wire n_state2 = ~state[2];\n  \n  // Top flip-flop (state[2]) - has reset feeding into AND with inverted reset\n  // Middle flip-flop (state[1])\n  // Bottom flip-flop (state[0])\n  \n  // Based on the circuit topology, this looks like a sequence detector\n  // Let me interpret the gates:\n  \n  // D2 = reset' & (state[2] ^ (state[1] & in))\n  // Actually let me try to read more carefully\n  \n  // Top section: reset goes through buffer/inverter, feeds NAND with state signals\n  // This is complex - let me try a different approach and identify it as a known FSM\n  \n  // Given the complexity, this appears to be a 3-flip-flop circuit.\n  // Let me assign: state[2]=top FF, state[1]=middle FF, state[0]=bottom FF\n  \n  // D2 = ~reset & ~(~state[2] & ~(~state[1] & in))\n  // Simplify: ~reset & (state[2] | (~state[1] & in))\n  \n  // D1 = ~(~(state[2] & ~state[1]) & ~(in & clk_related))\n  // This is getting complex from visual inspection\n  \n  // Let me try: this could be a counter or specific sequence detector\n  // out = NAND of some state bits at bottom right\n  \n  // Re-analyzing with fresh eyes for a 3-state FSM:\n  \n  assign d2 = ~reset & (state[2] | (~state[1] & in));\n  assign d1 = ~reset & (state[2] ^ in);  \n  assign d0 = ~reset & (~state[0] & ~(state[1] & ~state[2]));\n  \n  always @(posedge clk) begin\n    state[2] <= d2;\n    state[1] <= d1;\n    state[0] <= d0;\n  end\n  \n  assign out = ~(state[0] & state[1]);\n\nendmodule",
+                "pass": "Test failed: 157 mismatch(es) in 230 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "gates",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out_and,\n  output out_or,\n  output out_xor,\n  output out_nand,\n  output out_nor,\n  output out_xnor,\n  output out_anotb\n);\n  assign out_and = a & b;\n  assign out_or = a | b;\n  assign out_xor = a ^ b;\n  assign out_nand = ~(a & b);\n  assign out_nor = ~(a | b);\n  assign out_xnor = ~(a ^ b);\n  assign out_anotb = a & ~b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "gates4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] in,\n  output out_and,\n  output out_or,\n  output out_xor\n);\n  assign out_and = &in;\n  assign out_or = |in;\n  assign out_xor = ^in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "hadd",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output sum,\n  output cout\n);\n  assign sum = a ^ b;\n  assign cout = a & b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input d,\n  input ena,\n  output logic q\n);\n  always @(*) begin\n    if (ena)\n      q = d;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q4c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input d,\n  input r,\n  output logic q\n);\n  always @(posedge clk) begin\n    if (r)\n      q <= 0;\n    else\n      q <= d;\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q4e",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  output logic out\n);\n  assign out = ~(in2 | in1);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4f",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  output logic out\n);\n  assign out = ~(in1 & in2);\nendmodule",
+                "pass": "Test failed: 50 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4g",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in1,\n  input in2,\n  input in3,\n  output logic out\n);\n  wire xor1_out = in1 ^ in2;\n  wire and_out = xor1_out & in2;\n  out = and_out ^ in3;\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_001iust2/verilogeval_v2/temp.v:9: syntax error\n/tmp/fc_iverilog_001iust2/verilogeval_v2/temp.v:9: error: Invalid module instantiation"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4h",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  output out\n);\n  assign out = in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4i",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  output out\n);\n  assign out = 0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q4j",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  input [3:0] y,\n  output [4:0] sum\n);\n  assign sum = x + y;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "m2014_q4k",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input in,\n  output out\n);\n  reg q0, q1, q2, q3;\n  always @(posedge clk) begin\n    if (!resetn) begin\n      q0 <= 0; q1 <= 0; q2 <= 0; q3 <= 0;\n    end else begin\n      q0 <= in;\n      q1 <= q0;\n      q2 <= q1;\n      q3 <= q2;\n    end\n  end\n  assign out = q3;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q6",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  input w,\n  output z\n);\n\n  reg [2:0] state, next_state;\n\n  parameter A = 3'b000, B = 3'b001, C = 3'b010, D = 3'b011;\n\n  always @(posedge clk or posedge reset) begin\n    if (reset)\n      state <= A;\n    else\n      state <= next_state;\n  end\n\n  always @(*) begin\n    case (state)\n      A: next_state = w ? B : A;\n      B: next_state = w ? C : A;\n      C: next_state = w ? D : A;\n      D: next_state = w ? D : A;\n      default: next_state = A;\n    endcase\n  end\n\n  assign z = (state == D);\n\nendmodule",
+                "pass": "Test failed: 51 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "mt2015_eq2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [1:0] A,\n  input [1:0] B,\n  output z\n);\n  wire mux_top = B[0] ? B[1] : ~B[1];\n  wire mux_bot = A[0] ? A[1] : ~A[1];\n  wire nand_out = ~(mux_top & mux_bot);\n  assign z = ~(nand_out & nand_out);\nendmodule",
+                "pass": "Test failed: 496 mismatch(es) in 2000 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mt2015_q4a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\n  assign z = ~(x & y);\nendmodule",
+                "pass": "Test failed: 96 mismatch(es) in 202 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mux2to1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input sel,\n  output out\n);\n  assign out = sel ? b : a;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "norgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out\n);\n  assign out = ~(b & a);\nendmodule",
+                "pass": "Test failed: 126 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "notgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  output out\n);\n  assign out = in;\nendmodule",
+                "pass": "Test failed: 239 mismatch(es) in 239 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "popcount3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] in,\n  output [1:0] out\n);\n  wire or1 = in[2] | in[0];\n  wire and1 = or1 & in[0];\n  wire xor1 = in[2] ^ in[0];\n  wire not_in1 = ~in[1];\n  wire and2 = xor1 & not_in1;\n  wire nor1 = ~(and1 | and2);\n  wire xnor1 = ~(in[0] ^ in[1]);\n  wire and3 = xor1 & xnor1;\n  \n  assign out[1] = nor1;\n  assign out[0] = and3;\nendmodule",
+                "pass": "Test failed: 166 mismatch(es) in 220 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "reduction",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output parity\n);\n  assign parity = ^in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "review2015_shiftcount",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input shift_ena,\n  input count_ena,\n  input data,\n  output reg [3:0] q\n);\n\n  always @(posedge clk) begin\n    if (shift_ena)\n      q <= {q[2:0], data};\n    else if (count_ena)\n      q <= q - 1;\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ringer",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input ring,\n  input vibrate_mode,\n  output ringer,\n  output motor\n);\n  assign motor = ring & vibrate_mode;\n  assign ringer = ring & ~vibrate_mode;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "shift4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input load,\n  input ena,\n  input [3:0] data,\n  output reg [3:0] q\n);\n  wire e = ena | load;\n  wire [3:0] d;\n  assign d[0] = load ? data[0] : q[1];\n  assign d[1] = load ? data[1] : q[2];\n  assign d[2] = load ? data[2] : q[3];\n  assign d[3] = load ? data[3] : q[0];\n\n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      q <= 4'b0;\n    else if (e)\n      q <= d;\n  end\nendmodule",
+                "pass": "Test failed: 119 mismatch(es) in 427 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "step_one",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  output one\n);\n  assign one = 1'b1;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "thermostat",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input mode,\n  input too_cold,\n  input too_hot,\n  input fan_on,\n  output heater,\n  output aircon,\n  output fan\n);\n  assign heater = mode & too_cold;\n  assign aircon = ~mode & too_hot;\n  assign fan = heater | aircon | fan_on;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector0",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] vec,\n  output [2:0] outv,\n  output o2,\n  output o1,\n  output o0\n);\n  assign outv = vec;\n  assign o2 = vec[2];\n  assign o1 = vec[1];\n  assign o0 = vec[0];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [15:0] in,\n  output [7:0] out_hi,\n  output [7:0] out_lo\n);\n  assign out_hi = in[15:8];\n  assign out_lo = in[7:0];\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [31:0] in,\n  output [31:0] out\n);\n  assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [4:0] a,\n  input [4:0] b,\n  input [4:0] c,\n  input [4:0] d,\n  input [4:0] e,\n  input [4:0] f,\n  output [7:0] w,\n  output [7:0] x,\n  output [7:0] y,\n  output [7:0] z\n);\n\n  wire [31:0] concat = {11'b0, f, e[4:0], d[3:0], a, b[4:0], c};\n  \n  // Let me re-analyze the diagram more carefully\n  // Building a 32-bit vector and splitting into w, x, y, z\n  \n  // From the diagram, it appears we concatenate signals and route to outputs\n  // z = {0:1} top bits, with 11 and f\n  // Reading the mux/concat structure:\n  \n  // It looks like we're packing into a 32-bit bus {w, x, y, z} or {z, y, x, w}\n  \n  // Let me trace: 11 (the constant), f[4:0], e[4:0], d[3:0], a[4:0], b[4:0], c[4:0]\n  // Total: 2 + 5 + 5 + 4 + 5 + 5 + 5 = 31... not quite 32\n  \n  // With labels like 0:1, 2:6, 7, 1:4, 0, 0:3, 0:3, 4:7, 0:2, 3:7, 0, 1:5, 2:4, 0:1, 6:7\n  \n  // The output is 32 bits: {z, y, x, w} or {w, x, y, z}\n  // Packing from top to bottom seems to fill z(high) down to w(low)... but let me just do:\n  \n  // z[7:0]: z[0:1] = 2'b11, z[2:6] = f[4:0], z[7] = e[4]  --> z = {e[4], f[4:0], 2'b11}\n  // y[7:0]: y[1:4] = e[3:0], y[0] = d[3], y[0:3] = d[3:0], y[4:7] = ... \n  \n  // Let me think of it as a 32-bit concatenation split into 4 bytes:\n  // From top: 11(2 bits), f(5), e(5), d(4), a(5), b(5), c(5) = 31 bits... need 32\n  \n  // Maybe 11 is decimal 11 bits of zero? No, it shows \"11\" as a small constant = 2'b11\n  \n  // I think: the full vector is {2'b11, f, e, d[3:0], a, b, c} = 2+5+5+4+5+5+5 = 31\n  // Need one more bit. Maybe d is all 5 bits: 2+5+5+5+5+5+5 = 32. And d[0:3] means bits 0-3 with bit 4 going elsewhere.\n  \n  // Looking again: d has label \"4\" going up and \"0:3\" at the mux. So d[4] goes up, d[3:0] goes right.\n  \n  // Full 32-bit vector top to bottom: {2'b11, f[4:0], e[4:0], d[4], d[3:0], a[4:0], b[4:0], c[4:0]}\n  // = 2+5+5+1+4+5+5+5 = 32 ✓\n  \n  wire [31:0] full = {2'b11, f, e, d[4], d[3:0], a, b, c};\n  \n  assign z = full[31:24];\n  assign y = full[23:16];\n  assign x = full[15:8];\n  assign w = full[7:0];\n\nendmodule",
+                "pass": "Test failed: 126 mismatch(es) in 126 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output [31:0] out\n);\n  assign out = {{24{in[7]}}, in};\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vector5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  input e,\n  output [24:0] out\n);\n\n  wire ne = ~e;\n  wire nd = ~d;\n  wire nc = ~c;\n  wire nb = ~b;\n  wire na = ~a;\n\n  // Generate the 5 OR gate outputs from combinations\n  wire or_e_ne = e | ne;       // always 1... let me re-examine\n  \n  // Looking at the diagram more carefully:\n  // There are NAND/AND/OR gates combining signals\n  // Let me trace the connections to each mux input (0-24)\n  \n  // The diagram shows a 25:1 mux with select lines, but output is [24:0]\n  // Actually out is 25 bits, each bit is a mux input\n  \n  // From the diagram, it appears we have:\n  // ~e, e fed into NAND/AND/OR gates with ~d, d, and similarly down to a\n  // Creating products for a 5x5 = 25 output pattern\n  \n  // The gates appear to generate all combinations of {e,d,c,b,a} with their complements\n  // through OR gates, producing a 5x5 grid\n  \n  // Let me interpret: 5 signals on left, 5 on top, 25 outputs = AND of pairs\n  // The vertical lines (top) seem to be: ~e, e|~e?, ~d, d, ...\n  // The horizontal lines seem to come from OR combinations\n  \n  // Re-examining: looks like 5 row signals OR'd with 5 column signals\n  // Row signals (horizontal, from bottom): a|b, a|~b, ... \n  // No, let me look at gate types.\n  \n  // The left side shows NOT gates for e,d,c,b,a producing ~e,~d,~c,~b,~a\n  // Then OR gates combining pairs, and AND gates at intersections\n  \n  // 5 column wires (vertical) and 5 row wires (horizontal)\n  // Each out[i] = row[i/5] AND col[i%5]\n  \n  // Column signals (from left to right): ~e, ~e|e=1?, no...\n  // Top shows: ~e NAND something, etc.\n  \n  // Let me just assume it's the product of all pairs:\n  // 5 horizontal: derived from {a,b,c,d,e} combinations  \n  // 5 vertical: derived similarly\n  \n  // Given the structure with OR gates on left combining adjacent signals:\n  // Row 0 (bottom): a | b\n  // Row 1: a | ~b  ... this doesn't quite work\n  \n  // Simplest interpretation matching 25 outputs from 5 inputs:\n  // out[i*5+j] = row[i] & col[j] where rows and cols are some functions\n  \n  // From diagram: 5 row signals use OR gates combining neighbors:\n  wire r0 = a | b;\n  wire r1 = a | c;  \n  wire r2 = b | c;\n  wire r3 = a | d;\n  wire r4 = a | e;\n  \n  // This is getting too speculative. Let me try the most logical interpretation:\n  // Each out bit is the OR of two of the five inputs (choosing 2 from 5 = C(5,2)=10... not 25)\n  \n  // Most likely: out[5*i+j] = f(i) & g(j) for some row/col functions\n  // With 5 rows and 5 columns from the signals: ~e, ~d, ~c, ~b, ~a and e,d,c,b,a\n  \n  wire [4:0] col = {~e, e, ~d, d, 1'b1};\n  wire [4:0] row = {~d, d, ~c, c, ~e};\n  \n  // I'll go with: each of the 25 outputs is an AND of one row and one column signal\n  // where rows = {a|b, a|~b, ~a|b, ~a|~b, ...}\n  \n  // Given complexity, most reasonable: out[i] = product of two specific input combos\n  \n  genvar i, j;\n  generate\n    for (i = 0; i < 5; i = i + 1) begin : rows\n      for (j = 0; j < 5; j = j + 1) begin : cols\n        assign out[i*5+j] = ({a,b,c,d,e}[i]) | ({a,b,c,d,e}[j]);\n      end\n    end\n  endgenerate\n\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_001iust2/verilogeval_v2/temp.v:86: syntax error\n/tmp/fc_iverilog_001iust2/verilogeval_v2/temp.v:86: error: syntax error in continuous assignment"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vectorgates",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] a,\n  input [2:0] b,\n  output [2:0] out_or_bitwise,\n  output out_or_logical,\n  output [5:0] out_not\n);\n  assign out_or_bitwise = a | b;\n  assign out_or_logical = |a || |b;\n  assign out_not = {~b, ~a};\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "vectorr",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output [7:0] out\n);\n  assign out = {in[0], in[1], in[2], in[3], in[4], in[5], in[6], in[7]};\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  output out\n);\n  assign out = in;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  output w,\n  output x,\n  output y,\n  output z\n);\n  assign w = a;\n  assign z = c;\n  assign x = b;\n  assign y = b;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "wire_decl",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out,\n  output out_n\n);\n  wire cd_and = c & d;\n  wire ab_and = a & b;\n  wire or_out = cd_and | ab_and;\n  assign out = or_out;\n  assign out_n = ~or_out;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "xnorgate",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  output out\n);\n  assign out = ~(a ^ b);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "zero",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  output zero\n);\n  assign zero = 1'b0;\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2012_q2b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [5:0] y,\n  input w,\n  output Y1,\n  output Y3\n);\n  wire or1 = y[0] | y[2];\n  wire or2 = y[1] | y[4];\n  wire and1 = or1 & (~w);\n  wire and2 = or2 | y[5];\n  assign Y1 = and1;\n  assign Y3 = and2 & (~w);\nendmodule",
+                "pass": "Test failed: 194 mismatch(es) in 600 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2012_q2fsm",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  input w,\n  output z\n);\n\n  reg [2:0] state;\n  \n  wire s2, s1, s0;\n  assign s2 = state[2];\n  assign s1 = state[1];\n  assign s0 = state[0];\n  \n  // This appears to be a 3-bit state machine with synchronous reset\n  // Let me trace the logic from the diagram with 3 flip-flops (all $_SDFF_PP0_ = posedge clk, posedge reset, reset to 0)\n  \n  // Based on the circuit structure, this looks like a sequence detector FSM\n  // Let me derive next state and output logic\n  \n  wire n2, n1, n0;\n  \n  // Tracing the combinational logic:\n  // The gates form next-state logic for 3 FFs and output z\n  \n  // From analysis of typical exam circuits with this structure:\n  // This is a 6-state FSM detecting patterns of w\n  \n  // Let me try to interpret the gate-level logic:\n  // Top FF = s2, Middle FF = s1, Bottom FF = s0\n  \n  // Next state logic (derived from gate connections):\n  assign n0 = (~s1 & ~s2 & w) | (s1 & s2 & w);\n  assign n1 = (~s0 & ~s2 & w) | (s0 & s2 & w); \n  assign n2 = (s0 & ~s1 & ~w) | (s1 & ~s0 & ~w) | (s0 & s1 & w) | (~s0 & ~s1 & ~w & s2);\n  \n  // Hmm, let me reconsider. With 3 FFs and the gate structure, let me try a known FSM pattern.\n  // Looking more carefully at the outputs and AND/OR/NOT gate structure:\n  \n  // Actually let me just encode what I see:\n  // There are buffers (triangles), AND gates, OR gates, NAND gates, NOR gates, NOT gates (circles)\n  \n  // For a cleaner approach, this is likely detecting when w has been the same for 3 consecutive cycles\n  \n  // States: A=000, B=001, C=010, D=011, E=100, F=101\n  // If w=1: A->B->C (z=1 at C, stay C while w=1)\n  // If w=0: A->D->E (z=1 at E, stay E while w=0)\n  \n  // Next state:\n  // n2 = (s1 & ~w) | (s2 & ~w & ~s0) | (s0 & s1 & w);\n  // Hmm, let me just go with a standard approach:\n  \n  always @(posedge clk) begin\n    if (reset)\n      state <= 3'b000;\n    else\n      state <= {n2, n1, n0};\n  end\n  \n  // Re-derive assuming the FSM for \"3 consecutive same inputs\":\n  // A(000): w=1->B(001), w=0->D(011)\n  // B(001): w=1->C(010), w=0->D(011)  \n  // C(010): w=1->C(010), w=0->D(011), z=1\n  // D(011): w=1->B(001), w=0->E(100)\n  // E(100): w=1->B(001), w=0->E(100), z=1\n  \n  wire [2:0] next;\n  \n  assign next = (state == 3'b000) ? (w ? 3'b001 : 3'b011) :\n                (state == 3'b001) ? (w ? 3'b010 : 3'b011) :\n                (state == 3'b010) ? (w ? 3'b010 : 3'b011) :\n                (state == 3'b011) ? (w ? 3'b001 : 3'b100) :\n                (state == 3'b100) ? (w ? 3'b001 : 3'b100) :\n                (w ? 3'b001 : 3'b011);\n  \n  assign {n2, n1, n0} = next;\n  \n  assign z = (state == 3'b010) | (state == 3'b100);\n\nendmodule",
+                "pass": "Test failed: 357 mismatch(es) in 400 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "2014_q3c",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input x,\n  input [2:0] y,\n  output reg Y0,\n  output reg z\n);\n\n  wire y2, y1, y0;\n  assign y2 = y[2];\n  assign y1 = y[1];\n  assign y0 = y[0];\n\n  // Derive logic from the circuit diagram\n  // Top path: ~y2 fed into various gates\n  \n  wire n_y2 = ~y2;\n  \n  // AND gates on the left side\n  wire and1 = y1 & y0;        // y[1] & y[0]\n  wire and2 = y1 & ~y0;       // y[1] & ~y[0]\n  wire and3 = ~y1 & y0;       // ~y[1] & y[0] -- not sure\n  wire and4 = y0 & y2;        // bottom AND\n  \n  // MUX-like structure in middle - looking more carefully\n  // Let me trace the signals\n  \n  // NOR at top: ~(y2 | something)\n  wire nor1 = ~y2;  // could be just inverter or NOR\n  \n  // This is a state machine next-state logic\n  // Let me try to interpret as standard FSM\n  \n  // Based on the diagram structure, deriving combinational logic:\n  \n  wire Y0_next;\n  wire z_out;\n  \n  // From the circuit:\n  // Y0 seems to involve: xor, mux, and/or gates with y[2], y[1], y[0]\n  \n  // Let me try a direct approach based on visible gate connections:\n  \n  wire w1 = ~y2;                    // inverter on y2\n  wire w2 = y1 ^ y0;               // XOR of y1 and y0 (mux-like in middle)\n  wire w3 = ~(y1 & y0);            // NAND\n  wire w4 = w1 & w2;               // AND\n  wire w5 = y1 & ~y0;              // AND with inverted y0\n  wire w6 = ~y1 & y0 & y2;        // AND gate bottom\n  wire w7 = y0 & y2;              // AND gate\n  \n  // OR gate feeding Y0\n  wire w8 = w1 ~^ w2;             // XNOR or similar\n  \n  // I'll interpret based on common FSM patterns visible in the diagram:\n  \n  // Y0 = (NOR(y2) AND something) OR (y2 AND y0 related)\n  // z involves x mux\n  \n  wire mux_sel = y1;\n  wire mux_out = mux_sel ? y0 : ~y0;  // MUX in middle\n  \n  wire top_and = ~y2 & ~(y1 & y0);    // top path\n  wire mid = ~y2 & mux_out;\n  wire bot = y2 & y0;\n  \n  assign Y0_next = (top_and | mid | bot);  // OR gate to Y0\n  \n  // z output: mux with x as select\n  wire z_comb = x ? (y2 & ~y1 & y0) : (y2 & y1 & y0);\n  \n  always @(posedge clk) begin\n    Y0 <= Y0_next;\n    z <= z_comb;\n  end\n\nendmodule",
+                "pass": "Test failed: 83 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "always_casez",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [7:0] in,\n  output reg [2:0] pos\n);\n  always @(*) begin\n    casez (in)\n      8'b???????1: pos = 3'd0;\n      8'b??????10: pos = 3'd1;\n      8'b?????100: pos = 3'd2;\n      8'b????1000: pos = 3'd3;\n      8'b???10000: pos = 3'd4;\n      8'b??100000: pos = 3'd5;\n      8'b?1000000: pos = 3'd6;\n      8'b10000000: pos = 3'd7;\n      default: pos = 3'd0;\n    endcase\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit10",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  input b,\n  output q,\n  output state\n);\n\n  wire b_not = ~b;\n  wire xor_out = b ^ b_not; // This is always 1... let me re-read the diagram.\n\n  // Re-analyzing the diagram:\n  // Top-left: XNOR of b and something, fed into a NOR gate\n  // Let me trace more carefully.\n  \n  // It appears to be a state machine with a D flip-flop.\n  // Let me identify: there's a D flip-flop clocked by clk.\n  // state is the output of the flip-flop.\n  \n  wire b_xnor = ~(b ^ state); // XNOR gate top-left with b and state feedback\n  wire nor_out = ~(b_xnor | a); // NOR gate\n  wire and1 = a & state; // AND gate bottom\n  wire xor_mid = nor_out ^ and1; // XOR gate middle\n  wire d = xor_mid; // D input to flip-flop\n  \n  reg state_reg;\n  \n  always @(posedge clk) begin\n    state_reg <= d;\n  end\n  \n  assign state = state_reg;\n  \n  // q output: NOR of b_xnor and state, then inverted? \n  // Top-right looks like XNOR of b_xnor(inverted?) and state\n  wire q_out = ~(nor_out | state); // trying different combo\n  \n  // Let me re-think. The diagram shows:\n  // q = output of a buffer fed by an XNOR/XOR of (NOR result, state)\n  \n  assign q = ~(nor_out ^ state); // XNOR of nor_out and state for q\n  \nendmodule",
+                "pass": "Test failed: 229 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "circuit2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  wire ab_nor = ~(a | b);\n  wire ab_xnor = ~(ab_nor ^ 1'b0);\n  wire top = ~(a & b);\n  wire mid = ~(top | ab_nor);\n  wire cd_nor = ~(c | d);\n  wire bot = c & d;\n  assign q = ~(mid | (cd_nor));\nendmodule",
+                "pass": "Test failed: 53 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  assign q = ~((~a & b) & (~c & d));\nendmodule",
+                "pass": "Test failed: 59 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output q\n);\n  assign q = (a & d) | (b & c);\nendmodule",
+                "pass": "Test failed: 54 mismatch(es) in 121 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] a,\n  input [3:0] b,\n  input [3:0] c,\n  input [3:0] d,\n  input [3:0] e,\n  output reg [3:0] q\n);\n\n  integer i;\n  \n  always @(*) begin\n    for (i = 0; i < 4; i = i + 1) begin\n      q[i] = (a[i] & b[i] & c[i]) |\n             (a[i] & b[i] & d[i]) |\n             (a[i] & b[i] & e[i]) |\n             (a[i] & c[i] & d[i]) |\n             (a[i] & c[i] & e[i]) |\n             (a[i] & d[i] & e[i]) |\n             (b[i] & c[i] & d[i]) |\n             (b[i] & c[i] & e[i]) |\n             (b[i] & d[i] & e[i]) |\n             (c[i] & d[i] & e[i]);\n    end\n  end\n\nendmodule",
+                "pass": "Test failed: 118 mismatch(es) in 141 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "circuit9",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input a,\n  output reg [2:0] q\n);\n\n  reg ff0, ff1, ff2;\n  \n  wire nand_01 = ~(ff0 & ff1);\n  wire nand_01_buf = ~(ff0 & ~ff1);\n  wire and_mid = nand_01 & nand_01;\n  wire buf_mid = ~nand_01;\n  \n  // Let me re-analyze: this looks like a 3-bit counter with input 'a'\n  // Three flip-flops: ff0, ff1 (SDFF_PP0 with reset), ff2 (SDFF_PP1)\n  \n  // Based on the circuit structure, this appears to be a 3-bit counter\n  // that counts through a specific sequence controlled by 'a'\n  \n  // Let me trace more carefully:\n  // Three FFs: q[0], q[1], q[2]\n  // PP0 = posedge clk, pos reset (active high async reset? or sync?)\n  // Actually $_SDFF_PP0_ = posedge clk, posedge reset, reset value 0\n  // $_SDFF_PP1_ = posedge clk, posedge reset, reset value 1\n  \n  // The reset lines seem tied to specific logic, not a reset input.\n  // Looking at the outputs going through AND gates to form q bits.\n  \n  // This looks like it could be a simple Gray code or binary counter.\n  // Given complexity, let me try a functional approach:\n  \n  reg r0, r1, r2; // three flip-flops\n  \n  wire n0 = ~(r0 & r1);\n  wire n1 = ~(~r0 & r1);\n  wire d2_pre = n0 & n1; // XNOR? no... \n  // ~(r0&r1) & ~(~r0&r1) = (~r0|~r1)&(r0|~r1) = ~r1\n  // So d2 input simplifies... let me think differently.\n  \n  // Given the diagram complexity, this is likely a 5-state or 7-state counter.\n  // Let me just implement what seems like a 0-4 counter with 'a' control.\n  \n  // I'll attempt: when a=1, count up; when a=0, count down or hold.\n  // Actually with 3 FFs and input 'a', common pattern is:\n  \n  always @(posedge clk) begin\n    if (q == 3'd0)\n      q <= a ? 3'd1 : 3'd0;\n    else if (q == 3'd1)\n      q <= a ? 3'd2 : 3'd1;\n    else if (q == 3'd2)\n      q <= a ? 3'd3 : 3'd2;\n    else if (q == 3'd3)\n      q <= a ? 3'd4 : 3'd3;\n    else if (q == 3'd4)\n      q <= a ? 3'd5 : 3'd4;\n    else if (q == 3'd5)\n      q <= a ? 3'd6 : 3'd5;\n    else if (q == 3'd6)\n      q <= a ? 3'd7 : 3'd6;\n    else\n      q <= a ? 3'd0 : 3'd7;\n  end\n\nendmodule",
+                "pass": "Test failed: 226 mismatch(es) in 245 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2013_q2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out_sop,\n  output out_pos\n);\n  assign out_sop = c | (~a & ~b & ~d) | (a & ~b & d);\n  assign out_pos = c | (~a & ~b & ~d) | (a & ~b & d);\nendmodule",
+                "pass": "Test failed: 34 mismatch(es) in 107 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "ece241_2014_q5b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input x,\n  output z\n);\n\n  wire q1, q0;\n  wire d1, d0;\n  \n  // From the diagram:\n  // DFF_PP1: positive edge clk, async reset (active high resets to 0)\n  // DFF_PP0: positive edge clk, async reset (active high resets to 0)\n  \n  // d1 = x XOR q0\n  // d0 = ~x AND ~q1\n  // z = (q1 XOR q0) AND ~(q1 AND q0)... let me look more carefully\n  \n  // Looking at outputs: there's an XOR feeding into something, and an AND gate\n  // z seems to be: (q0 XOR q1) ... no, let me re-examine\n  \n  // The NAND at top right: inputs are q1 and something -> NAND\n  // Actually let me trace more carefully:\n  \n  // Top NAND gate: inputs q1 and (x NAND q1)... no\n  \n  // x goes through NOT -> feeds into AND with something\n  // Actually: x_not = ~x\n  \n  // d1 = NAND(q1, x_not)... no, it's a NOR at top right? \n  \n  // Let me just interpret as a state machine from the diagram:\n  // d1 = ~(q1 | x_not) ... no\n  \n  // Top right: NOR gate with inputs q1 and ~x -> d1 = ~(q1 | ~x) = ~q1 & x\n  // Wait, that feeds back to D of DFF_PP1... but there's also q0 involved.\n  \n  // Let me reconsider. The XOR has inputs x and something.\n  // d1 = x XOR q1 (NOR at top = actually XOR?)\n  \n  // I think based on common FSM problems:\n  // d1 = x ^ q0\n  // d0 = ~x & ~q1  \n  // z = ~(q1 & q0) & (q1 | q0)  -- i.e., q1 XOR q0\n  \n  // Actually: z = q0 ^ q1... but with AND gates shown\n  \n  // Let me try:\n  assign d1 = x ^ q0;\n  assign d0 = ~x & ~q1;\n  assign z = q1 ^ q0;\n  \n  reg rq1, rq0;\n  \n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      rq1 <= 0;\n      rq0 <= 0;\n    end else begin\n      rq1 <= d1;\n      rq0 <= d0;\n    end\n  end\n  \n  assign q1 = rq1;\n  assign q0 = rq0;\n\nendmodule",
+                "pass": "Test failed: 227 mismatch(es) in 436 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3comb",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [1:0] state,\n  output reg [1:0] next_state,\n  output out\n);\n\n  wire s0 = state[0];\n  wire s1 = state[1];\n  wire in_n = ~in;\n\n  // Decode state bits\n  wire state_0 = ~s0 & ~s1; // state == 0 (demux output 0 when state=0)\n  // Actually, let me re-read: state goes into a demux with 0,1 outputs\n  // state[0] selects: when state[0]=0, top output active; state[0]=1, bottom output active\n  // But state is 2 bits... Let me look more carefully.\n\n  // state -> demux with sel, outputs 0 and 1\n  // Looks like state[1] is the data/signal going into AND gates, state[0] might be... \n  // Actually this seems like a state machine. Let me trace more carefully.\n\n  // The demux on the left: state[0] selects output 0 (top) or 1 (bottom)\n  // Top output (sel=0): state[1] & ~state[0] -> let's call it A\n  // Bottom output (sel=1): state[1] & state[0] -> call it B\n  // Wait, demux: input=state[1], sel=state[0]. Out0 = state[1] & ~state[0], Out1 = state[1] & state[0]\n\n  wire A = s1 & ~s0;  // demux out 0\n  wire B = s1 & s0;   // demux out 1\n\n  // Top section: A goes through D-ff-like path (but combinational)\n  // A -> buffer -> AND with ~in -> some path\n  // A -> AND with in -> another path\n\n  wire A_and_notIn = A & in_n;\n  wire A_and_in = A & in;\n  \n  // Bottom section with B:\n  wire B_and_notIn = B & in_n;\n  wire B_and_in = B & in;\n\n  // Also traces from ~s0 & ~s1 area... let me think about this as a state machine\n  // with states 0-3 encoded in state[1:0]\n\n  // Let me try to figure out the truth table by tracing signals:\n  // Actually, the NOT of s1 also feeds into gates with in and ~in\n  \n  wire notS1 = ~s1;\n  wire C = notS1 & ~s0; // state==00\n  wire D = notS1 & s0;  // state==01\n\n  // Tracing next_state[1] (mux output 1 = bottom input of next_state mux):\n  // next_state mux: sel=? ... output 0 is top, output 1 is bottom\n  \n  // Let me just try all 8 combinations and deduce from typical FSM diagrams:\n  // This looks like it could be a sequence detector FSM.\n  \n  // Given complexity, let me try a direct approach:\n  // next_state[0]: OR of several paths through the top\n  // next_state[1]: OR of paths through bottom\n\n  wire ns1_candidate = (A_and_notIn) | (C & in);\n  wire ns0_candidate = (D & in) | (A_and_in) | (B_and_notIn);\n  \n  // out: OR at bottom\n  wire out_w = B_and_in | D & in_n;\n\n  always @(*) begin\n    next_state[0] = ns1_candidate;\n    next_state[1] = ns0_candidate;\n  end\n\n  assign out = (B & in) | (D & in_n);\n\nendmodule",
+                "pass": "Test failed: 77 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm3onehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [3:0] state,\n  output reg [3:0] next_state,\n  output out\n);\n\n  assign next_state[0] = (state[0] & ~in) | (state[2] & ~in);\n  assign next_state[1] = (state[0] & in) | (state[1] & in) | (state[2] & in) | (state[3] & in);\n  assign next_state[2] = (state[1] & ~in) | (state[3] & ~in);\n  assign next_state[3] = (state[2] & in);\n  assign out = state[3];\n\nendmodule",
+                "pass": "Test failed: 22 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_hdlc",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  input in,\n  output disc,\n  output flag,\n  output err\n);\n\n  // This appears to be an HDLC flag/abort detector FSM\n  // Counts consecutive 1s, detects:\n  // - disc: six 1s followed by 0 (bit stuffing discard)\n  // - flag: six 1s followed by 0 in flag pattern (0111_1110)\n  // - err: seven or more consecutive 1s\n\n  reg [3:0] state;\n  \n  localparam S0 = 4'd0;  // no 1s\n  localparam S1 = 4'd1;  // one 1\n  localparam S2 = 4'd2;  // two 1s\n  localparam S3 = 4'd3;  // three 1s\n  localparam S4 = 4'd4;  // four 1s\n  localparam S5 = 4'd5;  // five 1s\n  localparam S6 = 4'd6;  // six 1s\n  localparam S7 = 4'd7;  // seven+ 1s (error)\n  localparam S8 = 4'd8;  // disc state\n  localparam S9 = 4'd9;  // flag state\n\n  always @(posedge clk) begin\n    if (reset)\n      state <= S0;\n    else begin\n      case (state)\n        S0: state <= in ? S1 : S0;\n        S1: state <= in ? S2 : S0;\n        S2: state <= in ? S3 : S0;\n        S3: state <= in ? S4 : S0;\n        S4: state <= in ? S5 : S0;\n        S5: state <= in ? S6 : S8;\n        S6: state <= in ? S7 : S9;\n        S7: state <= in ? S7 : S0;\n        S8: state <= in ? S1 : S0;\n        S9: state <= in ? S1 : S0;\n        default: state <= S0;\n      endcase\n    end\n  end\n\n  assign disc = (state == S8);\n  assign flag = (state == S9);\n  assign err  = (state == S7);\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_onehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input in,\n  input [9:0] state,\n  output [9:0] next_state,\n  output out1,\n  output out2\n);\n\n  wire s0=state[0], s1=state[1], s2=state[2], s3=state[3], s4=state[4];\n  wire s5=state[5], s6=state[6], s7=state[7], s8=state[8], s9=state[9];\n\n  // Analyzing the diagram carefully:\n  // Top section computes next_state[0] through some AND/OR/NOR gates\n  // Let me trace each next_state bit:\n\n  wire and_s1_s0 = s1 & s0;\n  wire or_and_s2 = and_s1_s0 | s2;\n  wire and_or_s0 = or_and_s2 & s0;\n  wire nor_result = ~(and_or_s0 | s3);\n  \n  assign next_state[0] = nor_result;\n  \n  wire and_s4_s7 = s4 & s7;\n  assign next_state[1] = and_s4_s7;\n  \n  wire and_s8_s3 = s8 & s3;\n  assign next_state[2] = and_s8_s3;\n  \n  assign next_state[3] = s9;\n  \n  wire and_s5_s3 = s5 & s3;\n  assign next_state[4] = and_s5_s3;\n  \n  assign next_state[5] = s6;\n  \n  // next_state[6-9] use AND gates with 'in'\n  wire and_s3_s4 = s3 | s4;  // OR gate feeding into AND\n  assign next_state[6] = and_s3_s4 & in;\n  \n  assign next_state[7] = s4 & in;\n  assign next_state[8] = s7 & in;\n  assign next_state[9] = s7 & ~in;\n\n  assign out1 = s8 | s9;\n  assign out2 = s7 | s9;\n\nendmodule",
+                "pass": "Test failed: 166 mismatch(es) in 224 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_ps2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input [7:0] in,\n  input reset,\n  output done\n);\n\n  reg q;\n  \n  wire in3 = in[3];\n  \n  wire nand1_out = ~(clk & in3);\n  wire nor1_out = ~(in3 | reset);\n  wire not_nor1 = ~nor1_out;\n  wire not_nand1 = ~nand1_out;\n  \n  wire nand2_out = ~(clk & nand1_out);\n  wire nor2_out = ~(not_nand1 | not_nor1);\n  wire not_nor2 = ~nor2_out;\n  \n  wire d_input = ~(nand2_out & not_nor2);\n  \n  wire and_top = ~(clk & q);\n  wire and_right_top;\n  assign and_right_top = and_top & nand2_out;\n  \n  wire and_bottom = q & nor2_out;\n  \n  assign done = and_right_top | and_bottom;\n  \n  always @(posedge clk) begin\n    if (reset)\n      q <= 0;\n    else\n      q <= d_input;\n  end\n\nendmodule",
+                "pass": "Test failed: 271 mismatch(es) in 400 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "fsm_serial",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input in,\n  input reset,\n  output done\n);\n  // FSM for serial protocol: idle, start bit, 8 data bits, stop bit\n  reg [3:0] state;\n  \n  localparam IDLE = 4'd0;\n  localparam BIT0 = 4'd1;\n  localparam BIT1 = 4'd2;\n  localparam BIT2 = 4'd3;\n  localparam BIT3 = 4'd4;\n  localparam BIT4 = 4'd5;\n  localparam BIT5 = 4'd6;\n  localparam BIT6 = 4'd7;\n  localparam BIT7 = 4'd8;\n  localparam STOP = 4'd9;\n  localparam WAIT = 4'd10;\n  \n  reg done_reg;\n  assign done = done_reg;\n  \n  always @(posedge clk) begin\n    if (reset) begin\n      state <= IDLE;\n      done_reg <= 0;\n    end else begin\n      done_reg <= 0;\n      case (state)\n        IDLE: begin\n          if (~in)\n            state <= BIT0;\n        end\n        BIT0: state <= BIT1;\n        BIT1: state <= BIT2;\n        BIT2: state <= BIT3;\n        BIT3: state <= BIT4;\n        BIT4: state <= BIT5;\n        BIT5: state <= BIT6;\n        BIT6: state <= BIT7;\n        BIT7: state <= STOP;\n        STOP: begin\n          if (in) begin\n            done_reg <= 1;\n            state <= IDLE;\n          end else begin\n            state <= WAIT;\n          end\n        end\n        WAIT: begin\n          if (in)\n            state <= IDLE;\n        end\n        default: state <= IDLE;\n      endcase\n    end\n  end\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "gatesv",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input  [3:0] in,\n  output [3:0] out_both,\n  output [3:0] out_any,\n  output [3:0] out_different\n);\n  assign out_both = {in[3]&in[2], in[2]&in[1], in[1]&in[0], 1'b0};\n  assign out_any = {1'b0, in[3]|in[2], in[2]|in[1], in[1]|in[0]};\n  assign out_different = {in[0]^in[3], in[3]^in[2], in[2]^in[1], in[1]^in[0]};\nendmodule",
+                "pass": "Test failed: 207 mismatch(es) in 213 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  output out\n);\n  assign out = (~b & ~c) | (~a & c);\nendmodule",
+                "pass": "Test failed: 138 mismatch(es) in 219 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output out\n);\n  wire nb = ~b;\n  wire na = ~a;\n  \n  wire nand1 = ~(nb & c);\n  wire and1 = c & d;\n  wire and2 = na & c;\n  \n  wire nand2 = ~(and1 & nand1);\n  wire nand3 = ~(and2 & nand1);\n  \n  wire nor1 = ~(nand3 | nand3); // buffer? Let me re-examine\n  \n  // Let me re-analyze the diagram more carefully\n  // Top: ~b AND c -> NAND gate output nand1 = ~(~b & c)... wait no\n  \n  // Top NAND: inputs are ~b and c -> NAND -> ~(~b & c)\n  wire g1 = ~(nb & c);\n  \n  // Second NAND: inputs are c and ... looking at connections\n  // Middle area: AND of c and d, and a NAND\n  // Bottom: ~a AND c\n  \n  wire g2 = c & d;\n  wire g3 = na & c;\n  \n  // The NAND with inputs g1 and g2: ~(g1 & g2)\n  wire g4 = ~(g1 & g2);\n  \n  // Another NAND with inputs g1 and g3: ~(g1 & g3)  \n  wire g5 = ~(g1 & g3);\n  \n  // These feed into something producing out\n  // out is AND of g4 and g5 inverted? or NAND?\n  \n  // Looking at diagram: g4 goes through NOR with something, g5 goes through NOR\n  // Then final AND gate produces out\n  \n  // Actually let me reconsider the structure:\n  // Top-right: NAND of (g1, something) -> inv -> feeds AND\n  // Bottom-right: NAND of something -> inv -> feeds AND\n  \n  wire g6 = ~(g4);  // inverter on g4\n  wire g7 = ~(g5);  // inverter on g5\n  \n  assign out = g6 & g7;\n\nendmodule",
+                "pass": "Test failed: 129 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output reg out\n);\n  wire nand_out = ~(d & c);\n  wire or_out = nand_out | b;\n  assign out = or_out & a;\nendmodule",
+                "pass": "Test failed: 45 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "kmap4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input a,\n  input b,\n  input c,\n  input d,\n  output reg out\n);\n  wire d_not = ~d;\n  wire c_not = ~c;\n  wire a_not = ~a;\n  \n  wire xor1 = d_not ^ c_not;\n  wire xor2 = b ^ a_not;\n  wire nor1 = ~(xor2);\n  \n  wire or1 = xor1 | nor1;\n  \n  assign out = or1;\nendmodule",
+                "pass": "Test failed: 79 mismatch(es) in 232 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "lemmings1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input bump_left,\n  input bump_right,\n  output walk_left,\n  output walk_right\n);\n  reg state;\n  wire d;\n  \n  assign d = state ? (bump_left ? 0 : 1) : (bump_right ? 1 : 0);\n  \n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      state <= 0;\n    else\n      state <= d;\n  end\n  \n  assign walk_left = ~state;\n  assign walk_right = state;\nendmodule",
+                "pass": "Test failed: 186 mismatch(es) in 229 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "lemmings2",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input bump_left,\n  input bump_right,\n  input ground,\n  output walk_left,\n  output walk_right,\n  output aaah\n);\n\n  // State encoding: 2 bits for direction (left/right) and falling\n  // From the diagram, there are flip-flops with async reset\n  // This appears to be a Lemmings walker: walks left/right, falls when no ground\n  \n  reg [1:0] state;\n  // States: 00 = walk_left, 01 = walk_right, 10 = fall_left, 11 = fall_right\n  \n  localparam WL = 2'b00, WR = 2'b01, FL = 2'b10, FR = 2'b11;\n  \n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      state <= WL;\n    else begin\n      case (state)\n        WL: begin\n          if (!ground) state <= FL;\n          else if (bump_left) state <= WR;\n        end\n        WR: begin\n          if (!ground) state <= FR;\n          else if (bump_right) state <= WL;\n        end\n        FL: begin\n          if (ground) state <= WL;\n        end\n        FR: begin\n          if (ground) state <= WR;\n        end\n      endcase\n    end\n  end\n  \n  assign walk_left  = (state == WL);\n  assign walk_right = (state == WR);\n  assign aaah       = (state == FL) || (state == FR);\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "mt2015_q4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\n  assign z = ~(x ^ y);\nendmodule",
+                "pass": "Test failed: 60 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "mt2015_q4b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x,\n  input y,\n  output z\n);\n  assign z = ~(x ^ y);\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "review2015_fsmseq",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  input data,\n  output start_shifting\n);\n\n  reg ff1, ff2, ff3, ff_out;\n\n  wire ff1_d = data;\n  wire ff2_d = ff1;\n  wire ff3_d = ~ff2;\n  wire nand_out = ~(ff3 & ff2);\n  wire and_out = nand_out & data;\n  wire enable = and_out | start_shifting;\n\n  always @(posedge clk) begin\n    if (reset) begin\n      ff1 <= 0;\n      ff2 <= 0;\n      ff3 <= 0;\n      ff_out <= 0;\n    end else begin\n      ff1 <= ff1_d;\n      ff2 <= ff2_d;\n      ff3 <= ff3_d;\n      if (enable)\n        ff_out <= 1;\n    end\n  end\n\n  assign start_shifting = ff_out;\n\nendmodule",
+                "pass": "Test failed: 288 mismatch(es) in 643 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "review2015_fsmshift",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output shift_ena\n);\n  reg q0, q1, q2;\n\n  always @(posedge clk) begin\n    if (reset) begin\n      q0 <= 1;\n      q1 <= 1;\n      q2 <= 1;\n    end else begin\n      q0 <= ~q0;\n      q1 <= q0;\n      q2 <= q1;\n    end\n  end\n\n  assign shift_ena = ~(~q2 & q1);\nendmodule",
+                "pass": "Test failed: 64 mismatch(es) in 200 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "truthtable1",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input x3,\n  input x2,\n  input x1,\n  output f\n);\n  wire w1, w2;\n  assign w1 = x2 & x1;\n  assign w2 = x1 | x3;\n  assign f = w1 | w2;\nendmodule",
+                "pass": "Test failed: 8 mismatch(es) in 58 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2012_q1g",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  output logic f\n);\n  wire n1, n2, n3, n4;\n  \n  // Top AND: x[1] & ~x[3]\n  assign n1 = ~(x[1] & x[3]);\n  // Bottom AND: x[2] & ~x[0]\n  assign n2 = ~(x[2] & x[0]);\n  \n  // NOR of the two NAND outputs\n  assign n3 = ~(n1 | n2);\n  \n  // Also: ~x[1] & ~x[3] -> NAND, then AND with ~x[2] & x[0]\n  // Let me re-read the diagram more carefully.\n  \n  // x[1], x[3] feed top NAND -> n1\n  // x[2], x[0] feed bottom NAND -> n2\n  // ~n1 and ~n2 ... \n  \n  // Let me just trace it:\n  // Top path: x[1] & x[3] -> NAND -> invert -> AND with something\n  // Bottom path: x[2] & x[0] -> NAND -> invert -> ...\n  \n  // Actually, looking more carefully:\n  // Gate1 (NAND): inputs x[1], ~x[3] -> output n1\n  // Gate2 (NAND): inputs x[2], x[0] -> output n2  \n  // Gate3 (NOR): inputs n1, n2 -> but with bubbles... \n  \n  // Let me try a simpler interpretation:\n  // f = (~x[3] & x[1]) | (x[2] & ~x[0])\n  // No wait...\n  \n  // The decoder-like block splits x into x[1], x[3], x[2], x[0]\n  // Top NAND has inputs: ~x[3], x[1] (x[3] has bubble) -> NAND(~x[3], x[1])\n  // Then inverted (bubble on output going to NOR) \n  // Bottom NAND: x[2], ~x[0] (x[0] has bubble) -> NAND(x[2], ~x[0])\n  // Then inverted\n  // These feed into what looks like an OR then to f\n  \n  assign f = (x[1] & ~x[3]) | (x[2] & ~x[0]);\n  \nendmodule",
+                "pass": "Test failed: 43 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "2013_q2bfsm",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input resetn,\n  input x,\n  input y,\n  output f,\n  output g\n);\n\n  reg [2:0] state;\n  \n  localparam SA = 3'd0; // reset/idle\n  localparam SB = 3'd1; // after reset, f=1 for one cycle\n  localparam SC = 3'd2; // monitoring x, waiting for 1\n  localparam SD = 3'd3; // got x=1, waiting for 0\n  localparam SE = 3'd4; // got x=1,0, waiting for 1\n  localparam SF = 3'd5; // detected pattern 101, g=1, check y\n  localparam SG = 3'd6; // g=1 permanently\n  localparam SH = 3'd7; // g=0 permanently\n\n  always @(posedge clk) begin\n    if (!resetn) begin\n      state <= SA;\n    end else begin\n      case (state)\n        SA: state <= SB;\n        SB: state <= SC;\n        SC: state <= x ? SD : SC;\n        SD: state <= x ? SD : SE;\n        SE: state <= x ? SF : SC;\n        SF: begin\n          if (y) state <= SG;\n          else state <= SH;\n        end\n        SG: state <= SG;\n        SH: state <= SH;\n        default: state <= SA;\n      endcase\n    end\n  end\n\n  assign f = (state == SB);\n  assign g = (state == SF) || (state == SG);\n\nendmodule",
+                "pass": "Test failed: 78 mismatch(es) in 1002 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "circuit8",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clock,\n  input a,\n  output reg p,\n  output reg q\n);\n\n  always @(*) begin\n    if (clock)\n      p = a;\n  end\n\n  always @(negedge clock) begin\n    q <= a;\n  end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ece241_2014_q4",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input x,\n  output z\n);\n\n  reg q0, q1, q2;\n  wire d0, d1, d2;\n  wire xn;\n\n  assign xn = ~x;\n\n  assign d0 = q0 ^ x;\n  assign d1 = xn & (~q1);\n  assign d2 = xn | (~q2);\n\n  always @(posedge clk) begin\n    q0 <= d0;\n    q1 <= d1;\n    q2 <= d2;\n  end\n\n  assign z = ~(q0 & q1 & q2);\n\nendmodule",
+                "pass": "Test failed: 118 mismatch(es) in 118 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "ece241_2014_q5a",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input areset,\n  input x,\n  output z\n);\n  reg q0, q1;\n\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      q0 <= 0;\n      q1 <= 0;\n    end else begin\n      q0 <= x ^ q0;\n      q1 <= x ~^ q1;\n    end\n  end\n\n  assign z = ~(q0 | q1);\nendmodule",
+                "pass": "Test failed: 260 mismatch(es) in 436 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "lfsr5",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input clk,\n  input reset,\n  output reg [4:0] q\n);\n\n  wire feedback = q[4] ^ q[2];\n\n  always @(posedge clk) begin\n    if (reset)\n      q <= 5'b00001;\n    else\n      q <= {q[3:0], feedback};\n  end\n\nendmodule",
+                "pass": "Test failed: 4276 mismatch(es) in 4443 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "m2014_q3",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [3:0] x,\n  output logic f\n);\n  wire nand_out = ~(x[2] & x[0]);\n  wire and_out = x[1] & x[3];\n  assign f = nand_out & and_out;\nendmodule",
+                "pass": "Test failed: 14 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "m2014_q6b",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input [2:0] y,\n  input w,\n  output reg Y1\n);\n  wire y0 = y[0], y1 = y[1], y2 = y[2];\n  \n  wire and1 = y0 & w;\n  wire not_and1 = ~and1;\n  wire and2 = not_and1 & y1;\n  wire not_and2 = ~and2;\n  wire and3 = y2 & y0;\n  \n  assign Y1 = not_and2 & ~and3;\n  \nendmodule",
+                "pass": "Test failed: 40 mismatch(es) in 100 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "review2015_fsmonehot",
+        "solutions": [
+            {
+                "solution": "module TopModule (\n  input d,\n  input done_counting,\n  input ack,\n  input [9:0] state,\n  output B3_next,\n  output S_next,\n  output S1_next,\n  output Count_next,\n  output Wait_next,\n  output done,\n  output counting,\n  output shift_ena\n);\n\n  assign counting = state[8];\n  assign Count_next = state[8] & ~done_counting;\n  assign Wait_next = state[8] & done_counting;\n  assign done = state[9];\n  assign shift_ena = state[5] | state[4] | state[6] | state[7];\n  assign S_next = (state[9] & ack) | (state[0] & ~d);\n  assign B3_next = state[7];\n  assign S1_next = state[0] & d;\n\nendmodule",
+                "pass": "Test failed: 100 mismatch(es) in 300 sample(s)"
+            }
+        ],
+        "source": "verilogeval_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "adder_32bit",
+        "solutions": [
+            {
+                "solution": "module adder_32bit(A,B,S,C32);\n     input [32:1] A;\n     input [32:1] B;\n     output [32:1] S;\n     output C32;\n\n     wire C16;\n     wire [16:1] S_low, S_high;\n\n     cla_16bit u0(.A(A[16:1]), .B(B[16:1]), .Cin(1'b0), .S(S_low), .Cout(C16));\n     cla_16bit u1(.A(A[32:17]), .B(B[32:17]), .Cin(C16), .S(S_high), .Cout(C32));\n\n     assign S = {S_high, S_low};\nendmodule",
+                "pass": "Compilation failed: /tmp/fc_iverilog_001iust2/rtllm_v2/temp.v:10: error: Unknown module type: cla_16bit\n/tmp/fc_iverilog_001iust2/rtllm_v2/temp.v:11: error: Unknown module type: cla_16bit\n3 error(s) during elaboration.\n*** These modules were missing:\n        cla_16bit referenced 2 times.\n***"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "adder_8bit",
+        "solutions": [
+            {
+                "solution": "module adder_8bit(\n    input [7:0] a, b, \n    input cin, \n    output [7:0] sum, \n    output cout);\n\n    wire [8:0] c;\n    assign c[0] = cin;\n    \n    genvar i;\n    generate\n        for (i = 0; i < 8; i = i + 1) begin\n            assign sum[i] = a[i] ^ b[i] ^ c[i];\n            assign c[i+1] = (a[i] & b[i]) | (a[i] & c[i]) | (b[i] & c[i]);\n        end\n    endgenerate\n    \n    assign cout = c[8];\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "adder_bcd",
+        "solutions": [
+            {
+                "solution": "module adder_bcd (\n    input  [3:0] A,   // First BCD number (0-9)\n    input  [3:0] B,   // Second BCD number (0-9)\n    input  Cin,       // Input carry\n    output [3:0] Sum, // BCD sum (0-9)\n    output Cout       // Output carry\n);\n\n    wire [4:0] binary_sum;\n    wire correction;\n    wire [3:0] corrected_sum;\n\n    // First, perform binary addition\n    assign binary_sum = A + B + Cin;\n\n    // Correction needed if sum > 9\n    assign correction = (binary_sum > 5'd9) ? 1'b1 : 1'b0;\n\n    // If correction needed, add 6 and set carry\n    assign Cout = correction;\n    assign corrected_sum = correction ? (binary_sum[3:0] + 4'd6) : binary_sum[3:0];\n    assign Sum = corrected_sum;\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Mathematical Operations & Algorithms"
+    },
+    {
+        "module_name": "comparator_3bit",
+        "solutions": [
+            {
+                "solution": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output A_greater,\n    output A_equal,\n    output A_less\n);\n\n    wire eq2 = ~(A[2] ^ B[2]);\n    wire eq1 = ~(A[1] ^ B[1]);\n    wire eq0 = ~(A[0] ^ B[0]);\n\n    wire gt2 = A[2] & ~B[2];\n    wire gt1 = eq2 & A[1] & ~B[1];\n    wire gt0 = eq2 & eq1 & A[0] & ~B[0];\n\n    wire lt2 = ~A[2] & B[2];\n    wire lt1 = eq2 & ~A[1] & B[1];\n    wire lt0 = eq2 & eq1 & ~A[0] & B[0];\n\n    assign A_greater = ~(~(gt2 | gt1 | gt0));\n    assign A_less = ~(~(lt2 | lt1 | lt0));\n    assign A_equal = ~(~(eq2 & eq1 & eq0));\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "comparator_4bit",
+        "solutions": [
+            {
+                "solution": "module comparator_4bit(\n    input [3:0] A,\n    input [3:0] B,\n    output A_greater,\n    output A_equal,\n    output A_less\n);\n\n    wire [3:0] x;\n    assign x[3] = ~(A[3] ^ B[3]);\n    assign x[2] = ~(A[2] ^ B[2]);\n    assign x[1] = ~(A[1] ^ B[1]);\n    assign x[0] = ~(A[0] ^ B[0]);\n\n    assign A_equal = x[3] & x[2] & x[1] & x[0];\n\n    assign A_greater = (A[3] & ~B[3]) |\n                       (x[3] & A[2] & ~B[2]) |\n                       (x[3] & x[2] & A[1] & ~B[1]) |\n                       (x[3] & x[2] & x[1] & A[0] & ~B[0]);\n\n    assign A_less = (~A[3] & B[3]) |\n                    (x[3] & ~A[2] & B[2]) |\n                    (x[3] & x[2] & ~A[1] & B[1]) |\n                    (x[3] & x[2] & x[1] & ~A[0] & B[0]);\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "counter_12",
+        "solutions": [
+            {
+                "solution": "module counter_12 \n(\n  input rst_n,\n  input clk,\n  input valid_count,\n\n  output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n  if (!rst_n)\n    out <= 4'd0;\n  else if (valid_count) begin\n    if (out == 4'd11)\n      out <= 4'd0;\n    else\n      out <= out + 4'd1;\n  end\nend\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "edge_detect",
+        "solutions": [
+            {
+                "solution": "module edge_detect(\n\tinput clk,\n\tinput rst_n,\n\tinput a,\n\t\n\toutput reg rise,\n\toutput reg down\n);\n\nreg a_delayed;\n\nalways @(posedge clk or negedge rst_n) begin\n\tif (!rst_n)\n\t\ta_delayed <= 0;\n\telse\n\t\ta_delayed <= a;\nend\n\nalways @(posedge clk or negedge rst_n) begin\n\tif (!rst_n)\n\t\trise <= 0;\n\telse\n\t\trise <= a & ~a_delayed;\nend\n\nalways @(posedge clk or negedge rst_n) begin\n\tif (!rst_n)\n\t\tdown <= 0;\n\telse\n\t\tdown <= ~a & a_delayed;\nend\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "freq_divbyeven",
+        "solutions": [
+            {
+                "solution": "module freq_divbyeven(\n    clk,\n    rst_n,\n    clk_div\n);\n    input clk;\n    input rst_n;\n    output clk_div;\n    reg clk_div;\n\n    parameter NUM_DIV = 6;\n\n    reg [31:0] cnt;\n\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            cnt <= 0;\n        else if (cnt >= NUM_DIV/2 - 1)\n            cnt <= 0;\n        else\n            cnt <= cnt + 1;\n    end\n\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            clk_div <= 0;\n        else if (cnt == NUM_DIV/2 - 1)\n            clk_div <= ~clk_div;\n    end\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "instr_reg",
+        "solutions": [
+            {
+                "solution": "module instr_reg (\n    input clk,\n    input rst,\n    input [1:0] fetch,\n    input [7:0] data,\n    output [2:0] ins,\n    output [4:0] ad1,\n    output [7:0] ad2\n);\n\n    reg [7:0] high_byte;\n    reg [7:0] low_byte;\n\n    wire ena_high = fetch[1];\n    wire ena_low = fetch[0];\n\n    always @(posedge clk) begin\n        if (rst) begin\n            high_byte <= 8'b0;\n        end else if (ena_high) begin\n            high_byte <= data;\n        end\n    end\n\n    always @(posedge clk) begin\n        if (rst) begin\n            low_byte <= 8'b0;\n        end else if (ena_low) begin\n            low_byte <= data;\n        end\n    end\n\n    assign ins = high_byte[7:5];\n    assign ad1 = high_byte[4:0];\n    assign ad2 = low_byte;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "LFSR",
+        "solutions": [
+            {
+                "solution": "module LFSR (out, clk, rst);\n  input clk, rst;\n  output reg [3:0] out;\n\n  wire feedback;\n  assign feedback = out[1] ^ out[3];\n\n  always @(posedge clk or posedge rst) begin\n    if (rst) begin\n      out <= 4'b0000;\n    end else begin\n      out[0] <= out[3];\n      out[1] <= out[0];\n      out[2] <= feedback;\n      out[3] <= out[2];\n    end\n  end\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "right_shifter",
+        "solutions": [
+            {
+                "solution": "module right_shifter(clk, q, d);\n\n    input clk;\n    input d;\n    output [7:0] q;\n\n    reg [7:0] shift_reg;\n\n    always @(posedge clk) begin\n        shift_reg <= {d, shift_reg[7:1]};\n    end\n\n    assign q = shift_reg;\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "synchronizer",
+        "solutions": [
+            {
+                "solution": "module synchronizer(\n\tinput \t\t\t\tclk_a\t, \n\tinput \t\t\t\tclk_b\t,   \n\tinput \t\t\t\tarstn\t,\n\tinput\t\t\t\tbrstn   ,\n\tinput\t\t[3:0]\tdata_in\t,\n\tinput               data_en ,\n\n\toutput reg  [3:0] \tdataout\n);\n\n\t// data_en captured in clk_a domain\n\treg data_en_a;\n\talways @(posedge clk_a or negedge arstn) begin\n\t\tif (!arstn)\n\t\t\tdata_en_a <= 1'b0;\n\t\telse\n\t\t\tdata_en_a <= data_en;\n\tend\n\n\t// Two-stage synchronizer for enable into clk_b domain\n\treg en_sync1, en_sync2;\n\talways @(posedge clk_b or negedge brstn) begin\n\t\tif (!brstn) begin\n\t\t\ten_sync1 <= 1'b0;\n\t\t\ten_sync2 <= 1'b0;\n\t\tend else begin\n\t\t\ten_sync1 <= data_en_a;\n\t\t\ten_sync2 <= en_sync1;\n\t\tend\n\tend\n\n\t// Data registers in clk_b domain (first stage, reset by brstn)\n\treg [3:0] data_sync1;\n\talways @(posedge clk_b or negedge brstn) begin\n\t\tif (!brstn)\n\t\t\tdata_sync1 <= 4'b0;\n\t\telse\n\t\t\tdata_sync1 <= data_in;\n\tend\n\n\t// Output registers with enable (en_sync2)\n\talways @(posedge clk_b or negedge brstn) begin\n\t\tif (!brstn)\n\t\t\tdataout <= 4'b0;\n\t\telse if (en_sync2)\n\t\t\tdataout <= data_sync1;\n\tend\n\nendmodule",
+                "pass": "true"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "fsm",
+        "solutions": [
+            {
+                "solution": "module fsm(IN,MATCH,CLK,RST);\ninput IN,CLK,RST;\noutput reg MATCH;\n\nreg [2:0] state;\n\nparameter S0 = 3'b000,\n          S1 = 3'b001,\n          S2 = 3'b010,\n          S3 = 3'b011,\n          S4 = 3'b100;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST) begin\n        state <= S0;\n        MATCH <= 0;\n    end else begin\n        case (state)\n            S0: begin\n                MATCH <= 0;\n                if (IN)\n                    state <= S1;\n                else\n                    state <= S0;\n            end\n            S1: begin\n                MATCH <= 0;\n                if (IN)\n                    state <= S1;\n                else\n                    state <= S2;\n            end\n            S2: begin\n                MATCH <= 0;\n                if (IN)\n                    state <= S3;\n                else\n                    state <= S0;\n            end\n            S3: begin\n                MATCH <= 0;\n                if (IN)\n                    state <= S1;\n                else\n                    state <= S4;\n            end\n            S4: begin\n                MATCH <= 1;\n                if (IN)\n                    state <= S3;\n                else\n                    state <= S0;\n            end\n            default: begin\n                state <= S0;\n                MATCH <= 0;\n            end\n        endcase\n    end\nend\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Finite State Machines"
+    },
+    {
+        "module_name": "parallel2serial",
+        "solutions": [
+            {
+                "solution": "module parallel2serial(\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output valid_out,\n    output dout\n);\n\n    reg [1:0] cnt;\n    reg valid_out_reg;\n    reg dout_reg;\n    reg [3:0] data_reg;\n\n    // 2-bit counter\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            cnt <= 2'b00;\n        else\n            cnt <= cnt + 1'b1;\n    end\n\n    // Latch input data when counter is 0\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            data_reg <= 4'b0;\n        else if (cnt == 2'b00)\n            data_reg <= d;\n    end\n\n    // Mux to select bit based on counter\n    reg mux_out;\n    always @(*) begin\n        case (cnt)\n            2'b00: mux_out = d[0];\n            2'b01: mux_out = data_reg[1];\n            2'b10: mux_out = data_reg[2];\n            2'b11: mux_out = data_reg[3];\n        endcase\n    end\n\n    // Output register for dout\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            dout_reg <= 1'b0;\n        else\n            dout_reg <= mux_out;\n    end\n\n    // Valid out - high when outputting valid data\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            valid_out_reg <= 1'b0;\n        else\n            valid_out_reg <= 1'b1;\n    end\n\n    assign dout = dout_reg;\n    assign valid_out = valid_out_reg;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Sequential Building Blocks"
+    },
+    {
+        "module_name": "ROM",
+        "solutions": [
+            {
+                "solution": "module ROM (\n    input wire [7:0] addr,        // 8-bit Address input\n    output reg [15:0] dout        // 16-bit Data output\n);\n\n    wire addr_bit1 = addr[1];\n    wire addr_bit0 = addr[0];\n    \n    // Decode from the diagram:\n    // addr[1:0] selects, addr[7:2] unused\n    // Analyzing the circuit diagram signals going to dout bits:\n    \n    // From the diagram:\n    // dout[15] = 1 (constant)\n    // dout[14] = addr[0]\n    // dout[13] = ~(addr[1] ^ addr[0])  -- XNOR\n    // dout[12] = ~(addr[1] ^ addr[0])  -- inverted XOR (bubble on output)\n    // dout[10:11] = 00\n    // dout[8:9] = 00\n    // dout[7] = 00 -> 0\n    // dout[6] = 0 (addr bit 0 = 0 line)\n    // dout[5] = 0\n    // dout[4] = 0\n    // dout[2:3] = addr[1:0]\n    // dout[0:1] = addr[1:0]\n\n    // Let me re-read more carefully.\n    // The left side has addr going into a demux/decoder with outputs: 1, 0:1, 0\n    // addr[1] = 1 output, addr[1:0] = 0:1 output, addr[0] = 0 output\n    \n    // Signals feeding into dout bits (16-bit bus, bits 0:1 at top, 15 at bottom):\n    // dout[0:1] = addr[1:0]\n    // dout[2:3] = addr[1:0]\n    // dout[4] = addr[1]\n    // dout[5] = addr[1]\n    // dout[6] = addr[0]\n    // dout[7] = 0 (constant 00)\n    // dout[8:9] = 00\n    // dout[10:11] = 00\n    // dout[12] = XNOR of addr[1] and addr[0] (XOR with bubble)\n    // dout[13] = XNOR of addr[1] and addr[0]\n    // dout[14] = addr[0]\n    // dout[15] = 1 (constant)\n\n    always @(*) begin\n        dout[1:0]   = addr[1:0];\n        dout[3:2]   = addr[1:0];\n        dout[4]     = addr[1];\n        dout[5]     = addr[1];\n        dout[6]     = addr[0];\n        dout[7]     = 1'b0;\n        dout[9:8]   = 2'b00;\n        dout[11:10] = 2'b00;\n        dout[12]    = ~(addr[1] ^ addr[0]);\n        dout[13]    = ~(addr[1] ^ addr[0]);\n        dout[14]    = addr[0];\n        dout[15]    = 1'b1;\n    end\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Basic Combinational Logic"
+    },
+    {
+        "module_name": "sequence_detector",
+        "solutions": [
+            {
+                "solution": "module sequence_detector(\n     input  clk, \n     input  rst_n,\n     input  data_in, \n     output sequence_detected\t\t\t\t\n     );\n\n    wire clk_inv;\n    wire rst;\n    wire q0, q1, q2, q3, q4;\n    wire d0, d1, d2, d3, d4;\n\n    assign clk_inv = ~clk;\n    assign rst = ~rst_n;\n\n    // FF0: S_DFF_PN0_ clocked on clk_inv, stores data_in\n    // Bottom-left FF, C=clk_inv, D=data_in, R=rst\n    reg ff0;\n    always @(posedge clk_inv or posedge rst)\n        if (rst) ff0 <= 0;\n        else ff0 <= data_in;\n    assign q0 = ff0;\n\n    // FF1: S_DFF_PN0_ clocked on clk_inv, D = AND(q0, data_in)\n    reg ff1;\n    wire d1_w = q0 & data_in;\n    always @(posedge clk_inv or posedge rst)\n        if (rst) ff1 <= 0;\n        else ff1 <= d1_w;\n    assign q1 = ff1;\n\n    // FF2: S_DFF_PN0_ top, clocked on clk, D = AND(q1, ~data_in)\n    reg ff2;\n    wire d2_w = q1 & (~data_in);\n    always @(posedge clk or posedge rst)\n        if (rst) ff2 <= 0;\n        else ff2 <= d2_w;\n    assign q2 = ff2;\n\n    // FF3: S_DFF_PN0_ bottom, clocked on clk_inv, D = AND(q2, ~data_in)\n    reg ff3;\n    wire d3_w = q2 & (~data_in);\n    always @(posedge clk_inv or posedge rst)\n        if (rst) ff3 <= 0;\n        else ff3 <= d3_w;\n    assign q3 = ff3;\n\n    // FF4: S_DFF_PN1_ (active-low reset?), clocked on clk\n    // D = OR(q2, q3) & data_in — looking at the AND/OR gates feeding it\n    // From diagram: there's an OR gate fed by q2 and q3, then AND with something\n    // and NAND at top feeds into it\n    // Let me re-examine: top-right has AND, NAND gates connecting to FF4\n    // FF4 is S_DFF_PN1_ which has inverted output or different reset polarity\n    \n    // Top right: AND(q2, data_in) -> fed into NAND with something -> NOT -> D of FF2? \n    // Let me reconsider the topology for detecting sequence 1100\n\n    // Re-analyzing: the circuit detects 1-1-0-0 then 1 (sequence_detected)\n    // sequence_detected = AND(q3, data_in, q4_complement_or_similar)\n\n    // FF4: S_DFF_PN1_ clocked on clk, R=rst\n    // D = AND( OR(q2,q3), data_in ) based on the middle OR and AND gates\n    reg ff4;\n    wire or_23 = q2 | q3;\n    wire d4_w = or_23 & data_in;\n    always @(posedge clk or posedge rst)\n        if (rst) ff4 <= 0;\n        else ff4 <= d4_w;\n    assign q4 = ff4;\n\n    // Top NAND/AND structure: AND(q2, data_in) -> into NAND with q4 -> NOT\n    wire top_and = q2 & data_in;\n    wire top_nand = ~(top_and & q4);\n    wire top_not = ~top_nand; // = top_and & q4\n\n    // sequence_detected = AND(q3, q4, data_in) or similar\n    // From bottom of diagram: sequence_detected connects from AND gate\n    assign sequence_detected = q3 & data_in;\n\nendmodule",
+                "pass": "Test failed: tests did not pass"
+            }
+        ],
+        "source": "rtllm_v2",
+        "level": "Finite State Machines"
+    }
+]

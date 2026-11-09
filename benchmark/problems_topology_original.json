@@ -1,0 +1,200 @@
+[
+  {
+    "pair_id": "topology_000",
+    "module_name": "topology_000",
+    "module_header": "module module_name (\n  input [3:0] val_0,\n  output logic val_1\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/2012_q1g.jpg"
+  },
+  {
+    "pair_id": "topology_001",
+    "module_name": "topology_001",
+    "module_header": "module module_name (\n    input val_0, val_1, val_2, val_3,\n    output val_4,\n    input val_5, val_6, val_7, val_8,\n    output val_9\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/7420.jpg"
+  },
+  {
+    "pair_id": "topology_002",
+    "module_name": "topology_002",
+    "module_header": "module module_name (\n    input val_0, val_1, val_2, val_3, val_4, val_5,\n    output val_6,\n    input val_7, val_8, val_9, val_10,\n    output val_11\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/7458.jpg"
+  },
+  {
+    "pair_id": "topology_003",
+    "module_name": "topology_003",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/andgate.jpg"
+  },
+  {
+    "pair_id": "topology_004",
+    "module_name": "topology_004",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/circuit1.jpg"
+  },
+  {
+    "pair_id": "topology_005",
+    "module_name": "topology_005",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  input val_3,\n  output val_4\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/circuit3.jpg"
+  },
+  {
+    "pair_id": "topology_006",
+    "module_name": "topology_006",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  input val_3,\n  output val_4\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/circuit4.jpg"
+  },
+  {
+    "pair_id": "topology_007",
+    "module_name": "topology_007",
+    "module_header": "module module_name (\n    input  val_0,\n    input  val_1,\n    output val_2,\n    output val_3\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "archxbench",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/demux-1to2.jpg"
+  },
+  {
+    "pair_id": "topology_008",
+    "module_name": "topology_008",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  input val_3,\n  output val_4,\n  output val_5\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/ece241_2013_q2.jpg"
+  },
+  {
+    "pair_id": "topology_009",
+    "module_name": "topology_009",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output val_2,\n  output val_3,\n  output val_4,\n  output val_5,\n  output val_6,\n  output val_7,\n  output val_8\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/gates.jpg"
+  },
+  {
+    "pair_id": "topology_010",
+    "module_name": "topology_010",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  output val_3\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/kmap1.jpg"
+  },
+  {
+    "pair_id": "topology_011",
+    "module_name": "topology_011",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  input val_3,\n  output val_4\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/kmap2.jpg"
+  },
+  {
+    "pair_id": "topology_012",
+    "module_name": "topology_012",
+    "module_header": "module module_name (\n  input [3:0] val_0,\n  output logic val_1\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/m2014_q3.jpg"
+  },
+  {
+    "pair_id": "topology_013",
+    "module_name": "topology_013",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output logic val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/m2014_q4e.jpg"
+  },
+  {
+    "pair_id": "topology_014",
+    "module_name": "topology_014",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output logic val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/m2014_q4f.jpg"
+  },
+  {
+    "pair_id": "topology_015",
+    "module_name": "topology_015",
+    "module_header": "module module_name (\n    input val_0, val_1, val_2,\n    output val_3\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "resbench",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/majority.jpg"
+  },
+  {
+    "pair_id": "topology_016",
+    "module_name": "topology_016",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/mt2015_q4.jpg"
+  },
+  {
+    "pair_id": "topology_017",
+    "module_name": "topology_017",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/mt2015_q4a.jpg"
+  },
+  {
+    "pair_id": "topology_018",
+    "module_name": "topology_018",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  output val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/norgate.jpg"
+  },
+  {
+    "pair_id": "topology_019",
+    "module_name": "topology_019",
+    "module_header": "module module_name (\n    input  [3:0] val_0,\n    output [1:0] val_1,\n    output       val_2\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "archxbench",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/priority-encoder.jpg"
+  },
+  {
+    "pair_id": "topology_020",
+    "module_name": "topology_020",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  input val_3,\n  output val_4,\n  output val_5,\n  output val_6\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/thermostat.jpg"
+  },
+  {
+    "pair_id": "topology_021",
+    "module_name": "topology_021",
+    "module_header": "module module_name (\n  input val_0,\n  input val_1,\n  input val_2,\n  input val_3,\n  output val_4,\n  output val_5\n);",
+    "prompt": "Implement the circuit shown in the provided diagram.",
+    "source": "verilogeval_v2",
+    "level": "Basic Combinational Logic",
+    "image": "images_anony/wire_decl.jpg"
+  }
+]
